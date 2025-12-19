@@ -1,0 +1,71 @@
+// SPDX-FileCopyrightText: 2025 maplike contributors
+//
+// SPDX-License-Identifier: MIT OR Apache-2.0
+
+#[cfg(feature = "std")]
+extern crate std as _std;
+
+// No feature for `alloc` because it would be always enabled anyway.
+extern crate alloc as _alloc;
+
+/// Marker trait for map-like types that store values of type `Item`.
+pub trait Map {
+    type Item;
+}
+
+/// Marker trait for keyed collections describing their key type.
+pub trait Keyed {
+    type Key;
+}
+
+/// Returns a reference to the value corresponding to the key.
+pub trait Get<K>: Map {
+    /// Returns a reference to the value corresponding to the key.
+    fn get(&self, key: &K) -> Option<&Self::Item>;
+}
+
+/// Insert a key-value pair into the collection.
+pub trait Insert<K>: Map {
+    /// Insert a key-value pair into the collection.
+    fn insert(&mut self, key: K, value: Self::Item);
+}
+
+/// Remove a key from the collection, returning the value at the key if the
+/// key was previously in the map.
+pub trait Remove<K>: Map {
+    /// Remove a key from the collection, returning the value at the key if the
+    /// key was previously in the map.
+    fn remove(&mut self, key: &K) -> Option<Self::Item>;
+}
+
+/// Insert a value into the collection without specifying a key, returning
+/// the key that was automatically generated.
+pub trait Push<K>: Map {
+    /// Insert a value into the collection without specifying a key, returning
+    /// the key that was automatically generated.
+    fn push(&mut self, value: Self::Item) -> K;
+}
+
+/// Consume the collection and yield owned key-value pairs.
+pub trait IntoIter<K>: Map + Keyed {
+    /// Iterator that consumes the collection.
+    type IntoIter: Iterator<Item = (K, Self::Item)>;
+
+    /// Consume the collection and yield owned key-value pairs.
+    fn into_iter(self) -> Self::IntoIter;
+}
+
+#[cfg(feature = "std")]
+mod std;
+
+// No feature for alloc because it would be always enabled anyway.
+mod alloc;
+
+#[cfg(feature = "stable-vec")]
+mod stable_vec;
+
+#[cfg(feature = "thunderdome")]
+mod thunderdome;
+
+#[cfg(feature = "rstar")]
+mod rstar;
