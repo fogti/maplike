@@ -1,14 +1,14 @@
 [package]
 name = "maplike"
-version = "0.2.0"
+version = "0.3.0"
 authors = ["Mikolaj Wielgus <wielgusmikolaj@gmail.com>"]
 description = "Simple decorator that adds rstar::RTree to collections such as HashMap, BTreeMap, StableVec, thunderdome::Arena."
 repository = "https://codeberg.org/topola/maplike"
 documentation = "https://docs.rs/maplike"
 readme = "README.md"
 license = "MIT OR Apache-2.0"
-keywords = ["rtree", "no_std"]
-categories = ["data-structures", "no-std", "rust-patterns"]
+keywords = ["undo", "redo", "rtree", "no_std"]
+categories = ["data-structures", "gui", "no-std", "rust-patterns"]
 edition = "2024"
 
 [badges]
@@ -29,4 +29,4 @@ thunderdome = "0.6"
 rstar = "0.12"
 
 [package.metadata.docs.rs]
-cargo-args = ["-Zunstable-options", "-Zrustdoc-scrape-examples"]
+cargo-args = ["--all-features", "-Zunstable-options", "-Zrustdoc-scrape-examples"]
