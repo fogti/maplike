@@ -14,6 +14,10 @@ pub trait Map {
 }
 
 /// Marker trait for keyed collections describing their key type.
+///
+/// This trait is needed to prevent "error[E0207]: the type parameter `(...)`
+/// is not constrained by the impl trait, self type, or predicates" by consuming
+/// the type parameter into the associated type `Key`.
 pub trait Keyed {
     type Key;
 }
