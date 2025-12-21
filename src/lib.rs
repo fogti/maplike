@@ -2,6 +2,12 @@
 //
 // SPDX-License-Identifier: MIT OR Apache-2.0
 
+#![doc(html_root_url = "https://docs.rs/maplike")]
+#![doc = include_str!("../README.md")]
+//#![deny(missing_docs)]
+#![forbid(unsafe_code)]
+#![no_std]
+
 #[cfg(feature = "std")]
 extern crate std as _std;
 
