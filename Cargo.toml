@@ -2,7 +2,7 @@
 name = "maplike"
 version = "0.3.2"
 authors = ["Mikolaj Wielgus <wielgusmikolaj@gmail.com>"]
-description = "Simple decorator that adds rstar::RTree to collections such as HashMap, BTreeMap, StableVec, thunderdome::Arena, rstar::RTree, rstared::RTreed"
+description = "Traits for common operations over maps, sets, stable vectors. Has built-ins for HashMap, BTreeMap, StableVec, thunderdome::Arena, rstar::RTree, rstared::RTreed"
 repository = "https://codeberg.org/topola/maplike"
 documentation = "https://docs.rs/maplike"
 readme = "README.md"

@@ -3,6 +3,8 @@ insert, remove and push.
 
 ## Supported collections
 
+### Standard library
+
 Rust's standard library maps and sets are supported via built-in convenience
 implementations:
 
