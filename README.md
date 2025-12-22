@@ -5,13 +5,14 @@ insert, remove and push.
 
 ### Standard library
 
-Rust's standard library maps and sets are supported via built-in convenience
+Rust's standard library collections are supported via built-in convenience
 implementations:
 
 - [`HashMap`](https://doc.rust-lang.org/std/collections/struct.HashMap.html), gated by the `std` feature (enabled by default);
 - [`HashSet`](https://doc.rust-lang.org/stable/std/collections/struct.HashSet.html), gated by the `std` feature (enabled by default);
 - [`BTreeMap`](https://doc.rust-lang.org/std/collections/struct.BTreeMap.html), not feature-gated;
-- [`BTreeSet`](https://doc.rust-lang.org/stable/std/collections/struct.BTreeSet.html), not feature-gated.
+- [`BTreeSet`](https://doc.rust-lang.org/stable/std/collections/struct.BTreeSet.html), not feature-gated;
+- [`Vec`], not feature-gated (only push and pop, no insert and remove).
 
 ### Third-party types
 
@@ -42,9 +43,7 @@ section below.
 
 ## Unsupported collections
 
-Standard library's `Vec` and `VecDeque` cannot be supported because they lack
-an interface to remove elements without invalidating indexes of other elements.
-Stable vectors do not have this limitation.
+Standard library's `VecDeque` is unsupported.
 
 Among stable vector data structures,
 [`Slab`](https://docs.rs/slab/latest/slab/),

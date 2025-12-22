@@ -56,6 +56,14 @@ pub trait Push<K>: Map {
     fn push(&mut self, value: Self::Item) -> K;
 }
 
+/// Remove the last element of the collection, returning it.
+///
+/// If `Push` is also implemented, calling `Pop` should revert it.
+pub trait Pop: Map {
+    /// Remove the last element of the collection, returning it.
+    fn pop(&mut self) -> Option<Self::Item>;
+}
+
 /// Consume the collection and yield owned key-value pairs.
 pub trait IntoIter<K>: Map + Keyed {
     /// Iterator that consumes the collection.

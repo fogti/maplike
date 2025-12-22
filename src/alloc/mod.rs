@@ -4,3 +4,4 @@
 
 mod btreemap;
 mod btreeset;
+mod vec;
