@@ -4,7 +4,7 @@
 
 #![doc(html_root_url = "https://docs.rs/maplike")]
 #![doc = include_str!("../README.md")]
-//#![deny(missing_docs)]
+#![deny(missing_docs)]
 #![forbid(unsafe_code)]
 #![no_std]
 
@@ -14,17 +14,23 @@ extern crate std as _std;
 // No feature for `alloc` because it would be always enabled anyway.
 extern crate alloc as _alloc;
 
-/// Marker trait for map-like types that store values of type `Item`.
+/// A map-like collection that stores values of type `Item`.
 pub trait Map {
+    /// Type of the items in the map.
     type Item;
 }
 
-/// Marker trait for keyed collections describing their key type.
+/// A keyed map with key of type `Key`.
 ///
-/// This trait is needed to prevent "error[E0207]: the type parameter `(...)`
-/// is not constrained by the impl trait, self type, or predicates" by consuming
-/// the type parameter into the associated type `Key`.
+/// This trait is needed to prevent rustc error E0207:
+///
+/// ```
+/// error[E0207]: the type parameter `(...)` is not constrained by the impl trait, self type, or predicates
+/// ```
+///
+/// by consuming the type parameter into the associated type `Key`.
 pub trait Keyed {
+    /// Type of the keys in the map.
     type Key;
 }
 
