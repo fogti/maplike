@@ -4,7 +4,7 @@
 
 use stable_vec::StableVecFacade;
 
-use crate::{Get, Insert, IntoIter, Keyed, Map, Push, Remove};
+use crate::{Get, Insert, IntoIter, Keyed, Map, Push, Remove, StableRemove};
 
 impl<V, C: stable_vec::core::Core<V>> Map for StableVecFacade<V, C> {
     type Item = V;
@@ -36,6 +36,8 @@ impl<V, C: stable_vec::core::Core<V>> Remove<usize> for StableVecFacade<V, C> {
         StableVecFacade::remove(self, *index)
     }
 }
+
+impl<V, C: stable_vec::core::Core<V>> StableRemove<usize> for StableVecFacade<V, C> {}
 
 impl<V, C: stable_vec::core::Core<V>> Push<usize> for StableVecFacade<V, C> {
     #[inline(always)]

@@ -4,7 +4,7 @@
 
 use _alloc::vec::Vec;
 
-use crate::{Get, IntoIter, Keyed, Map, Pop, Push};
+use crate::{Get, Insert, IntoIter, Keyed, Map, Pop, Push, Remove};
 
 impl<V> Map for Vec<V> {
     type Item = V;
@@ -18,6 +18,20 @@ impl<V> Get<usize> for Vec<V> {
     #[inline(always)]
     fn get(&self, key: &usize) -> Option<&V> {
         self.as_slice().get(*key)
+    }
+}
+
+impl<V> Insert<usize> for Vec<V> {
+    #[inline(always)]
+    fn insert(&mut self, key: usize, value: V) {
+        self[key] = value;
+    }
+}
+
+impl<V> Remove<usize> for Vec<V> {
+    #[inline(always)]
+    fn remove(&mut self, key: &usize) -> Option<V> {
+        Some(self.swap_remove(*key))
     }
 }
 

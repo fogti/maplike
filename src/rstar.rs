@@ -4,7 +4,7 @@
 
 use rstar::{RTree, RTreeObject};
 
-use crate::{Get, Insert, IntoIter, Keyed, Map, Remove};
+use crate::{Get, Insert, IntoIter, Keyed, Map, Remove, StableRemove};
 
 impl<K: RTreeObject> Map for RTree<K> {
     type Item = ();
@@ -35,11 +35,14 @@ impl<K: RTreeObject + PartialEq> Remove<K> for RTree<K> {
     }
 }
 
+impl<K: RTreeObject + PartialEq> StableRemove<K> for RTree<K> {}
+
 pub struct MapIntoIter<K: RTreeObject>(rstar::iterators::IntoIter<K>);
 
 impl<K: RTreeObject> Iterator for MapIntoIter<K> {
     type Item = (K, ());
 
+    #[inline(always)]
     fn next(&mut self) -> Option<Self::Item> {
         self.0.next().map(|k| (k, ()))
     }
@@ -48,6 +51,7 @@ impl<K: RTreeObject> Iterator for MapIntoIter<K> {
 impl<K: RTreeObject> IntoIter<K> for RTree<K> {
     type IntoIter = MapIntoIter<K>;
 
+    #[inline(always)]
     fn into_iter(self) -> MapIntoIter<K> {
         MapIntoIter(IntoIterator::into_iter(self))
     }

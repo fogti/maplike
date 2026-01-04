@@ -4,7 +4,7 @@
 
 use thunderdome::{Arena, Index};
 
-use crate::{Get, Insert, IntoIter, Keyed, Map, Push, Remove};
+use crate::{Get, Insert, IntoIter, Keyed, Map, Push, Remove, StableRemove};
 
 impl<V> Map for Arena<V> {
     type Item = V;
@@ -34,6 +34,8 @@ impl<V> Remove<Index> for Arena<V> {
         Arena::remove(self, *key)
     }
 }
+
+impl<V> StableRemove<Index> for Arena<V> {}
 
 impl<V> Push<Index> for Arena<V> {
     #[inline(always)]

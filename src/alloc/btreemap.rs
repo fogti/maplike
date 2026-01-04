@@ -4,7 +4,7 @@
 
 use _alloc::collections::BTreeMap;
 
-use crate::{Get, Insert, IntoIter, Keyed, Map, Remove};
+use crate::{Get, Insert, IntoIter, Keyed, Map, Remove, StableRemove};
 
 impl<K, V> Map for BTreeMap<K, V> {
     type Item = V;
@@ -35,9 +35,12 @@ impl<K: Ord, V> Remove<K> for BTreeMap<K, V> {
     }
 }
 
+impl<K: Ord, V> StableRemove<K> for BTreeMap<K, V> {}
+
 impl<K, V> IntoIter<K> for BTreeMap<K, V> {
     type IntoIter = _alloc::collections::btree_map::IntoIter<K, V>;
 
+    #[inline(always)]
     fn into_iter(self) -> _alloc::collections::btree_map::IntoIter<K, V> {
         IntoIterator::into_iter(self)
     }

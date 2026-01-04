@@ -1,5 +1,5 @@
-This create provides traits for common operations over maps and stable vectors:
-insert, remove and push.
+This create provides traits for common operations over map-like data structures:
+insert, remove, stable remove, push.
 
 ## Supported collections
 
@@ -12,7 +12,7 @@ implementations:
 - [`HashSet`](https://doc.rust-lang.org/stable/std/collections/struct.HashSet.html), gated by the `std` feature (enabled by default);
 - [`BTreeMap`](https://doc.rust-lang.org/std/collections/struct.BTreeMap.html), not feature-gated;
 - [`BTreeSet`](https://doc.rust-lang.org/stable/std/collections/struct.BTreeSet.html), not feature-gated;
-- [`Vec`], not feature-gated (only push and pop, no insert and remove).
+- [`Vec`](https://doc.rust-lang.org/std/vec/struct.Vec.html), not feature-gated, but does not support stable removal.
 
 ### Third-party types
 

@@ -24,9 +24,7 @@ pub trait Map {
 ///
 /// This trait is needed to prevent rustc error E0207:
 ///
-/// ```
-/// error[E0207]: the type parameter `(...)` is not constrained by the impl trait, self type, or predicates
-/// ```
+/// error[E0207]: the type parameter (...) is not constrained by the impl trait, self type, or predicates
 ///
 /// by consuming the type parameter into the associated type `Key`.
 pub trait Keyed {
@@ -46,13 +44,23 @@ pub trait Insert<K>: Map {
     fn insert(&mut self, key: K, value: Self::Item);
 }
 
-/// Remove a key from the collection, returning the value at the key if the
-/// key was previously in the map.
+/// Remove an element under a key from the collection, returning the value at
+/// the key if the key was previously in the map.
 pub trait Remove<K>: Map {
     /// Remove a key from the collection, returning the value at the key if the
     /// key was previously in the map.
     fn remove(&mut self, key: &K) -> Option<Self::Item>;
 }
+
+/// Removing an element under a key using [`Remove::remove()`] does not
+/// invalidate any other key.
+///
+/// Plain vectors such as [`Vec`] cannot implement this trait because
+/// removing elements invalidates keys of other elements. Some contiguous data
+/// structures, such as [`stable_vec::StableVec`] and [`thunderdome::Arena`],
+/// bypass this limitation by placing a tombstone element in place of the
+/// removed element.
+pub trait StableRemove<K>: Remove<K> {}
 
 /// Insert a value into the collection without specifying a key, returning
 /// the key that was automatically generated.
@@ -64,7 +72,8 @@ pub trait Push<K>: Map {
 
 /// Remove the last element of the collection, returning it.
 ///
-/// If `Push` is also implemented, calling `Pop` should revert it.
+/// If `Push` is also implemented, calling `Pop` should revert the previous
+/// pushes in their reversed order.
 pub trait Pop: Map {
     /// Remove the last element of the collection, returning it.
     fn pop(&mut self) -> Option<Self::Item>;
