@@ -16,7 +16,7 @@ implementations:
 
 ### Third-party types
 
-In addition to the standard library, `undoredo` has built-in feature-gated
+In addition to the standard library, `maplike` has built-in feature-gated
 convenience implementations for data structures from certain external crates:
 
 - [`stable_vec::StableVec`](https://docs.rs/stable-vec/latest/stable_vec/),
