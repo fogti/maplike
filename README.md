@@ -1,3 +1,9 @@
+<!--
+SPDX-FileCopyrightText: 2026 maplike contributors
+
+SPDX-License-Identifier: MIT OR Apache-2.0
+-->
+
 This create provides traits for common operations over map-like data structures:
 insert, remove, stable remove, push.
 
