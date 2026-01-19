@@ -4,7 +4,14 @@ SPDX-FileCopyrightText: 2026 maplike contributors
 SPDX-License-Identifier: MIT OR Apache-2.0
 -->
 
-This create provides traits for common operations over map-like data structures:
+[![CI Status](https://ci.codeberg.org/api/badges/15907/status.svg)](https://ci.codeberg.org/repos/15785)
+[![Docs](https://docs.rs/rstared/badge.svg)](https://docs.rs/rstared/)
+[![Crates.io](https://img.shields.io/crates/v/rstared.svg)](https://crates.io/crates/rstared)
+[![MIT OR Apache 2.0](https://img.shields.io/crates/l/rstared.svg)](#licence)
+
+# maplike
+
+This crate provides traits for common operations over map-like data structures:
 insert, remove, stable remove, push.
 
 ## Supported collections
