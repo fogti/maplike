@@ -14,11 +14,16 @@ extern crate std as _std;
 // No feature for `alloc` because it would be always enabled anyway.
 extern crate alloc as _alloc;
 
-/// A key-value map without any operations defined.
+/// A keyed collection without any operations defined.
+///
+/// A keyed collection is just a key-value map. We however use the name
+/// `KeyedCollection` instead of `Map` to distinguish maps from vectors and
+/// stable vectors, which also are keyed collections but with slightly different
+/// sets of operations.
 pub trait KeyedCollection {
-    /// Type of the keys in the map.
+    /// Type of the keys in the keyed collection.
     type Key;
-    /// Type of the values in the map.
+    /// Type of the values in the keyed collection.
     type Value;
 }
 
@@ -77,6 +82,30 @@ pub trait IntoIter<K>: KeyedCollection {
     /// Consume the collection and yield owned key-value pairs.
     fn into_iter(self) -> Self::IntoIter;
 }
+
+/// Operations for a keyed collection with stable removes.
+pub trait MapOps<K>: Get<K> + Insert<K> + StableRemove<K> {}
+impl<K, T: Get<K> + Insert<K> + StableRemove<K>> MapOps<K> for T {}
+
+/// A keyed collection with stable removes.
+pub trait Map<K>: KeyedCollection + MapOps<K> {}
+impl<K, T: Map<K>> Map<K> for T {}
+
+/// Operations for a keyed collection with pushes.
+pub trait VecOps<K>: Get<K> + Insert<K> + Remove<K> + Push<K> {}
+impl<K, T: Get<K> + Insert<K> + Remove<K> + Push<K>> VecOps<K> for T {}
+
+/// A keyed collection with pushes.
+pub trait Vec<K>: KeyedCollection + VecOps<K> {}
+impl<K, T: Vec<K>> Vec<K> for T {}
+
+/// Operations for a keyed collection with stable removes and pushes.
+pub trait StableVecOps<K>: VecOps<K> + StableRemove<K> {}
+impl<K, T: StableVecOps<K>> StableVecOps<K> for T {}
+
+/// A keyed collection with stable removes and pushes.
+pub trait StableVec<K>: KeyedCollection + StableVecOps<K> {}
+impl<K, T: StableVec<K>> StableVec<K> for T {}
 
 #[cfg(feature = "std")]
 mod std;
