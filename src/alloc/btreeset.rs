@@ -4,14 +4,11 @@
 
 use _alloc::collections::BTreeSet;
 
-use crate::{Get, Insert, IntoIter, Keyed, Map, Remove, StableRemove};
+use crate::{Get, Insert, IntoIter, KeyedCollection, Remove, StableRemove};
 
-impl<K> Map for BTreeSet<K> {
-    type Item = ();
-}
-
-impl<K> Keyed for BTreeSet<K> {
+impl<K> KeyedCollection for BTreeSet<K> {
     type Key = K;
+    type Value = ();
 }
 
 impl<K: Ord> Get<K> for BTreeSet<K> {

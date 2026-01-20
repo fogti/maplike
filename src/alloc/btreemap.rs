@@ -4,14 +4,11 @@
 
 use _alloc::collections::BTreeMap;
 
-use crate::{Get, Insert, IntoIter, Keyed, Map, Remove, StableRemove};
+use crate::{Get, Insert, IntoIter, KeyedCollection, Remove, StableRemove};
 
-impl<K, V> Map for BTreeMap<K, V> {
-    type Item = V;
-}
-
-impl<K, V> Keyed for BTreeMap<K, V> {
+impl<K, V> KeyedCollection for BTreeMap<K, V> {
     type Key = K;
+    type Value = V;
 }
 
 impl<K: Ord, V> Get<K> for BTreeMap<K, V> {

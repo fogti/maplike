@@ -4,14 +4,11 @@
 
 use _std::{collections::HashMap, hash::Hash};
 
-use crate::{Get, Insert, IntoIter, Keyed, Map, Remove, StableRemove};
+use crate::{Get, Insert, IntoIter, KeyedCollection, Remove, StableRemove};
 
-impl<K, V> Map for HashMap<K, V> {
-    type Item = V;
-}
-
-impl<K, V> Keyed for HashMap<K, V> {
+impl<K, V> KeyedCollection for HashMap<K, V> {
     type Key = K;
+    type Value = V;
 }
 
 impl<K: Eq + Hash, V> Get<K> for HashMap<K, V> {

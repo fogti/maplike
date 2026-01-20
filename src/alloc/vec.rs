@@ -4,14 +4,11 @@
 
 use _alloc::vec::Vec;
 
-use crate::{Get, Insert, IntoIter, Keyed, Map, Pop, Push, Remove};
+use crate::{Get, Insert, IntoIter, KeyedCollection, Pop, Push, Remove};
 
-impl<V> Map for Vec<V> {
-    type Item = V;
-}
-
-impl<V> Keyed for Vec<V> {
+impl<V> KeyedCollection for Vec<V> {
     type Key = usize;
+    type Value = V;
 }
 
 impl<V> Get<usize> for Vec<V> {

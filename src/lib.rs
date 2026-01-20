@@ -14,42 +14,32 @@ extern crate std as _std;
 // No feature for `alloc` because it would be always enabled anyway.
 extern crate alloc as _alloc;
 
-/// A map-like collection that stores values of type `Item`.
-pub trait Map {
-    /// Type of the items in the map.
-    type Item;
-}
-
-/// A keyed map with key of type `Key`.
-///
-/// This trait is needed to prevent rustc error E0207:
-///
-/// error[E0207]: the type parameter (...) is not constrained by the impl trait, self type, or predicates
-///
-/// by consuming the type parameter into the associated type `Key`.
-pub trait Keyed {
+/// A key-value map without any operations defined.
+pub trait KeyedCollection {
     /// Type of the keys in the map.
     type Key;
+    /// Type of the values in the map.
+    type Value;
 }
 
 /// Returns a reference to the value corresponding to the key.
-pub trait Get<K>: Map {
+pub trait Get<K>: KeyedCollection {
     /// Returns a reference to the value corresponding to the key.
-    fn get(&self, key: &K) -> Option<&Self::Item>;
+    fn get(&self, key: &K) -> Option<&Self::Value>;
 }
 
 /// Insert a key-value pair into the collection.
-pub trait Insert<K>: Map {
+pub trait Insert<K>: KeyedCollection {
     /// Insert a key-value pair into the collection.
-    fn insert(&mut self, key: K, value: Self::Item);
+    fn insert(&mut self, key: K, value: Self::Value);
 }
 
 /// Remove an element under a key from the collection, returning the value at
 /// the key if the key was previously in the map.
-pub trait Remove<K>: Map {
+pub trait Remove<K>: KeyedCollection {
     /// Remove a key from the collection, returning the value at the key if the
     /// key was previously in the map.
-    fn remove(&mut self, key: &K) -> Option<Self::Item>;
+    fn remove(&mut self, key: &K) -> Option<Self::Value>;
 }
 
 /// Removing an element under a key using [`Remove::remove()`] does not
@@ -64,25 +54,25 @@ pub trait StableRemove<K>: Remove<K> {}
 
 /// Insert a value into the collection without specifying a key, returning
 /// the key that was automatically generated.
-pub trait Push<K>: Map {
+pub trait Push<K>: KeyedCollection {
     /// Insert a value into the collection without specifying a key, returning
     /// the key that was automatically generated.
-    fn push(&mut self, value: Self::Item) -> K;
+    fn push(&mut self, value: Self::Value) -> K;
 }
 
 /// Remove the last element of the collection, returning it.
 ///
 /// If `Push` is also implemented, calling `Pop` should revert the previous
 /// pushes in their reversed order.
-pub trait Pop: Map {
+pub trait Pop: KeyedCollection {
     /// Remove the last element of the collection, returning it.
-    fn pop(&mut self) -> Option<Self::Item>;
+    fn pop(&mut self) -> Option<Self::Value>;
 }
 
 /// Consume the collection and yield owned key-value pairs.
-pub trait IntoIter<K>: Map + Keyed {
+pub trait IntoIter<K>: KeyedCollection {
     /// Iterator that consumes the collection.
-    type IntoIter: Iterator<Item = (K, Self::Item)>;
+    type IntoIter: Iterator<Item = (K, Self::Value)>;
 
     /// Consume the collection and yield owned key-value pairs.
     fn into_iter(self) -> Self::IntoIter;
