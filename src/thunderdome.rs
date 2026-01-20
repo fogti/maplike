@@ -4,14 +4,11 @@
 
 use thunderdome::{Arena, Index};
 
-use crate::{Get, Insert, IntoIter, Keyed, Map, Push, Remove, StableRemove};
+use crate::{Get, Insert, IntoIter, KeyedCollection, Push, Remove, StableRemove};
 
-impl<V> Map for Arena<V> {
-    type Item = V;
-}
-
-impl<V> Keyed for Arena<V> {
+impl<V> KeyedCollection for Arena<V> {
     type Key = Index;
+    type Value = V;
 }
 
 impl<V> Get<Index> for Arena<V> {

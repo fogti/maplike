@@ -4,14 +4,11 @@
 
 use rstar::{RTree, RTreeObject};
 
-use crate::{Get, Insert, IntoIter, Keyed, Map, Remove, StableRemove};
+use crate::{Get, Insert, IntoIter, KeyedCollection, Remove, StableRemove};
 
-impl<K: RTreeObject> Map for RTree<K> {
-    type Item = ();
-}
-
-impl<K: RTreeObject> Keyed for RTree<K> {
+impl<K: RTreeObject> KeyedCollection for RTree<K> {
     type Key = K;
+    type Value = ();
 }
 
 impl<K: RTreeObject + PartialEq> Get<K> for RTree<K> {
