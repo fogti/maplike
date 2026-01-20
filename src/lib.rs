@@ -83,28 +83,16 @@ pub trait IntoIter<K>: KeyedCollection {
     fn into_iter(self) -> Self::IntoIter;
 }
 
-/// Operations for a keyed collection with stable removes.
-pub trait MapOps<K>: Get<K> + Insert<K> + StableRemove<K> {}
-impl<K, T: Get<K> + Insert<K> + StableRemove<K>> MapOps<K> for T {}
-
 /// A keyed collection with stable removes.
-pub trait Map<K>: KeyedCollection + MapOps<K> {}
-impl<K, T: Map<K>> Map<K> for T {}
-
-/// Operations for a keyed collection with pushes.
-pub trait VecOps<K>: Get<K> + Insert<K> + Remove<K> + Push<K> {}
-impl<K, T: Get<K> + Insert<K> + Remove<K> + Push<K>> VecOps<K> for T {}
+pub trait Map<K>: Get<K> + Insert<K> + StableRemove<K> {}
+impl<K, T: Get<K> + Insert<K> + StableRemove<K>> Map<K> for T {}
 
 /// A keyed collection with pushes.
-pub trait Vec<K>: KeyedCollection + VecOps<K> {}
-impl<K, T: Vec<K>> Vec<K> for T {}
-
-/// Operations for a keyed collection with stable removes and pushes.
-pub trait StableVecOps<K>: VecOps<K> + StableRemove<K> {}
-impl<K, T: StableVecOps<K>> StableVecOps<K> for T {}
+pub trait Vec<K>: Get<K> + Insert<K> + Remove<K> + Push<K> {}
+impl<K, T: Get<K> + Insert<K> + Remove<K> + Push<K>> Vec<K> for T {}
 
 /// A keyed collection with stable removes and pushes.
-pub trait StableVec<K>: KeyedCollection + StableVecOps<K> {}
+pub trait StableVec<K>: Vec<K> + StableRemove<K> {}
 impl<K, T: StableVec<K>> StableVec<K> for T {}
 
 #[cfg(feature = "std")]
