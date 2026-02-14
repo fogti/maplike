@@ -4,7 +4,7 @@
 
 use _std::{collections::HashSet, hash::Hash};
 
-use crate::{Get, Insert, IntoIter, KeyedCollection, Remove, StableRemove};
+use crate::{Get, Insert, IntoIter, KeyedCollection, Remove, Set, StableRemove};
 
 impl<K> KeyedCollection for HashSet<K> {
     type Key = K;
@@ -15,6 +15,13 @@ impl<K: Eq + Hash> Get<K> for HashSet<K> {
     #[inline(always)]
     fn get(&self, key: &K) -> Option<&()> {
         HashSet::get(self, key).map(|_| &())
+    }
+}
+
+impl<K: Eq + Hash> Set<K> for HashSet<K> {
+    #[inline(always)]
+    fn set(&mut self, key: K, _value: ()) {
+        self.insert(key);
     }
 }
 

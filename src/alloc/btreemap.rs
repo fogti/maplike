@@ -4,7 +4,7 @@
 
 use _alloc::collections::BTreeMap;
 
-use crate::{Get, Insert, IntoIter, KeyedCollection, Remove, StableRemove};
+use crate::{Get, Insert, IntoIter, KeyedCollection, Remove, Set, StableRemove};
 
 impl<K, V> KeyedCollection for BTreeMap<K, V> {
     type Key = K;
@@ -15,6 +15,13 @@ impl<K: Ord, V> Get<K> for BTreeMap<K, V> {
     #[inline(always)]
     fn get(&self, key: &K) -> Option<&V> {
         BTreeMap::get(self, key)
+    }
+}
+
+impl<K: Ord, V> Set<K> for BTreeMap<K, V> {
+    #[inline(always)]
+    fn set(&mut self, key: K, value: V) {
+        self.insert(key, value);
     }
 }
 

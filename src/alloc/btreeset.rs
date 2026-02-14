@@ -4,7 +4,7 @@
 
 use _alloc::collections::BTreeSet;
 
-use crate::{Get, Insert, IntoIter, KeyedCollection, Remove, StableRemove};
+use crate::{Get, Insert, IntoIter, KeyedCollection, Remove, Set, StableRemove};
 
 impl<K> KeyedCollection for BTreeSet<K> {
     type Key = K;
@@ -15,6 +15,13 @@ impl<K: Ord> Get<K> for BTreeSet<K> {
     #[inline(always)]
     fn get(&self, key: &K) -> Option<&()> {
         BTreeSet::get(self, key).map(|_| &())
+    }
+}
+
+impl<K: Ord> Set<K> for BTreeSet<K> {
+    #[inline(always)]
+    fn set(&mut self, key: K, _value: ()) {
+        self.insert(key);
     }
 }
 

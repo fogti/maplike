@@ -12,7 +12,7 @@ SPDX-License-Identifier: MIT OR Apache-2.0
 # maplike
 
 This crate provides traits for common operations over map-like data structures:
-get, insert, remove, stable remove, push.
+get, set, insert, remove, stable remove, push.
 
 ## Supported collections
 

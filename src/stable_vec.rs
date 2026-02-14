@@ -18,10 +18,17 @@ impl<V, C: stable_vec::core::Core<V>> Get<usize> for StableVecFacade<V, C> {
     }
 }
 
+impl<V, C: stable_vec::core::Core<V>> Set<usize> for StableVecFacade<V, C> {
+    #[inline(always)]
+    fn set(&mut self, index: usize, value: V) {
+        self.insert(index, value);
+    }
+}
+
 impl<V, C: stable_vec::core::Core<V>> Insert<usize> for StableVecFacade<V, C> {
     #[inline(always)]
     fn insert(&mut self, index: usize, value: V) {
-        StableVecFacade::reserve_for(self, index);
+        self.reserve_for(self, index);
         StableVecFacade::insert(self, index, value);
     }
 }

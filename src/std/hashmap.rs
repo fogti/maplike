@@ -4,7 +4,7 @@
 
 use _std::{collections::HashMap, hash::Hash};
 
-use crate::{Get, Insert, IntoIter, KeyedCollection, Remove, StableRemove};
+use crate::{Get, Insert, IntoIter, KeyedCollection, Remove, Set, StableRemove};
 
 impl<K, V> KeyedCollection for HashMap<K, V> {
     type Key = K;
@@ -15,6 +15,13 @@ impl<K: Eq + Hash, V> Get<K> for HashMap<K, V> {
     #[inline(always)]
     fn get(&self, key: &K) -> Option<&V> {
         HashMap::get(self, key)
+    }
+}
+
+impl<K: Eq + Hash, V> Set<K> for HashMap<K, V> {
+    #[inline(always)]
+    fn set(&mut self, key: K, value: V) {
+        self.insert(key, value);
     }
 }
 

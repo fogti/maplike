@@ -33,17 +33,23 @@ pub trait Get<K>: KeyedCollection {
     fn get(&self, key: &K) -> Option<&Self::Value>;
 }
 
-/// Insert a key-value pair into the collection.
+/// Set the value of an already existing element under a key.
+pub trait Set<K>: KeyedCollection {
+    /// Set the value of an already existing element under a key.
+    fn set(&mut self, key: K, value: Self::Value);
+}
+
+/// Insert a new key-value pair into the collection at an arbitrary key.
 pub trait Insert<K>: KeyedCollection {
-    /// Insert a key-value pair into the collection.
+    /// Insert a new key-value pair into the collection at an arbitrary key.
     fn insert(&mut self, key: K, value: Self::Value);
 }
 
 /// Remove an element under a key from the collection, returning the value at
 /// the key if the key was previously in the map.
 pub trait Remove<K>: KeyedCollection {
-    /// Remove a key from the collection, returning the value at the key if the
-    /// key was previously in the map.
+    /// Remove an element from the collection, returning the value at the key if
+    /// the key was previously in the map.
     fn remove(&mut self, key: &K) -> Option<Self::Value>;
 }
 
@@ -93,7 +99,7 @@ impl<K, T: Get<K> + Insert<K> + Remove<K> + Push<K>> Vec<K> for T {}
 
 /// A keyed collection with stable removes and pushes.
 pub trait StableVec<K>: Vec<K> + StableRemove<K> {}
-impl<K, T: StableVec<K>> StableVec<K> for T {}
+impl<K, T: Vec<K> + StableRemove<K>> StableVec<K> for T {}
 
 #[cfg(feature = "std")]
 mod std;

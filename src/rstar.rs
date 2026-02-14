@@ -18,6 +18,14 @@ impl<K: RTreeObject + PartialEq> Get<K> for RTree<K> {
     }
 }
 
+impl<K: RTreeObject> Set<K> for RTree<K> {
+    #[inline(always)]
+    fn set(&mut self, key: K, _value: ()) {
+        self.remove(key);
+        self.insert(key);
+    }
+}
+
 impl<K: RTreeObject> Insert<K> for RTree<K> {
     #[inline(always)]
     fn insert(&mut self, key: K, _value: ()) {

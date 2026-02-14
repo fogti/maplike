@@ -18,6 +18,13 @@ impl<V> Get<Index> for Arena<V> {
     }
 }
 
+impl<V> Set<Index> for Arena<V> {
+    #[inline(always)]
+    fn set(&mut self, key: Index, value: V) {
+        self.insert(key, value)
+    }
+}
+
 impl<V> Insert<Index> for Arena<V> {
     #[inline(always)]
     fn insert(&mut self, key: Index, value: V) {
