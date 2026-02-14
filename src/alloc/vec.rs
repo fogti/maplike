@@ -28,12 +28,14 @@ impl<V> Set<usize> for Vec<V> {
 impl<V: Clone> Insert<usize> for Vec<V> {
     #[inline(always)]
     fn insert(&mut self, index: usize, value: V) {
-        // If the `Vec`'s len is too small, resize it and fill the elements
-        // between with the same value as the new inserted one.
-        //
-        // This is somewhat of a hack, but it helps in making the `undoredo`
-        // work.
-        if index >= self.len() {
+        if index < self.len() {
+            self[index] = value;
+        } else {
+            // If the `Vec`'s len is too small, resize it and fill the elements
+            // between with the same value as the new inserted one.
+            //
+            // This is somewhat of a hack, but it helps in making the `undoredo`
+            // work.
             self.resize(index + 1, value);
         }
     }
