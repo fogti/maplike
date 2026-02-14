@@ -21,7 +21,7 @@ impl<K: Ord> Get<K> for BTreeSet<K> {
 impl<K: Ord> Set<K> for BTreeSet<K> {
     #[inline(always)]
     fn set(&mut self, key: K, _value: ()) {
-        self.insert(key);
+        BTreeSet::insert(self, key);
     }
 }
 

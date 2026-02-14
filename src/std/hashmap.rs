@@ -21,7 +21,7 @@ impl<K: Eq + Hash, V> Get<K> for HashMap<K, V> {
 impl<K: Eq + Hash, V> Set<K> for HashMap<K, V> {
     #[inline(always)]
     fn set(&mut self, key: K, value: V) {
-        self.insert(key, value);
+        HashMap::insert(self, key, value);
     }
 }
 

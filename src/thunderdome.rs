@@ -4,7 +4,7 @@
 
 use thunderdome::{Arena, Index};
 
-use crate::{Get, Insert, IntoIter, KeyedCollection, Push, Remove, StableRemove};
+use crate::{Get, Insert, IntoIter, KeyedCollection, Push, Remove, Set, StableRemove};
 
 impl<V> KeyedCollection for Arena<V> {
     type Key = Index;
@@ -21,7 +21,7 @@ impl<V> Get<Index> for Arena<V> {
 impl<V> Set<Index> for Arena<V> {
     #[inline(always)]
     fn set(&mut self, key: Index, value: V) {
-        self.insert(key, value)
+        Arena::insert_at(self, key, value);
     }
 }
 

@@ -4,7 +4,7 @@
 
 use rstar::{RTree, RTreeObject};
 
-use crate::{Get, Insert, IntoIter, KeyedCollection, Remove, StableRemove};
+use crate::{Get, Insert, IntoIter, KeyedCollection, Remove, Set, StableRemove};
 
 impl<K: RTreeObject> KeyedCollection for RTree<K> {
     type Key = K;
@@ -18,11 +18,11 @@ impl<K: RTreeObject + PartialEq> Get<K> for RTree<K> {
     }
 }
 
-impl<K: RTreeObject> Set<K> for RTree<K> {
+impl<K: RTreeObject + PartialEq> Set<K> for RTree<K> {
     #[inline(always)]
     fn set(&mut self, key: K, _value: ()) {
-        self.remove(key);
-        self.insert(key);
+        RTree::remove(self, &key);
+        RTree::insert(self, key);
     }
 }
 

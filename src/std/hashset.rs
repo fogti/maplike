@@ -21,7 +21,7 @@ impl<K: Eq + Hash> Get<K> for HashSet<K> {
 impl<K: Eq + Hash> Set<K> for HashSet<K> {
     #[inline(always)]
     fn set(&mut self, key: K, _value: ()) {
-        self.insert(key);
+        HashSet::insert(self, key);
     }
 }
 
