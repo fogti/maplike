@@ -33,7 +33,9 @@ impl<V: Clone> Insert<usize> for Vec<V> {
         //
         // This is somewhat of a hack, but it helps in making the `undoredo`
         // work.
-        self.resize(index + 1, value);
+        if index >= self.len() {
+            self.resize(index + 1, value);
+        }
     }
 }
 
