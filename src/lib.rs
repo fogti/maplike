@@ -80,6 +80,20 @@ pub trait Pop: KeyedCollection {
     fn pop(&mut self) -> Option<Self::Value>;
 }
 
+/// Returns the length of the collection.
+///
+/// Should be only implemented for truly contiguous data structures, for which
+/// it makes sense to have a `.pop()` operation. Currently [`Vec`] is the only
+/// supported data structure that satisfies this property.
+pub trait Len: KeyedCollection {
+    /// Returns the length of the collection.
+    ///
+    /// Should be only implemented for truly contiguous data structures, for which
+    /// it makes sense to have a `.pop()` operation. Currently [`Vec`] is the only
+    /// supported data structure that satisfies this property.
+    fn len(&self) -> Self::Key;
+}
+
 /// Consume the collection and yield owned key-value pairs.
 pub trait IntoIter<K>: KeyedCollection {
     /// Iterator that consumes the collection.
