@@ -4,7 +4,7 @@
 
 [package]
 name = "maplike"
-version = "0.8.4"
+version = "0.8.5"
 authors = ["Mikolaj Wielgus <wielgusmikolaj@gmail.com>"]
 description = "Traits for common operations over maps, sets, (stable) vectors. Has built-ins for std, stable-vec, thunderdome, rstar, rstared."
 repository = "https://codeberg.org/topola/maplike"
