@@ -80,6 +80,22 @@ pub trait Pop: KeyedCollection {
     fn pop(&mut self) -> Option<Self::Value>;
 }
 
+/// Remove all elements from the collection.
+pub trait Clear<K>: Clone + IntoIter<K> + Remove<K>
+where
+    Self::IntoIter: DoubleEndedIterator,
+{
+    /// Remove all elements from the collection.
+    fn clear(&mut self) {
+        let keys: _alloc::vec::Vec<K> =
+            self.clone().into_iter().rev().map(|(key, _)| key).collect();
+
+        for key in keys {
+            self.remove(&key);
+        }
+    }
+}
+
 /// Returns the length of the collection.
 ///
 /// Should be only implemented for truly contiguous data structures, for which
