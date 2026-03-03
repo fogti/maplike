@@ -4,7 +4,7 @@
 
 use rstar::{RTree, RTreeObject};
 
-use crate::{Get, Insert, IntoIter, KeyedCollection, Remove, Set, StableRemove};
+use crate::{Clear, Get, Insert, IntoIter, KeyedCollection, Remove, Set, StableRemove};
 
 impl<K: RTreeObject> KeyedCollection for RTree<K> {
     type Key = K;
@@ -42,7 +42,14 @@ impl<K: RTreeObject + PartialEq> Remove<K> for RTree<K> {
 
 impl<K: RTreeObject + PartialEq> StableRemove<K> for RTree<K> {}
 
-// TODO: Clear for R-tree. Send a PR to upstream.
+impl<K: RTreeObject + PartialEq> Clear for RTree<K> {
+    #[inline(always)]
+    fn clear(&mut self) {
+        // TODO: Send a path upstream to implement `.clear()` efficiently,
+        // without having to drain.
+        self.drain().for_each(drop);
+    }
+}
 
 pub struct MapIntoIter<K: RTreeObject>(rstar::iterators::IntoIter<K>);
 
