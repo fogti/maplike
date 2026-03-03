@@ -2,9 +2,12 @@
 //
 // SPDX-License-Identifier: MIT OR Apache-2.0
 
-use _std::{collections::HashSet, hash::Hash};
+use _std::{
+    collections::{HashMap, HashSet},
+    hash::Hash,
+};
 
-use crate::{Get, Insert, IntoIter, KeyedCollection, Remove, Set, StableRemove};
+use crate::{Clear, Get, Insert, IntoIter, KeyedCollection, Remove, Set, StableRemove};
 
 impl<K> KeyedCollection for HashSet<K> {
     type Key = K;
@@ -40,6 +43,13 @@ impl<K: Eq + Hash> Remove<K> for HashSet<K> {
 }
 
 impl<K: Eq + Hash> StableRemove<K> for HashSet<K> {}
+
+impl<K: Eq + Hash> Clear for HashSet<K> {
+    #[inline(always)]
+    fn clear(&mut self) {
+        HashSet::clear(self);
+    }
+}
 
 pub struct MapIntoIter<K>(_std::collections::hash_set::IntoIter<K>);
 

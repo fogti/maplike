@@ -4,7 +4,7 @@
 
 use stable_vec::StableVecFacade;
 
-use crate::{Get, Insert, IntoIter, KeyedCollection, Push, Remove, Set, StableRemove};
+use crate::{Clear, Get, Insert, IntoIter, KeyedCollection, Push, Remove, Set, StableRemove};
 
 impl<V, C: stable_vec::core::Core<V>> KeyedCollection for StableVecFacade<V, C> {
     type Key = usize;
@@ -47,6 +47,13 @@ impl<V, C: stable_vec::core::Core<V>> Push<usize> for StableVecFacade<V, C> {
     #[inline(always)]
     fn push(&mut self, value: V) -> usize {
         StableVecFacade::push(self, value)
+    }
+}
+
+impl<V, C: stable_vec::core::Core<V>> Clear for StableVecFacade<V, C> {
+    #[inline(always)]
+    fn clear(&mut self) {
+        StableVecFacade::clear(self);
     }
 }
 

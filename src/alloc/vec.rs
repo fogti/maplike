@@ -4,7 +4,7 @@
 
 use _alloc::vec::Vec;
 
-use crate::{Get, Insert, IntoIter, KeyedCollection, Len, Pop, Push, Remove, Set};
+use crate::{Clear, Get, Insert, IntoIter, KeyedCollection, Len, Pop, Push, Remove, Set};
 
 impl<V> KeyedCollection for Vec<V> {
     type Key = usize;
@@ -60,6 +60,13 @@ impl<V> Pop for Vec<V> {
     #[inline(always)]
     fn pop(&mut self) -> Option<V> {
         Vec::pop(self)
+    }
+}
+
+impl<V> Clear for Vec<V> {
+    #[inline(always)]
+    fn clear(&mut self) {
+        Vec::clear(self);
     }
 }
 

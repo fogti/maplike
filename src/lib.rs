@@ -81,19 +81,9 @@ pub trait Pop: KeyedCollection {
 }
 
 /// Remove all elements from the collection.
-pub trait Clear<K>: Clone + IntoIter<K> + Remove<K>
-where
-    Self::IntoIter: DoubleEndedIterator,
-{
+pub trait Clear: KeyedCollection {
     /// Remove all elements from the collection.
-    fn clear(&mut self) {
-        let keys: _alloc::vec::Vec<K> =
-            self.clone().into_iter().rev().map(|(key, _)| key).collect();
-
-        for key in keys {
-            self.remove(&key);
-        }
-    }
+    fn clear(&mut self);
 }
 
 /// Returns the length of the collection.

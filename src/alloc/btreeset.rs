@@ -4,7 +4,7 @@
 
 use _alloc::collections::BTreeSet;
 
-use crate::{Get, Insert, IntoIter, KeyedCollection, Remove, Set, StableRemove};
+use crate::{Clear, Get, Insert, IntoIter, KeyedCollection, Remove, Set, StableRemove};
 
 impl<K> KeyedCollection for BTreeSet<K> {
     type Key = K;
@@ -40,6 +40,13 @@ impl<K: Ord> Remove<K> for BTreeSet<K> {
 }
 
 impl<K: Ord> StableRemove<K> for BTreeSet<K> {}
+
+impl<K: Ord> Clear for BTreeSet<K> {
+    #[inline(always)]
+    fn clear(&mut self) {
+        BTreeSet::clear(self);
+    }
+}
 
 pub struct MapIntoIter<K>(_alloc::collections::btree_set::IntoIter<K>);
 

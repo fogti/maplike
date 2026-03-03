@@ -42,6 +42,8 @@ impl<K: RTreeObject + PartialEq> Remove<K> for RTree<K> {
 
 impl<K: RTreeObject + PartialEq> StableRemove<K> for RTree<K> {}
 
+// TODO: Clear for R-tree. Send a PR to upstream.
+
 pub struct MapIntoIter<K: RTreeObject>(rstar::iterators::IntoIter<K>);
 
 impl<K: RTreeObject> Iterator for MapIntoIter<K> {
