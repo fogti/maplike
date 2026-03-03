@@ -2,10 +2,7 @@
 //
 // SPDX-License-Identifier: MIT OR Apache-2.0
 
-use _std::{
-    collections::{HashMap, HashSet},
-    hash::Hash,
-};
+use _std::{collections::HashSet, hash::Hash};
 
 use crate::{Clear, Get, Insert, IntoIter, KeyedCollection, Remove, Set, StableRemove};
 
