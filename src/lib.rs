@@ -11,7 +11,7 @@
 #[cfg(feature = "std")]
 extern crate std as std_;
 
-// No feature for `alloc` because it would be always enabled anyway.
+#[cfg(feature = "alloc")]
 extern crate alloc as alloc_;
 
 /// Replace self with a new value.
@@ -133,7 +133,7 @@ impl<K, T: Get<K> + Set<K> + Push<K> + Pop + Clear + Len> Veclike<K> for T {}
 #[cfg(feature = "std")]
 mod std;
 
-// No feature for alloc because it would be always enabled anyway.
+#[cfg(feature = "alloc")]
 mod alloc;
 
 #[cfg(feature = "stable-vec")]
