@@ -60,9 +60,9 @@ pub trait Insert<K>: Collection {
 /// at the key if the key was previously in the map. Other keys are not
 /// invalidated.
 ///
-/// `Vec` obviously does not implement this trait because its element
-/// removal methods, [`Vec::insert()`] and [`Vec::swap_insert()`], invalidate
-/// existing indices.
+/// [`Vec`] obviously does not implement this trait because its element removal
+/// methods, [`Vec::insert()`] and [`Vec::swap_insert()`], invalidate existing
+/// indices.
 ///
 /// If you need this trait on a contiguous data type with constant-time
 /// insertion, lookup, and removal, try [`stable_vec::StableVec`] or
@@ -104,10 +104,6 @@ pub trait Clear: Collection {
 /// supported data structure that satisfies this property.
 pub trait Len: Collection {
     /// Returns the length of the collection.
-    ///
-    /// Should be only implemented for truly contiguous data structures, for which
-    /// it makes sense to have a `.pop()` operation. Currently [`Vec`] is the only
-    /// supported data structure that satisfies this property.
     fn len(&self) -> Self::Key;
 }
 
@@ -135,14 +131,20 @@ impl<K, T: Get<K> + Set<K> + Insert<K> + Remove<K> + Clear> Maplike<K> for T whe
 {
 }
 
-/// A map-like whose value is the unit type, thus behaving like a set.
+/// A map-like keyed collection whose value is the unit type, thus behaving like
+/// a set.
 pub trait Setlike<K>: Maplike<K, Value = ()> {}
 impl<K, T: Maplike<K, Value = ()>> Setlike<K> for T {}
 
-/// A keyed collection with get, set, push, pop, clear, len operations.
-pub trait Veclike<K>: Index<K> + Get<K> + Set<K> + Push<K> + Pop + Clear + Len {}
-impl<K, T: Index<K> + Get<K> + Set<K> + Push<K> + Pop + Clear + Len> Veclike<K> for T {}
+/// A keyed collection with get, set, len operations.
+pub trait Arraylike<K>: Index<K> + Get<K> + Set<K> + Len {}
+impl<K, T: Index<K> + Get<K> + Set<K> + Len> Arraylike<K> for T {}
 
+/// An array-like keyed collection with additional push, pop, clear operations.
+pub trait Veclike<K>: Index<K> + Get<K> + Set<K> + Push<K> + Pop + Clear + Len {}
+impl<K, T: Arraylike<K> + Push<K> + Pop + Clear> Veclike<K> for T {}
+
+mod compounds;
 mod scalars;
 
 #[cfg(feature = "std")]
