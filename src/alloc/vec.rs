@@ -4,7 +4,7 @@
 
 use alloc_::vec::Vec;
 
-use crate::{Clear, Get, Insert, IntoIter, KeyedCollection, Len, Pop, Push, Remove, Set};
+use crate::{Clear, Get, IntoIter, KeyedCollection, Len, Pop, Push, Remove, Set};
 
 impl<V> KeyedCollection for Vec<V> {
     type Key = usize;
@@ -22,22 +22,6 @@ impl<V> Set<usize> for Vec<V> {
     #[inline(always)]
     fn set(&mut self, index: usize, value: V) {
         self[index] = value;
-    }
-}
-
-impl<V: Clone> Insert<usize> for Vec<V> {
-    #[inline(always)]
-    fn insert(&mut self, index: usize, value: V) {
-        if index < self.len() {
-            self[index] = value;
-        } else {
-            // If the `Vec`'s len is too small, resize it and fill the elements
-            // between with the same value as the new inserted one.
-            //
-            // This is somewhat of a hack, but it helps in making the `undoredo`
-            // work.
-            self.resize(index + 1, value);
-        }
     }
 }
 
