@@ -118,6 +118,10 @@ pub trait IntoIter<K>: Collection {
     fn into_iter(self) -> Self::IntoIter;
 }
 
+/// A single assignable value.
+pub trait Scalarlike: Assign {}
+impl<T: Assign> Scalarlike for T {}
+
 /// A keyed collection with get, set, insert, remove, clear operations.
 pub trait Maplike<K>: Get<K> + Set<K> + Insert<K> + Remove<K> + Clear {}
 impl<K, T: Get<K> + Set<K> + Insert<K> + Remove<K> + Clear> Maplike<K> for T {}
@@ -129,6 +133,8 @@ impl<K, T: Maplike<K, Value = ()>> Setlike<K> for T {}
 /// A keyed collection with get, set, push, pop, clear, len operations.
 pub trait Veclike<K>: Get<K> + Set<K> + Push<K> + Pop + Clear + Len {}
 impl<K, T: Get<K> + Set<K> + Push<K> + Pop + Clear + Len> Veclike<K> for T {}
+
+mod scalars;
 
 #[cfg(feature = "std")]
 mod std;
