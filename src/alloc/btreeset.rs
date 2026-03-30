@@ -2,7 +2,7 @@
 //
 // SPDX-License-Identifier: MIT OR Apache-2.0
 
-use _alloc::collections::BTreeSet;
+use alloc_::collections::BTreeSet;
 
 use crate::{Clear, Get, Insert, IntoIter, KeyedCollection, Remove, Set, StableRemove};
 
@@ -48,7 +48,7 @@ impl<K: Ord> Clear for BTreeSet<K> {
     }
 }
 
-pub struct MapIntoIter<K>(_alloc::collections::btree_set::IntoIter<K>);
+pub struct MapIntoIter<K>(alloc_::collections::btree_set::IntoIter<K>);
 
 impl<K> Iterator for MapIntoIter<K> {
     type Item = (K, ());

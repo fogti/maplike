@@ -2,7 +2,7 @@
 //
 // SPDX-License-Identifier: MIT OR Apache-2.0
 
-use _std::{collections::HashSet, hash::Hash};
+use std_::{collections::HashSet, hash::Hash};
 
 use crate::{Clear, Get, Insert, IntoIter, KeyedCollection, Remove, Set, StableRemove};
 
@@ -48,7 +48,7 @@ impl<K: Eq + Hash> Clear for HashSet<K> {
     }
 }
 
-pub struct MapIntoIter<K>(_std::collections::hash_set::IntoIter<K>);
+pub struct MapIntoIter<K>(std_::collections::hash_set::IntoIter<K>);
 
 impl<K> Iterator for MapIntoIter<K> {
     type Item = (K, ());

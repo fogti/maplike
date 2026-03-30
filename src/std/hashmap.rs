@@ -2,7 +2,7 @@
 //
 // SPDX-License-Identifier: MIT OR Apache-2.0
 
-use _std::{collections::HashMap, hash::Hash};
+use std_::{collections::HashMap, hash::Hash};
 
 use crate::{Clear, Get, Insert, IntoIter, KeyedCollection, Remove, Set, StableRemove};
 
@@ -49,9 +49,9 @@ impl<K: Eq + Hash, V> Clear for HashMap<K, V> {
 }
 
 impl<K, V> IntoIter<K> for HashMap<K, V> {
-    type IntoIter = _std::collections::hash_map::IntoIter<K, V>;
+    type IntoIter = std_::collections::hash_map::IntoIter<K, V>;
 
-    fn into_iter(self) -> _std::collections::hash_map::IntoIter<K, V> {
+    fn into_iter(self) -> std_::collections::hash_map::IntoIter<K, V> {
         IntoIterator::into_iter(self)
     }
 }

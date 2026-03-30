@@ -2,7 +2,7 @@
 //
 // SPDX-License-Identifier: MIT OR Apache-2.0
 
-use _alloc::vec::Vec;
+use alloc_::vec::Vec;
 
 use crate::{Clear, Get, Insert, IntoIter, KeyedCollection, Len, Pop, Push, Remove, Set};
 
@@ -78,7 +78,7 @@ impl<V> Len for Vec<V> {
 }
 
 impl<V> IntoIter<usize> for Vec<V> {
-    type IntoIter = core::iter::Enumerate<_alloc::vec::IntoIter<V>>;
+    type IntoIter = core::iter::Enumerate<alloc_::vec::IntoIter<V>>;
 
     fn into_iter(self) -> Self::IntoIter {
         IntoIterator::into_iter(self).enumerate()

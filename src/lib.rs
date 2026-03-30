@@ -9,10 +9,10 @@
 #![no_std]
 
 #[cfg(feature = "std")]
-extern crate std as _std;
+extern crate std as std_;
 
 // No feature for `alloc` because it would be always enabled anyway.
-extern crate alloc as _alloc;
+extern crate alloc as alloc_;
 
 /// A keyed collection without any operations defined.
 ///
