@@ -14,7 +14,7 @@ extern crate std as std_;
 // No feature for `alloc` because it would be always enabled anyway.
 extern crate alloc as alloc_;
 
-/// A keyed collection without any operations defined.
+/// Base trait for keyed collections, without any operations defined yet.
 ///
 /// Just a key-value map without any methods yet. We however use the name
 /// `Collection` instead of `Map` to distinguish maps from vectors and stable
@@ -109,20 +109,17 @@ pub trait IntoIter<K>: Collection {
     fn into_iter(self) -> Self::IntoIter;
 }
 
-/// A keyed collection with get, insert, and remove.
-pub trait Map<K>: Get<K> + Insert<K> + Remove<K> {}
-impl<K, T: Get<K> + Insert<K> + Remove<K>> Map<K> for T {}
+/// A keyed collection with get, set, insert, remove, clear operations.
+pub trait Maplike<K>: Get<K> + Set<K> + Insert<K> + Remove<K> + Clear {}
+impl<K, T: Get<K> + Set<K> + Insert<K> + Remove<K> + Clear> Maplike<K> for T {}
 
-/// A keyed collection with pushes.
-pub trait Vec<K>: Get<K> + Insert<K> + Remove<K> + Push<K> {}
-impl<K, T: Get<K> + Insert<K> + Remove<K> + Push<K>> Vec<K> for T {}
+/// A map-like whose value is the unit type, thus behaving like a set.
+pub trait Setlike<K>: Maplike<K, Value = ()> {}
+impl<K, T: Maplike<K, Value = ()>> Setlike<K> for T {}
 
-/// A keyed collection with get, insert, remove, and push.
-///
-/// Equivalent to [`Vec`]; kept for compatibility with code that bounded on the
-/// previous definition.
-pub trait StableVec<K>: Vec<K> {}
-impl<K, T: Vec<K>> StableVec<K> for T {}
+/// A keyed collection with get, set, push, pop, clear, len operations.
+pub trait Veclike<K>: Get<K> + Set<K> + Push<K> + Pop + Clear + Len {}
+impl<K, T: Get<K> + Set<K> + Push<K> + Pop + Clear + Len> Veclike<K> for T {}
 
 #[cfg(feature = "std")]
 mod std;
