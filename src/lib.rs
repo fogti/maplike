@@ -14,6 +14,15 @@ extern crate std as std_;
 // No feature for `alloc` because it would be always enabled anyway.
 extern crate alloc as alloc_;
 
+/// Replace self with a new value.
+///
+/// This is mainly useful for scalars: these do not have get, set, insert,
+/// remove, push, pop, clear, len operations, but may still be assigned to.
+pub trait Assign {
+    /// Assign a new value to `*self`.
+    fn assign(&mut self, value: Self);
+}
+
 /// Base trait for keyed collections, without any operations defined yet.
 ///
 /// Just a key-value map without any methods yet. We however use the name

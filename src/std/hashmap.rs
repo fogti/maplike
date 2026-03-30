@@ -4,7 +4,14 @@
 
 use std_::{collections::HashMap, hash::Hash};
 
-use crate::{Clear, Get, Insert, IntoIter, Collection, Remove, Set};
+use crate::{Assign, Clear, Collection, Get, Insert, IntoIter, Remove, Set};
+
+impl<K, V> Assign for HashMap<K, V> {
+    #[inline(always)]
+    fn assign(&mut self, value: Self) {
+        *self = value;
+    }
+}
 
 impl<K, V> Collection for HashMap<K, V> {
     type Key = K;

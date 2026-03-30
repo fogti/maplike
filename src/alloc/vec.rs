@@ -4,7 +4,14 @@
 
 use alloc_::vec::Vec;
 
-use crate::{Clear, Collection, Get, IntoIter, Len, Pop, Push, Set};
+use crate::{Assign, Clear, Collection, Get, IntoIter, Len, Pop, Push, Set};
+
+impl<V> Assign for Vec<V> {
+    #[inline(always)]
+    fn assign(&mut self, value: Self) {
+        *self = value;
+    }
+}
 
 impl<V> Collection for Vec<V> {
     type Key = usize;

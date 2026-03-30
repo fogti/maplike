@@ -4,7 +4,14 @@
 
 use std_::{collections::HashSet, hash::Hash};
 
-use crate::{Clear, Get, Insert, IntoIter, Collection, Remove, Set};
+use crate::{Assign, Clear, Collection, Get, Insert, IntoIter, Remove, Set};
+
+impl<K> Assign for HashSet<K> {
+    #[inline(always)]
+    fn assign(&mut self, value: Self) {
+        *self = value;
+    }
+}
 
 impl<K> Collection for HashSet<K> {
     type Key = K;

@@ -6,6 +6,13 @@ use rstar::{RTree, RTreeObject};
 
 use crate::{Clear, Collection, Get, Insert, IntoIter, Remove, Set};
 
+impl<K> Assign for RTree<K> {
+    #[inline(always)]
+    fn assign(&mut self, value: Self) {
+        *self = value;
+    }
+}
+
 impl<K: RTreeObject> Collection for RTree<K> {
     type Key = K;
     type Value = ();
