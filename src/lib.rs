@@ -8,6 +8,8 @@
 #![forbid(unsafe_code)]
 #![no_std]
 
+use core::ops::Index;
+
 #[cfg(feature = "std")]
 extern crate std as std_;
 
@@ -123,16 +125,23 @@ pub trait Scalarlike: Assign {}
 impl<T: Assign> Scalarlike for T {}
 
 /// A keyed collection with get, set, insert, remove, clear operations.
-pub trait Maplike<K>: Get<K> + Set<K> + Insert<K> + Remove<K> + Clear {}
-impl<K, T: Get<K> + Set<K> + Insert<K> + Remove<K> + Clear> Maplike<K> for T {}
+pub trait Maplike<K>: Get<K> + Set<K> + Insert<K> + Remove<K> + Clear
+where
+    for<'a> Self: Index<&'a K>,
+{
+}
+impl<K, T: Get<K> + Set<K> + Insert<K> + Remove<K> + Clear> Maplike<K> for T where
+    for<'a> Self: Index<&'a K>
+{
+}
 
 /// A map-like whose value is the unit type, thus behaving like a set.
 pub trait Setlike<K>: Maplike<K, Value = ()> {}
 impl<K, T: Maplike<K, Value = ()>> Setlike<K> for T {}
 
 /// A keyed collection with get, set, push, pop, clear, len operations.
-pub trait Veclike<K>: Get<K> + Set<K> + Push<K> + Pop + Clear + Len {}
-impl<K, T: Get<K> + Set<K> + Push<K> + Pop + Clear + Len> Veclike<K> for T {}
+pub trait Veclike<K>: Index<K> + Get<K> + Set<K> + Push<K> + Pop + Clear + Len {}
+impl<K, T: Index<K> + Get<K> + Set<K> + Push<K> + Pop + Clear + Len> Veclike<K> for T {}
 
 mod scalars;
 
