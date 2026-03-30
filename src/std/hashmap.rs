@@ -4,9 +4,9 @@
 
 use std_::{collections::HashMap, hash::Hash};
 
-use crate::{Clear, Get, Insert, IntoIter, KeyedCollection, Remove, Set, StableRemove};
+use crate::{Clear, Get, Insert, IntoIter, Collection, Remove, Set, StableRemove};
 
-impl<K, V> KeyedCollection for HashMap<K, V> {
+impl<K, V> Collection for HashMap<K, V> {
     type Key = K;
     type Value = V;
 }

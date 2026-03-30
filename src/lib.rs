@@ -20,7 +20,7 @@ extern crate alloc as alloc_;
 /// `KeyedCollection` instead of `Map` to distinguish maps from vectors and
 /// stable vectors, which also are keyed collections but with slightly different
 /// sets of operations.
-pub trait KeyedCollection {
+pub trait Collection {
     /// Type of the keys in the keyed collection.
     type Key;
     /// Type of the values in the keyed collection.
@@ -28,26 +28,26 @@ pub trait KeyedCollection {
 }
 
 /// Returns a reference to the value corresponding to the key.
-pub trait Get<K>: KeyedCollection {
+pub trait Get<K>: Collection {
     /// Returns a reference to the value corresponding to the key.
     fn get(&self, key: &K) -> Option<&Self::Value>;
 }
 
 /// Set the value of an already existing element under a key.
-pub trait Set<K>: KeyedCollection {
+pub trait Set<K>: Collection {
     /// Set the value of an already existing element under a key.
     fn set(&mut self, key: K, value: Self::Value);
 }
 
 /// Insert a new key-value pair into the collection at an arbitrary key.
-pub trait Insert<K>: KeyedCollection {
+pub trait Insert<K>: Collection {
     /// Insert a new key-value pair into the collection at an arbitrary key.
     fn insert(&mut self, key: K, value: Self::Value);
 }
 
 /// Remove an element under a key from the collection, returning the value at
 /// the key if the key was previously in the map.
-pub trait Remove<K>: KeyedCollection {
+pub trait Remove<K>: Collection {
     /// Remove an element from the collection, returning the value at the key if
     /// the key was previously in the map.
     fn remove(&mut self, key: &K) -> Option<Self::Value>;
@@ -65,7 +65,7 @@ pub trait StableRemove<K>: Remove<K> {}
 
 /// Insert a value into the collection without specifying a key, returning
 /// the key that was automatically generated.
-pub trait Push<K>: KeyedCollection {
+pub trait Push<K>: Collection {
     /// Insert a value into the collection without specifying a key, returning
     /// the key that was automatically generated.
     fn push(&mut self, value: Self::Value) -> K;
@@ -75,13 +75,13 @@ pub trait Push<K>: KeyedCollection {
 ///
 /// If `Push` is also implemented, calling `Pop` should revert the previous
 /// pushes in their reversed order.
-pub trait Pop: KeyedCollection {
+pub trait Pop: Collection {
     /// Remove the last element of the collection, returning it.
     fn pop(&mut self) -> Option<Self::Value>;
 }
 
 /// Remove all elements from the collection.
-pub trait Clear: KeyedCollection {
+pub trait Clear: Collection {
     /// Remove all elements from the collection.
     fn clear(&mut self);
 }
@@ -91,7 +91,7 @@ pub trait Clear: KeyedCollection {
 /// Should be only implemented for truly contiguous data structures, for which
 /// it makes sense to have a `.pop()` operation. Currently [`Vec`] is the only
 /// supported data structure that satisfies this property.
-pub trait Len: KeyedCollection {
+pub trait Len: Collection {
     /// Returns the length of the collection.
     ///
     /// Should be only implemented for truly contiguous data structures, for which
@@ -101,7 +101,7 @@ pub trait Len: KeyedCollection {
 }
 
 /// Consume the collection and yield owned key-value pairs.
-pub trait IntoIter<K>: KeyedCollection {
+pub trait IntoIter<K>: Collection {
     /// Iterator that consumes the collection.
     type IntoIter: Iterator<Item = (K, Self::Value)>;
 

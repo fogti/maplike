@@ -4,9 +4,9 @@
 
 use alloc_::vec::Vec;
 
-use crate::{Clear, Get, IntoIter, KeyedCollection, Len, Pop, Push, Remove, Set};
+use crate::{Clear, Collection, Get, IntoIter, Len, Pop, Push, Remove, Set};
 
-impl<V> KeyedCollection for Vec<V> {
+impl<V> Collection for Vec<V> {
     type Key = usize;
     type Value = V;
 }

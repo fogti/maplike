@@ -4,9 +4,9 @@
 
 use alloc_::collections::BTreeSet;
 
-use crate::{Clear, Get, Insert, IntoIter, KeyedCollection, Remove, Set, StableRemove};
+use crate::{Clear, Collection, Get, Insert, IntoIter, Remove, Set, StableRemove};
 
-impl<K> KeyedCollection for BTreeSet<K> {
+impl<K> Collection for BTreeSet<K> {
     type Key = K;
     type Value = ();
 }

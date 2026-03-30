@@ -4,9 +4,9 @@
 
 use alloc_::collections::BTreeMap;
 
-use crate::{Clear, Get, Insert, IntoIter, KeyedCollection, Remove, Set, StableRemove};
+use crate::{Clear, Get, Insert, IntoIter, Collection, Remove, Set, StableRemove};
 
-impl<K, V> KeyedCollection for BTreeMap<K, V> {
+impl<K, V> Collection for BTreeMap<K, V> {
     type Key = K;
     type Value = V;
 }

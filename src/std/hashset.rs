@@ -4,9 +4,9 @@
 
 use std_::{collections::HashSet, hash::Hash};
 
-use crate::{Clear, Get, Insert, IntoIter, KeyedCollection, Remove, Set, StableRemove};
+use crate::{Clear, Get, Insert, IntoIter, Collection, Remove, Set, StableRemove};
 
-impl<K> KeyedCollection for HashSet<K> {
+impl<K> Collection for HashSet<K> {
     type Key = K;
     type Value = ();
 }
