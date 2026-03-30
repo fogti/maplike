@@ -4,9 +4,9 @@
 
 use rstar::{RTree, RTreeObject};
 
-use crate::{Clear, Get, Insert, IntoIter, KeyedCollection, Remove, Set, StableRemove};
+use crate::{Clear, Collection, Get, Insert, IntoIter, Remove, Set};
 
-impl<K: RTreeObject> KeyedCollection for RTree<K> {
+impl<K: RTreeObject> Collection for RTree<K> {
     type Key = K;
     type Value = ();
 }
@@ -39,8 +39,6 @@ impl<K: RTreeObject + PartialEq> Remove<K> for RTree<K> {
         RTree::remove(self, key).map(|_| ())
     }
 }
-
-impl<K: RTreeObject + PartialEq> StableRemove<K> for RTree<K> {}
 
 impl<K: RTreeObject + PartialEq> Clear for RTree<K> {
     #[inline(always)]

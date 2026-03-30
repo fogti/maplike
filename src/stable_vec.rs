@@ -4,9 +4,9 @@
 
 use stable_vec::StableVecFacade;
 
-use crate::{Clear, Get, Insert, IntoIter, KeyedCollection, Push, Remove, Set, StableRemove};
+use crate::{Clear, Collection, Get, Insert, IntoIter, Push, Remove, Set};
 
-impl<V, C: stable_vec::core::Core<V>> KeyedCollection for StableVecFacade<V, C> {
+impl<V, C: stable_vec::core::Core<V>> Collection for StableVecFacade<V, C> {
     type Key = usize;
     type Value = V;
 }
@@ -40,8 +40,6 @@ impl<V, C: stable_vec::core::Core<V>> Remove<usize> for StableVecFacade<V, C> {
         StableVecFacade::remove(self, *index)
     }
 }
-
-impl<V, C: stable_vec::core::Core<V>> StableRemove<usize> for StableVecFacade<V, C> {}
 
 impl<V, C: stable_vec::core::Core<V>> Push<usize> for StableVecFacade<V, C> {
     #[inline(always)]

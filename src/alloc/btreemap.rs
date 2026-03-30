@@ -4,7 +4,7 @@
 
 use alloc_::collections::BTreeMap;
 
-use crate::{Clear, Get, Insert, IntoIter, Collection, Remove, Set, StableRemove};
+use crate::{Clear, Get, Insert, IntoIter, Collection, Remove, Set};
 
 impl<K, V> Collection for BTreeMap<K, V> {
     type Key = K;
@@ -38,8 +38,6 @@ impl<K: Ord, V> Remove<K> for BTreeMap<K, V> {
         BTreeMap::remove(self, key)
     }
 }
-
-impl<K: Ord, V> StableRemove<K> for BTreeMap<K, V> {}
 
 impl<K: Ord, V> Clear for BTreeMap<K, V> {
     #[inline(always)]

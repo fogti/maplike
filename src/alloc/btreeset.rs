@@ -4,7 +4,7 @@
 
 use alloc_::collections::BTreeSet;
 
-use crate::{Clear, Collection, Get, Insert, IntoIter, Remove, Set, StableRemove};
+use crate::{Clear, Collection, Get, Insert, IntoIter, Remove, Set};
 
 impl<K> Collection for BTreeSet<K> {
     type Key = K;
@@ -38,8 +38,6 @@ impl<K: Ord> Remove<K> for BTreeSet<K> {
         BTreeSet::remove(self, key).then_some(())
     }
 }
-
-impl<K: Ord> StableRemove<K> for BTreeSet<K> {}
 
 impl<K: Ord> Clear for BTreeSet<K> {
     #[inline(always)]

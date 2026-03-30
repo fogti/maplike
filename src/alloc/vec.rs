@@ -4,7 +4,7 @@
 
 use alloc_::vec::Vec;
 
-use crate::{Clear, Collection, Get, IntoIter, Len, Pop, Push, Remove, Set};
+use crate::{Clear, Collection, Get, IntoIter, Len, Pop, Push, Set};
 
 impl<V> Collection for Vec<V> {
     type Key = usize;
@@ -22,13 +22,6 @@ impl<V> Set<usize> for Vec<V> {
     #[inline(always)]
     fn set(&mut self, index: usize, value: V) {
         self[index] = value;
-    }
-}
-
-impl<V> Remove<usize> for Vec<V> {
-    #[inline(always)]
-    fn remove(&mut self, index: &usize) -> Option<V> {
-        Some(self.swap_remove(*index))
     }
 }
 

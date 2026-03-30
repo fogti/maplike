@@ -4,7 +4,7 @@
 
 use std_::{collections::HashMap, hash::Hash};
 
-use crate::{Clear, Get, Insert, IntoIter, Collection, Remove, Set, StableRemove};
+use crate::{Clear, Get, Insert, IntoIter, Collection, Remove, Set};
 
 impl<K, V> Collection for HashMap<K, V> {
     type Key = K;
@@ -38,8 +38,6 @@ impl<K: Eq + Hash, V> Remove<K> for HashMap<K, V> {
         HashMap::remove(self, key)
     }
 }
-
-impl<K: Eq + Hash, V> StableRemove<K> for HashMap<K, V> {}
 
 impl<K: Eq + Hash, V> Clear for HashMap<K, V> {
     #[inline(always)]

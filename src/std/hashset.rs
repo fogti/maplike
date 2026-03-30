@@ -4,7 +4,7 @@
 
 use std_::{collections::HashSet, hash::Hash};
 
-use crate::{Clear, Get, Insert, IntoIter, Collection, Remove, Set, StableRemove};
+use crate::{Clear, Get, Insert, IntoIter, Collection, Remove, Set};
 
 impl<K> Collection for HashSet<K> {
     type Key = K;
@@ -38,8 +38,6 @@ impl<K: Eq + Hash> Remove<K> for HashSet<K> {
         HashSet::remove(self, key).then_some(())
     }
 }
-
-impl<K: Eq + Hash> StableRemove<K> for HashSet<K> {}
 
 impl<K: Eq + Hash> Clear for HashSet<K> {
     #[inline(always)]
