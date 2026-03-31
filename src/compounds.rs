@@ -15,6 +15,7 @@ macro_rules! impl_assign_for_tuple {
     };
 }
 
+// Tuples with up to 12 elements are supported.
 impl_assign_for_tuple!(0 T0);
 impl_assign_for_tuple!(0 T0, 1 T1);
 impl_assign_for_tuple!(0 T0, 1 T1, 2 T2);

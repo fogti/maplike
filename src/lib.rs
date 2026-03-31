@@ -20,9 +20,9 @@ extern crate alloc as alloc_;
 ///
 /// This is mainly useful for scalars: these do not have get, set, insert,
 /// remove, push, pop, clear, len operations, but may still be assigned to.
-pub trait Assign {
+pub trait Assign<V = Self> {
     /// Assign a new value to `*self`.
-    fn assign(&mut self, value: Self);
+    fn assign(&mut self, value: V);
 }
 
 /// Base trait for keyed collections, without any operations defined yet.
@@ -117,8 +117,8 @@ pub trait IntoIter<K>: Collection {
 }
 
 /// A single assignable value.
-pub trait Scalarlike: Assign {}
-impl<T: Assign> Scalarlike for T {}
+pub trait Scalarlike<V = Self>: Assign<V> {}
+impl<V, T: Assign<V>> Scalarlike<V> for T {}
 
 /// A keyed collection with get, set, insert, remove, clear operations.
 pub trait Maplike<K>: Get<K> + Set<K> + Insert<K> + Remove<K> + Clear
