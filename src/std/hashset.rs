@@ -4,18 +4,18 @@
 
 use std_::{collections::HashSet, hash::Hash};
 
-use crate::{Assign, Clear, Collection, Get, Insert, IntoIter, Remove, Set};
+use crate::{Clear, Container, Assign, Get, Insert, IntoIter, Remove, Set};
+
+impl<K> Container for HashSet<K> {
+    type Key = K;
+    type Value = ();
+}
 
 impl<K> Assign for HashSet<K> {
     #[inline(always)]
     fn assign(&mut self, value: Self) {
         *self = value;
     }
-}
-
-impl<K> Collection for HashSet<K> {
-    type Key = K;
-    type Value = ();
 }
 
 impl<K: Eq + Hash> Get<K> for HashSet<K> {

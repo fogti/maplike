@@ -4,18 +4,18 @@
 
 use alloc_::collections::BTreeMap;
 
-use crate::{Assign, Clear, Collection, Get, Insert, IntoIter, Remove, Set};
+use crate::{Clear, Container, Assign, Get, Insert, IntoIter, Remove, Set};
+
+impl<K, V> Container for BTreeMap<K, V> {
+    type Key = K;
+    type Value = V;
+}
 
 impl<K, V> Assign for BTreeMap<K, V> {
     #[inline(always)]
     fn assign(&mut self, value: Self) {
         *self = value;
     }
-}
-
-impl<K, V> Collection for BTreeMap<K, V> {
-    type Key = K;
-    type Value = V;
 }
 
 impl<K: Ord, V> Get<K> for BTreeMap<K, V> {

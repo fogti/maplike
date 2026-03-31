@@ -4,18 +4,18 @@
 
 use rstar::{RTree, RTreeObject};
 
-use crate::{Clear, Collection, Get, Insert, IntoIter, Remove, Set};
+use crate::{Clear, Container, Assign, Get, Insert, IntoIter, Remove, Set};
 
-impl<K> Assign for RTree<K> {
+impl<K: RTreeObject> Container for RTree<K> {
+    type Key = K;
+    type Value = ();
+}
+
+impl<K: RTreeObject> Assign for RTree<K> {
     #[inline(always)]
     fn assign(&mut self, value: Self) {
         *self = value;
     }
-}
-
-impl<K: RTreeObject> Collection for RTree<K> {
-    type Key = K;
-    type Value = ();
 }
 
 impl<K: RTreeObject + PartialEq> Get<K> for RTree<K> {

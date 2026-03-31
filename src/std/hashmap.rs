@@ -4,18 +4,18 @@
 
 use std_::{collections::HashMap, hash::Hash};
 
-use crate::{Assign, Clear, Collection, Get, Insert, IntoIter, Remove, Set};
+use crate::{Clear, Container, Assign, Get, Insert, IntoIter, Remove, Set};
+
+impl<K, V> Container for HashMap<K, V> {
+    type Key = K;
+    type Value = V;
+}
 
 impl<K, V> Assign for HashMap<K, V> {
     #[inline(always)]
     fn assign(&mut self, value: Self) {
         *self = value;
     }
-}
-
-impl<K, V> Collection for HashMap<K, V> {
-    type Key = K;
-    type Value = V;
 }
 
 impl<K: Eq + Hash, V> Get<K> for HashMap<K, V> {

@@ -2,7 +2,7 @@
 //
 // SPDX-License-Identifier: MIT OR Apache-2.0
 
-use crate::{Assign, Collection, Get, Len, Set};
+use crate::{Container, Assign, Get, Len, Set};
 
 macro_rules! impl_assign_for_tuple {
     ($($idx:tt $typ:ident),+) => {
@@ -29,16 +29,16 @@ impl_assign_for_tuple!(0 T0, 1 T1, 2 T2, 3 T3, 4 T4, 5 T5, 6 T6, 7 T7, 8 T8, 9 T
 impl_assign_for_tuple!(0 T0, 1 T1, 2 T2, 3 T3, 4 T4, 5 T5, 6 T6, 7 T7, 8 T8, 9 T9, 10 T10);
 impl_assign_for_tuple!(0 T0, 1 T1, 2 T2, 3 T3, 4 T4, 5 T5, 6 T6, 7 T7, 8 T8, 9 T9, 10 T10, 11 T11);
 
+impl<V, const N: usize> Container for [V; N] {
+    type Key = usize;
+    type Value = V;
+}
+
 impl<V, const N: usize> Assign for [V; N] {
     #[inline(always)]
     fn assign(&mut self, value: Self) {
         *self = value;
     }
-}
-
-impl<V, const N: usize> Collection for [V; N] {
-    type Key = usize;
-    type Value = V;
 }
 
 impl<V, const N: usize> Get<usize> for [V; N] {
@@ -62,7 +62,7 @@ impl<V, const N: usize> Len for [V; N] {
     }
 }
 
-impl<V> Collection for [V] {
+impl<V> Container for [V] {
     type Key = usize;
     type Value = V;
 }

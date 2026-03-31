@@ -4,18 +4,18 @@
 
 use thunderdome::{Arena, Index};
 
-use crate::{Clear, Collection, Get, Insert, IntoIter, Push, Remove, Set};
+use crate::{Clear, Container, Assign, Get, Insert, IntoIter, Push, Remove, Set};
 
-impl<K> Assign for Arena<V> {
+impl<V> Container for Arena<V> {
+    type Key = Index;
+    type Value = V;
+}
+
+impl<V> Assign for Arena<V> {
     #[inline(always)]
     fn assign(&mut self, value: Self) {
         *self = value;
     }
-}
-
-impl<V> Collection for Arena<V> {
-    type Key = Index;
-    type Value = V;
 }
 
 impl<V> Get<Index> for Arena<V> {

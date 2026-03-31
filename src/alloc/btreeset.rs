@@ -4,18 +4,18 @@
 
 use alloc_::collections::BTreeSet;
 
-use crate::{Assign, Clear, Collection, Get, Insert, IntoIter, Remove, Set};
+use crate::{Clear, Container, Assign, Get, Insert, IntoIter, Remove, Set};
+
+impl<K> Container for BTreeSet<K> {
+    type Key = K;
+    type Value = ();
+}
 
 impl<K> Assign for BTreeSet<K> {
     #[inline(always)]
     fn assign(&mut self, value: Self) {
         *self = value;
     }
-}
-
-impl<K> Collection for BTreeSet<K> {
-    type Key = K;
-    type Value = ();
 }
 
 impl<K: Ord> Get<K> for BTreeSet<K> {

@@ -16,6 +16,19 @@ extern crate std as std_;
 #[cfg(feature = "alloc")]
 extern crate alloc as alloc_;
 
+/// Base trait for keyed collections, without any operations defined yet.
+///
+/// Just a key-value map without any methods yet. We however use the name
+/// `Collection` instead of `Map` to distinguish maps from vectors and stable
+/// vectors, which also are keyed collections but with slightly different sets
+/// of operations.
+pub trait Container {
+    /// Type of the keys in the keyed collection.
+    type Key;
+    /// Type of the values in the keyed collection.
+    type Value;
+}
+
 /// Replace self with a new value.
 ///
 /// This is mainly useful for scalars: these do not have get, set, insert,
@@ -25,33 +38,20 @@ pub trait Assign<V = Self> {
     fn assign(&mut self, value: V);
 }
 
-/// Base trait for keyed collections, without any operations defined yet.
-///
-/// Just a key-value map without any methods yet. We however use the name
-/// `Collection` instead of `Map` to distinguish maps from vectors and stable
-/// vectors, which also are keyed collections but with slightly different sets
-/// of operations.
-pub trait Collection {
-    /// Type of the keys in the keyed collection.
-    type Key;
-    /// Type of the values in the keyed collection.
-    type Value;
-}
-
 /// Returns a reference to the value corresponding to the key.
-pub trait Get<K>: Collection {
+pub trait Get<K>: Container {
     /// Returns a reference to the value corresponding to the key.
     fn get(&self, key: &K) -> Option<&Self::Value>;
 }
 
 /// Set the value of an already existing element under a key.
-pub trait Set<K>: Collection {
+pub trait Set<K>: Container {
     /// Set the value of an already existing element under a key.
     fn set(&mut self, key: K, value: Self::Value);
 }
 
 /// Insert a new key-value pair into the collection at an arbitrary key.
-pub trait Insert<K>: Collection {
+pub trait Insert<K>: Container {
     /// Insert a new key-value pair into the collection at an arbitrary key.
     fn insert(&mut self, key: K, value: Self::Value);
 }
@@ -67,7 +67,7 @@ pub trait Insert<K>: Collection {
 /// If you need this trait on a contiguous data type with constant-time
 /// insertion, lookup, and removal, try [`stable_vec::StableVec`] or
 /// [`thunderdome::Arena`].
-pub trait Remove<K>: Collection {
+pub trait Remove<K>: Container {
     /// Remove an element under a key from the collection, returning the value
     /// at the key if the key was previously in the map. Other keys are not
     /// invalidated.
@@ -76,7 +76,7 @@ pub trait Remove<K>: Collection {
 
 /// Insert a value into the collection without specifying a key, returning
 /// the key that was automatically generated.
-pub trait Push<K>: Collection {
+pub trait Push<K>: Container {
     /// Insert a value into the collection without specifying a key, returning
     /// the key that was automatically generated.
     fn push(&mut self, value: Self::Value) -> K;
@@ -86,13 +86,13 @@ pub trait Push<K>: Collection {
 ///
 /// If `Push` is also implemented, calling `Pop` should revert the previous
 /// pushes in their reversed order.
-pub trait Pop: Collection {
+pub trait Pop: Container {
     /// Remove the last element of the collection, returning it.
     fn pop(&mut self) -> Option<Self::Value>;
 }
 
 /// Remove all elements from the collection.
-pub trait Clear: Collection {
+pub trait Clear: Container {
     /// Remove all elements from the collection.
     fn clear(&mut self);
 }
@@ -102,13 +102,13 @@ pub trait Clear: Collection {
 /// Should be only implemented for truly contiguous data structures, for which
 /// it makes sense to have a `.pop()` operation. Currently [`Vec`] is the only
 /// supported data structure that satisfies this property.
-pub trait Len: Collection {
+pub trait Len: Container {
     /// Returns the length of the collection.
     fn len(&self) -> Self::Key;
 }
 
 /// Consume the collection and yield owned key-value pairs.
-pub trait IntoIter<K>: Collection {
+pub trait IntoIter<K>: Container {
     /// Iterator that consumes the collection.
     type IntoIter: Iterator<Item = (K, Self::Value)>;
 

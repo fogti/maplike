@@ -4,18 +4,18 @@
 
 use stable_vec::StableVecFacade;
 
-use crate::{Clear, Collection, Get, Insert, IntoIter, Push, Remove, Set};
+use crate::{Clear, Container, Assign, Get, Insert, IntoIter, Push, Remove, Set};
+
+impl<V, C: stable_vec::core::Core<V>> Container for StableVecFacade<V, C> {
+    type Key = usize;
+    type Value = V;
+}
 
 impl<V, C: stable_vec::core::Core<V>> Assign for StableVecFacade<V, C> {
     #[inline(always)]
     fn assign(&mut self, value: Self) {
         *self = value;
     }
-}
-
-impl<V, C: stable_vec::core::Core<V>> Collection for StableVecFacade<V, C> {
-    type Key = usize;
-    type Value = V;
 }
 
 impl<V, C: stable_vec::core::Core<V>> Get<usize> for StableVecFacade<V, C> {
