@@ -1,0 +1,27 @@
+# SPDX-FileCopyrightText: 2026 maplike contributors
+#
+# SPDX-License-Identifier: MIT OR Apache-2.0
+
+[package]
+name = "maplike_derive"
+version = "0.9.1"
+authors = ["Mikolaj Wielgus <wielgusmikolaj@gmail.com>"]
+description = "Derive macros for undoredo."
+repository = "https://codeberg.org/topola/undoredo"
+documentation = "https://docs.rs/undoredo"
+readme = "README.md"
+license = "MIT OR Apache-2.0"
+keywords = ["undo", "redo", "rtree", "no_std"]
+categories = ["data-structures", "gui", "no-std", "rust-patterns"]
+edition = "2024"
+
+[badges]
+maintenance = { status = "actively-developed" }
+
+[lib]
+proc-macro = true
+
+[dependencies]
+proc-macro2 = "1"
+quote = "1"
+syn = { version = "2", features = ["full"] }

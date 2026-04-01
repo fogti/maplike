@@ -16,6 +16,9 @@ extern crate std as std_;
 #[cfg(feature = "alloc")]
 extern crate alloc as alloc_;
 
+#[cfg(feature = "maplike_derive")]
+pub use maplike_derive::Assign;
+
 /// Base trait for keyed collections, without any operations defined yet.
 ///
 /// Just a key-value map without any methods yet. We however use the name
