@@ -17,7 +17,7 @@ extern crate std as std_;
 extern crate alloc as alloc_;
 
 #[cfg(feature = "maplike_derive")]
-pub use maplike_derive::Assign;
+pub use maplike_derive::{Assign, Container};
 
 /// Base trait for keyed collections, without any operations defined yet.
 ///
@@ -36,7 +36,7 @@ pub trait Container {
 ///
 /// This is mainly useful for scalars: these do not have get, set, insert,
 /// remove, push, pop, clear, len operations, but may still be assigned to.
-pub trait Assign<V = Self> {
+pub trait Assign<V = Self>: Container {
     /// Assign a new value to `*self`.
     fn assign(&mut self, value: V);
 }

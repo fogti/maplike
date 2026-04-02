@@ -2,11 +2,16 @@
 //
 // SPDX-License-Identifier: MIT OR Apache-2.0
 
-use crate::{Container, Assign, Get, Len, Set};
+use crate::{Assign, Container, Get, Len, Set};
 
 macro_rules! impl_assign_for_tuple {
     ($($idx:tt $typ:ident),+) => {
-        impl<$($typ: Assign),+> Assign for ($($typ,)+) {
+        impl<$($typ,)+> Container for ($($typ,)+) {
+            type Key = usize;
+            type Value = Self;
+        }
+
+        impl<$($typ,)+> Assign for ($($typ,)+) {
             #[inline(always)]
             fn assign(&mut self, value: Self) {
                 *self = value;
