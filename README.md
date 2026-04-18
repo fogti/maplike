@@ -4,10 +4,10 @@ SPDX-FileCopyrightText: 2026 maplike contributors
 SPDX-License-Identifier: MIT OR Apache-2.0
 -->
 
-[![CI Status](https://ci.codeberg.org/api/badges/15907/status.svg)](https://ci.codeberg.org/repos/15785)
-[![Docs](https://docs.rs/rstared/badge.svg)](https://docs.rs/rstared/)
-[![Crates.io](https://img.shields.io/crates/v/rstared.svg)](https://crates.io/crates/rstared)
-[![MIT OR Apache 2.0](https://img.shields.io/crates/l/rstared.svg)](#licence)
+[![CI Status](https://ci.codeberg.org/api/badges/15907/status.svg)](https://ci.codeberg.org/repos/15907)
+[![Docs](https://docs.rs/maplike/badge.svg)](https://docs.rs/maplike/)
+[![Crates.io](https://img.shields.io/crates/v/maplike.svg)](https://crates.io/crates/maplike)
+[![MIT OR Apache 2.0](https://img.shields.io/crates/l/maplike.svg)](#licence)
 
 # maplike
 
