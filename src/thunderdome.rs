@@ -4,7 +4,7 @@
 
 use thunderdome::{Arena, Index};
 
-use crate::{Clear, Container, Assign, Get, Insert, IntoIter, Push, Remove, Set};
+use crate::{Assign, Clear, Container, Get, Insert, IntoIter, Modify, Push, Remove, Set};
 
 impl<V> Container for Arena<V> {
     type Key = Index;
@@ -29,6 +29,16 @@ impl<V> Set<Index> for Arena<V> {
     #[inline(always)]
     fn set(&mut self, key: Index, value: V) {
         Arena::insert_at(self, key, value);
+    }
+}
+
+impl<V> Modify<Index> for Arena<V> {
+    #[inline(always)]
+    fn modify<F>(&mut self, key: Index, f: F)
+    where
+        F: FnOnce(&mut V),
+    {
+        f(self.get_mut(key).expect("no value under key"));
     }
 }
 

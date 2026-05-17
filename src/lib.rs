@@ -19,7 +19,7 @@ extern crate std as std_;
 #[cfg_attr(docsrs, doc(cfg(feature = "alloc")))]
 extern crate alloc as alloc_;
 
-#[cfg(feature = "maplike_derive")]
+#[cfg(feature = "derive")]
 #[cfg_attr(docsrs, doc(cfg(feature = "derive")))]
 pub use maplike_derive::{Assign, Container};
 
@@ -41,7 +41,7 @@ pub trait Container {
 /// This is mainly useful for scalars: these do not have get, set, insert,
 /// remove, push, pop, clear, len operations, but may still be assigned to.
 pub trait Assign<V = Self>: Container {
-    /// Assign a new value to `*self`.
+    /// Replace self with a new value.
     fn assign(&mut self, value: V);
 }
 
@@ -55,6 +55,17 @@ pub trait Get<K>: Container {
 pub trait Set<K>: Container {
     /// Set the value of an already existing element under a key.
     fn set(&mut self, key: K, value: Self::Value);
+}
+
+/// Modify the value under key with a closure.
+///
+/// This is useful if something always has to be done before or after the
+/// modification to maintain an invariant.
+pub trait Modify<K>: Container {
+    /// Modify the value under key with a closure.
+    fn modify<F>(&mut self, key: K, f: F)
+    where
+        F: FnOnce(&mut Self::Value);
 }
 
 /// Insert a new key-value pair into the collection at an arbitrary key.

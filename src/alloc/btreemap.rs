@@ -4,7 +4,7 @@
 
 use alloc_::collections::BTreeMap;
 
-use crate::{Clear, Container, Assign, Get, Insert, IntoIter, Remove, Set};
+use crate::{Assign, Clear, Container, Get, Insert, IntoIter, Modify, Remove, Set};
 
 impl<K, V> Container for BTreeMap<K, V> {
     type Key = K;
@@ -29,6 +29,16 @@ impl<K: Ord, V> Set<K> for BTreeMap<K, V> {
     #[inline(always)]
     fn set(&mut self, key: K, value: V) {
         BTreeMap::insert(self, key, value);
+    }
+}
+
+impl<K: Ord, V> Modify<K> for BTreeMap<K, V> {
+    #[inline(always)]
+    fn modify<F>(&mut self, key: K, f: F)
+    where
+        F: FnOnce(&mut V),
+    {
+        f(self.get_mut(&key).expect("no value under key"));
     }
 }
 

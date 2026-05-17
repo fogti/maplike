@@ -2,7 +2,7 @@
 //
 // SPDX-License-Identifier: MIT OR Apache-2.0
 
-use crate::{Assign, Container, Get, Len, Set};
+use crate::{Assign, Container, Get, Len, Modify, Set};
 
 macro_rules! impl_assign_for_tuple {
     ($($idx:tt $typ:ident),+) => {
@@ -60,6 +60,16 @@ impl<V, const N: usize> Set<usize> for [V; N] {
     }
 }
 
+impl<V, const N: usize> Modify<usize> for [V; N] {
+    #[inline(always)]
+    fn modify<F>(&mut self, index: usize, f: F)
+    where
+        F: FnOnce(&mut V),
+    {
+        f(&mut self[index]);
+    }
+}
+
 impl<V, const N: usize> Len for [V; N] {
     #[inline(always)]
     fn len(&self) -> usize {
@@ -83,6 +93,16 @@ impl<V> Set<usize> for [V] {
     #[inline(always)]
     fn set(&mut self, index: usize, value: V) {
         self[index] = value;
+    }
+}
+
+impl<V> Modify<usize> for [V] {
+    #[inline(always)]
+    fn modify<F>(&mut self, index: usize, f: F)
+    where
+        F: FnOnce(&mut V),
+    {
+        f(&mut self[index]);
     }
 }
 

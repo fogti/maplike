@@ -4,7 +4,7 @@
 
 use alloc_::vec::Vec;
 
-use crate::{Clear, Container, Assign, Get, IntoIter, Len, Pop, Push, Set};
+use crate::{Assign, Clear, Container, Get, IntoIter, Len, Modify, Pop, Push, Set};
 
 impl<V> Container for Vec<V> {
     type Key = usize;
@@ -29,6 +29,16 @@ impl<V> Set<usize> for Vec<V> {
     #[inline(always)]
     fn set(&mut self, index: usize, value: V) {
         self[index] = value;
+    }
+}
+
+impl<V> Modify<usize> for Vec<V> {
+    #[inline(always)]
+    fn modify<F>(&mut self, index: usize, f: F)
+    where
+        F: FnOnce(&mut V),
+    {
+        f(&mut self[index]);
     }
 }
 
