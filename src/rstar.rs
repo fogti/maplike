@@ -4,7 +4,7 @@
 
 use rstar::{RTree, RTreeObject};
 
-use crate::{Clear, Container, Assign, Get, Insert, IntoIter, Remove, Set};
+use crate::{Assign, Clear, Container, Get, Insert, IntoIter, Remove, Set};
 
 impl<K: RTreeObject> Container for RTree<K> {
     type Key = K;

@@ -4,7 +4,7 @@
 
 use std_::{collections::HashSet, hash::Hash};
 
-use crate::{Clear, Container, Assign, Get, Insert, IntoIter, Remove, Set};
+use crate::{Assign, Clear, Container, Get, Insert, IntoIter, Remove, Set};
 
 impl<K> Container for HashSet<K> {
     type Key = K;
