@@ -4,6 +4,7 @@
 
 #![doc(html_root_url = "https://docs.rs/maplike")]
 #![doc = include_str!("../README.md")]
+#![cfg_attr(docsrs, feature(doc_cfg))]
 #![deny(missing_docs)]
 #![forbid(unsafe_code)]
 #![no_std]
@@ -11,12 +12,15 @@
 use core::ops::Index;
 
 #[cfg(feature = "std")]
+#[cfg_attr(docsrs, doc(cfg(feature = "std")))]
 extern crate std as std_;
 
 #[cfg(feature = "alloc")]
+#[cfg_attr(docsrs, doc(cfg(feature = "alloc")))]
 extern crate alloc as alloc_;
 
 #[cfg(feature = "maplike_derive")]
+#[cfg_attr(docsrs, doc(cfg(feature = "derive")))]
 pub use maplike_derive::{Assign, Container};
 
 /// Base trait for keyed collections, without any operations defined yet.
@@ -151,16 +155,21 @@ mod compounds;
 mod scalars;
 
 #[cfg(feature = "std")]
+#[cfg_attr(docsrs, doc(cfg(feature = "std")))]
 mod std;
 
 #[cfg(feature = "alloc")]
+#[cfg_attr(docsrs, doc(cfg(feature = "alloc")))]
 mod alloc;
 
 #[cfg(feature = "stable-vec")]
+#[cfg_attr(docsrs, doc(cfg(feature = "stable-vec")))]
 mod stable_vec;
 
 #[cfg(feature = "thunderdome")]
+#[cfg_attr(docsrs, doc(cfg(feature = "thunderdome")))]
 mod thunderdome;
 
 #[cfg(feature = "rstar")]
+#[cfg_attr(docsrs, doc(cfg(feature = "rstar")))]
 mod rstar;
