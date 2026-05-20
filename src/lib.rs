@@ -51,6 +51,30 @@ pub trait Get<K>: Container {
     fn get(&self, key: &K) -> Option<&Self::Value>;
 }
 
+/// Returns a reference to the right value corresponding to the given left value
+/// in a bidirectional map.
+///
+/// Should be only implemented only for bidirectional maps (not for
+/// unidirectional maps) along with [`GetByRight::get_by_right()`], and should
+/// behave identically to [`Get`].
+pub trait GetByLeft<K>: Container {
+    /// Returns a reference to the right value corresponding to the given left value.
+    fn get_by_left(&self, key: &K) -> Option<&Self::Value>;
+}
+
+/// Returns a reference to the left value corresponding to the given right value
+/// in a bidirectional map.
+///
+/// Should be only implemented only for bidirectional maps (not for
+/// unidirectional maps) along with [`GetByRight::get_by_left()`].
+///
+/// Note that key and value are unusually inverted here: `Self::Value` is
+/// actually the key, while `K` is the value.
+pub trait GetByRight<K>: Container {
+    /// Returns a reference to the right value corresponding to the given left value.
+    fn get_by_right(&self, key: &Self::Value) -> Option<&K>;
+}
+
 /// Set the value of an already existing element under a key.
 pub trait Set<K>: Container {
     /// Set the value of an already existing element under a key.
@@ -90,6 +114,32 @@ pub trait Remove<K>: Container {
     /// at the key if the key was previously in the map. Other keys are not
     /// invalidated.
     fn remove(&mut self, key: &K) -> Option<Self::Value>;
+}
+
+/// Remove the left and right values from pair corresponding to the given left
+/// value in a bidirectional map.
+///
+/// Should be only implemented only for bidirectional maps (not for
+/// unidirectional maps) along with [`RemoveByRight::remove_by_right()`], and should
+/// behave identically to [`Remove`].
+pub trait RemoveByLeft<K>: Container {
+    /// Remove the left and right values from pair corresponding to the given
+    /// left value in a bidirectional map.
+    fn remove_by_left(&mut self, key: &K) -> Option<Self::Value>;
+}
+
+/// Remove the left and right values from pair corresponding to the given right
+/// value in a bidirectional map.
+///
+/// Should be only implemented only for bidirectional maps (not for
+/// unidirectional maps) along with [`RemoveByLeft::remove_by_left()`].
+///
+/// Note that key and value are unusually inverted here: `Self::Value` is
+/// actually the key, while `K` is the value.
+pub trait RemoveByRight<K>: Container {
+    /// Remove the left and right values from pair corresponding to the given
+    /// left value in a bidirectional map.
+    fn remove_by_right(&mut self, key: &Self::Value) -> Option<K>;
 }
 
 /// Insert a value into the collection without specifying a key, returning
@@ -173,6 +223,18 @@ mod std;
 #[cfg_attr(docsrs, doc(cfg(feature = "alloc")))]
 mod alloc;
 
+#[cfg(feature = "bidimap")]
+#[cfg_attr(docsrs, doc(cfg(feature = "bidimap")))]
+mod bibtreemap;
+
+#[cfg(all(feature = "bidimap", feature = "std"))]
+#[cfg_attr(docsrs, doc(cfg(all(feature = "bidimap", feature = "std"))))]
+mod bihashmap;
+
+#[cfg(feature = "rstar")]
+#[cfg_attr(docsrs, doc(cfg(feature = "rstar")))]
+mod rstar;
+
 #[cfg(feature = "stable-vec")]
 #[cfg_attr(docsrs, doc(cfg(feature = "stable-vec")))]
 mod stable_vec;
@@ -180,7 +242,3 @@ mod stable_vec;
 #[cfg(feature = "thunderdome")]
 #[cfg_attr(docsrs, doc(cfg(feature = "thunderdome")))]
 mod thunderdome;
-
-#[cfg(feature = "rstar")]
-#[cfg_attr(docsrs, doc(cfg(feature = "rstar")))]
-mod rstar;

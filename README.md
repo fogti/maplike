@@ -32,16 +32,23 @@ implementations:
 In addition to the standard library, `maplike` has built-in feature-gated
 convenience implementations for data structures from certain external crates:
 
-- [`stable_vec::StableVec`](https://docs.rs/stable-vec/latest/stable_vec/),
-  gated by the `stable-vec` feature; (example usage:
-  [examples/stable_vec.rs](./examples/stable_vec.rs)),
-- [`thunderdome::Arena`](https://docs.rs/thunderdome/latest/thunderdome/),
-  gated by the `thunderdome` feature; (example usage:
-  [examples/thunderdome.rs](./examples/thunderdome.rs)),
+- [`bidimap::BiBTreeMap`](https://docs.rs/bidimap/latest/bidimap/), gated by
+  the `bidimap` feature flag, and [`bidimap::BiHashMap`], which is also gated by
+  the `std` feature flag. [`bidimap`](https://github.com/urschrei/bidimap)
+  is a maintained fork of the currently unmaintained
+  [`bimap`](https://github.com/brson/bimap) crate;
 - [`rstar::RTree`](https://docs.rs/rstar/0.12.2/rstar/index.html), gated by the
-  `rstar` feature. (example usage: [examples/rstar.rs](./examples/rstar.rs)).
+  `rstar` feature flag;
 - [`rstared::RTreed`](https://docs.rs/rstared/latest/rstared/), gated by the
-  `rstared` feature.
+  `rstared` feature flag;
+- [`stable_vec::StableVec`](https://docs.rs/stable-vec/latest/stable_vec/),
+  gated by the `stable-vec` feature flag;
+- [`thunderdome::Arena`](https://docs.rs/thunderdome/latest/thunderdome/),
+  gated by the `thunderdome` feature flag.
+
+For examples, see
+[examples](https://github.com/mikwielgus/undoredo/tree/develop/examples)
+directory of the [`undoredo`](https://github.com/mikwielgus/undoredo) crate.
 
 ## Unsupported collections
 
