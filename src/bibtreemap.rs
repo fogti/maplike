@@ -5,8 +5,8 @@
 use bidimap::BiBTreeMap;
 
 use crate::{
-    Assign, Clear, Container, GetByLeft, GetByRight, Insert, IntoIter, RemoveByLeft, RemoveByRight,
-    Set,
+    Assign, Clear, Container, Get, GetByLeft, GetByRight, Insert, IntoIter, RemoveByLeft,
+    RemoveByRight, Set,
 };
 
 impl<L, R> Container for BiBTreeMap<L, R> {
@@ -18,6 +18,13 @@ impl<L, R> Assign for BiBTreeMap<L, R> {
     #[inline(always)]
     fn assign(&mut self, value: Self) {
         *self = value;
+    }
+}
+
+impl<L: Ord, R: Ord> Get<L> for BiBTreeMap<L, R> {
+    #[inline(always)]
+    fn get(&self, key: &L) -> Option<&R> {
+        BiBTreeMap::get_by_left(self, key)
     }
 }
 

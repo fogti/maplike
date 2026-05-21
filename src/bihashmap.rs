@@ -6,8 +6,8 @@ use bidimap::BiHashMap;
 use std_::hash::Hash;
 
 use crate::{
-    Assign, Clear, Container, GetByLeft, GetByRight, Insert, IntoIter, RemoveByLeft, RemoveByRight,
-    Set,
+    Assign, Clear, Container, Get, GetByLeft, GetByRight, Insert, IntoIter, RemoveByLeft,
+    RemoveByRight, Set,
 };
 
 impl<L, R> Container for BiHashMap<L, R> {
@@ -19,6 +19,13 @@ impl<L, R> Assign for BiHashMap<L, R> {
     #[inline(always)]
     fn assign(&mut self, value: Self) {
         *self = value;
+    }
+}
+
+impl<L: Eq + Hash, R: Eq + Hash> Get<L> for BiHashMap<L, R> {
+    #[inline(always)]
+    fn get(&self, key: &L) -> Option<&R> {
+        BiHashMap::get_by_left(self, key)
     }
 }
 
