@@ -2,6 +2,8 @@
 //
 // SPDX-License-Identifier: MIT OR Apache-2.0
 
+use core::borrow::Borrow;
+
 use bidimap::BiBTreeMap;
 
 use crate::{
@@ -21,23 +23,32 @@ impl<L, R> Assign for BiBTreeMap<L, R> {
     }
 }
 
-impl<L: Ord, R: Ord> Get<L> for BiBTreeMap<L, R> {
+impl<L: Ord, R: Ord, Q: Ord + ?Sized> Get<L, Q> for BiBTreeMap<L, R>
+where
+    L: Borrow<Q>,
+{
     #[inline(always)]
-    fn get(&self, key: &L) -> Option<&R> {
+    fn get(&self, key: &Q) -> Option<&R> {
         BiBTreeMap::get_by_left(self, key)
     }
 }
 
-impl<L: Ord, R: Ord> GetByLeft<L> for BiBTreeMap<L, R> {
+impl<L: Ord, R: Ord, Q: Ord + ?Sized> GetByLeft<L, Q> for BiBTreeMap<L, R>
+where
+    L: Borrow<Q>,
+{
     #[inline(always)]
-    fn get_by_left(&self, key: &L) -> Option<&R> {
+    fn get_by_left(&self, key: &Q) -> Option<&R> {
         BiBTreeMap::get_by_left(self, key)
     }
 }
 
-impl<L: Ord, R: Ord> GetByRight<L> for BiBTreeMap<L, R> {
+impl<L: Ord, R: Ord, Q: Ord + ?Sized> GetByRight<L, Q> for BiBTreeMap<L, R>
+where
+    R: Borrow<Q>,
+{
     #[inline(always)]
-    fn get_by_right(&self, key: &R) -> Option<&L> {
+    fn get_by_right(&self, key: &Q) -> Option<&L> {
         BiBTreeMap::get_by_right(self, key)
     }
 }
@@ -56,16 +67,22 @@ impl<L: Ord, R: Ord> Insert<L> for BiBTreeMap<L, R> {
     }
 }
 
-impl<L: Ord, R: Ord> RemoveByLeft<L> for BiBTreeMap<L, R> {
+impl<L: Ord, R: Ord, Q: Ord + ?Sized> RemoveByLeft<L, Q> for BiBTreeMap<L, R>
+where
+    L: Borrow<Q>,
+{
     #[inline(always)]
-    fn remove_by_left(&mut self, key: &L) -> Option<R> {
+    fn remove_by_left(&mut self, key: &Q) -> Option<R> {
         BiBTreeMap::remove_by_left(self, key).map(|(_, value)| value)
     }
 }
 
-impl<L: Ord, R: Ord> RemoveByRight<L> for BiBTreeMap<L, R> {
+impl<L: Ord, R: Ord, Q: Ord + ?Sized> RemoveByRight<L, Q> for BiBTreeMap<L, R>
+where
+    R: Borrow<Q>,
+{
     #[inline(always)]
-    fn remove_by_right(&mut self, key: &R) -> Option<L> {
+    fn remove_by_right(&mut self, key: &Q) -> Option<L> {
         BiBTreeMap::remove_by_right(self, key).map(|(key, _)| key)
     }
 }

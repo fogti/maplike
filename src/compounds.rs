@@ -62,11 +62,11 @@ impl<V, const N: usize> Set<usize> for [V; N] {
 
 impl<V, const N: usize> Modify<usize> for [V; N] {
     #[inline(always)]
-    fn modify<F>(&mut self, index: usize, f: F)
+    fn modify<F>(&mut self, index: &usize, f: F)
     where
         F: FnOnce(&mut V),
     {
-        f(&mut self[index]);
+        f(&mut self[*index]);
     }
 }
 
@@ -98,11 +98,11 @@ impl<V> Set<usize> for [V] {
 
 impl<V> Modify<usize> for [V] {
     #[inline(always)]
-    fn modify<F>(&mut self, index: usize, f: F)
+    fn modify<F>(&mut self, index: &usize, f: F)
     where
         F: FnOnce(&mut V),
     {
-        f(&mut self[index]);
+        f(&mut self[*index]);
     }
 }
 

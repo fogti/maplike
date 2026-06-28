@@ -2,6 +2,8 @@
 //
 // SPDX-License-Identifier: MIT OR Apache-2.0
 
+use core::borrow::Borrow;
+
 use alloc_::collections::BTreeSet;
 
 use crate::{Assign, Clear, Container, Get, Insert, IntoIter, Remove, Set};
@@ -18,9 +20,12 @@ impl<K> Assign for BTreeSet<K> {
     }
 }
 
-impl<K: Ord> Get<K> for BTreeSet<K> {
+impl<K: Ord, Q: Ord + ?Sized> Get<K, Q> for BTreeSet<K>
+where
+    K: Borrow<Q>,
+{
     #[inline(always)]
-    fn get(&self, key: &K) -> Option<&()> {
+    fn get(&self, key: &Q) -> Option<&()> {
         BTreeSet::get(self, key).map(|_| &())
     }
 }
@@ -39,9 +44,12 @@ impl<K: Ord> Insert<K> for BTreeSet<K> {
     }
 }
 
-impl<K: Ord> Remove<K> for BTreeSet<K> {
+impl<K: Ord, Q: Ord + ?Sized> Remove<K, Q> for BTreeSet<K>
+where
+    K: Borrow<Q>,
+{
     #[inline(always)]
-    fn remove(&mut self, key: &K) -> Option<()> {
+    fn remove(&mut self, key: &Q) -> Option<()> {
         BTreeSet::remove(self, key).then_some(())
     }
 }

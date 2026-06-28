@@ -34,11 +34,11 @@ impl<V, C: stable_vec::core::Core<V>> Set<usize> for StableVecFacade<V, C> {
 
 impl<V, C: stable_vec::core::Core<V>> Modify<usize> for StableVecFacade<V, C> {
     #[inline(always)]
-    fn modify<F>(&mut self, index: usize, f: F)
+    fn modify<F>(&mut self, index: &usize, f: F)
     where
         F: FnOnce(&mut V),
     {
-        f(self.get_mut(index).expect("no value under key"));
+        f(self.get_mut(*index).expect("no value under key"));
     }
 }
 

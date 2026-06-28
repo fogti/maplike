@@ -2,6 +2,8 @@
 //
 // SPDX-License-Identifier: MIT OR Apache-2.0
 
+use core::borrow::Borrow;
+
 use bidimap::BiHashMap;
 use std_::hash::Hash;
 
@@ -22,23 +24,32 @@ impl<L, R> Assign for BiHashMap<L, R> {
     }
 }
 
-impl<L: Eq + Hash, R: Eq + Hash> Get<L> for BiHashMap<L, R> {
+impl<L: Eq + Hash, R: Eq + Hash, Q: Eq + Hash + ?Sized> Get<L, Q> for BiHashMap<L, R>
+where
+    L: Borrow<Q>,
+{
     #[inline(always)]
-    fn get(&self, key: &L) -> Option<&R> {
+    fn get(&self, key: &Q) -> Option<&R> {
         BiHashMap::get_by_left(self, key)
     }
 }
 
-impl<L: Eq + Hash, R: Eq + Hash> GetByLeft<L> for BiHashMap<L, R> {
+impl<L: Eq + Hash, R: Eq + Hash, Q: Eq + Hash + ?Sized> GetByLeft<L, Q> for BiHashMap<L, R>
+where
+    L: Borrow<Q>,
+{
     #[inline(always)]
-    fn get_by_left(&self, key: &L) -> Option<&R> {
+    fn get_by_left(&self, key: &Q) -> Option<&R> {
         BiHashMap::get_by_left(self, key)
     }
 }
 
-impl<L: Eq + Hash, R: Eq + Hash> GetByRight<L> for BiHashMap<L, R> {
+impl<L: Eq + Hash, R: Eq + Hash, Q: Eq + Hash + ?Sized> GetByRight<L, Q> for BiHashMap<L, R>
+where
+    R: Borrow<Q>,
+{
     #[inline(always)]
-    fn get_by_right(&self, key: &R) -> Option<&L> {
+    fn get_by_right(&self, key: &Q) -> Option<&L> {
         BiHashMap::get_by_right(self, key)
     }
 }
@@ -57,16 +68,22 @@ impl<L: Eq + Hash, R: Eq + Hash> Insert<L> for BiHashMap<L, R> {
     }
 }
 
-impl<L: Eq + Hash, R: Eq + Hash> RemoveByLeft<L> for BiHashMap<L, R> {
+impl<L: Eq + Hash, R: Eq + Hash, Q: Eq + Hash + ?Sized> RemoveByLeft<L, Q> for BiHashMap<L, R>
+where
+    L: Borrow<Q>,
+{
     #[inline(always)]
-    fn remove_by_left(&mut self, key: &L) -> Option<R> {
+    fn remove_by_left(&mut self, key: &Q) -> Option<R> {
         BiHashMap::remove_by_left(self, key).map(|(_, value)| value)
     }
 }
 
-impl<L: Eq + Hash, R: Eq + Hash> RemoveByRight<L> for BiHashMap<L, R> {
+impl<L: Eq + Hash, R: Eq + Hash, Q: Eq + Hash + ?Sized> RemoveByRight<L, Q> for BiHashMap<L, R>
+where
+    R: Borrow<Q>,
+{
     #[inline(always)]
-    fn remove_by_right(&mut self, key: &R) -> Option<L> {
+    fn remove_by_right(&mut self, key: &Q) -> Option<L> {
         BiHashMap::remove_by_right(self, key).map(|(key, _)| key)
     }
 }

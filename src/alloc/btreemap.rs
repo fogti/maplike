@@ -2,6 +2,8 @@
 //
 // SPDX-License-Identifier: MIT OR Apache-2.0
 
+use core::borrow::Borrow;
+
 use alloc_::collections::BTreeMap;
 
 use crate::{Assign, Clear, Container, Get, Insert, IntoIter, Modify, Remove, Set};
@@ -18,9 +20,12 @@ impl<K, V> Assign for BTreeMap<K, V> {
     }
 }
 
-impl<K: Ord, V> Get<K> for BTreeMap<K, V> {
+impl<K: Ord, Q: Ord + ?Sized, V> Get<K, Q> for BTreeMap<K, V>
+where
+    K: Borrow<Q>,
+{
     #[inline(always)]
-    fn get(&self, key: &K) -> Option<&V> {
+    fn get(&self, key: &Q) -> Option<&V> {
         BTreeMap::get(self, key)
     }
 }
@@ -32,13 +37,16 @@ impl<K: Ord, V> Set<K> for BTreeMap<K, V> {
     }
 }
 
-impl<K: Ord, V> Modify<K> for BTreeMap<K, V> {
+impl<K: Ord, Q: Ord + ?Sized, V> Modify<K, Q> for BTreeMap<K, V>
+where
+    K: Borrow<Q>,
+{
     #[inline(always)]
-    fn modify<F>(&mut self, key: K, f: F)
+    fn modify<F>(&mut self, key: &Q, f: F)
     where
         F: FnOnce(&mut V),
     {
-        f(self.get_mut(&key).expect("no value under key"));
+        f(self.get_mut(key).expect("no value under key"));
     }
 }
 
@@ -49,9 +57,12 @@ impl<K: Ord, V> Insert<K> for BTreeMap<K, V> {
     }
 }
 
-impl<K: Ord, V> Remove<K> for BTreeMap<K, V> {
+impl<K: Ord, Q: Ord + ?Sized, V> Remove<K, Q> for BTreeMap<K, V>
+where
+    K: Borrow<Q>,
+{
     #[inline(always)]
-    fn remove(&mut self, key: &K) -> Option<V> {
+    fn remove(&mut self, key: &Q) -> Option<V> {
         BTreeMap::remove(self, key)
     }
 }

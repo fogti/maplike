@@ -2,6 +2,8 @@
 //
 // SPDX-License-Identifier: MIT OR Apache-2.0
 
+use core::borrow::Borrow;
+
 use std_::{collections::HashMap, hash::Hash};
 
 use crate::{Assign, Clear, Container, Get, Insert, IntoIter, Modify, Remove, Set};
@@ -18,9 +20,12 @@ impl<K, V> Assign for HashMap<K, V> {
     }
 }
 
-impl<K: Eq + Hash, V> Get<K> for HashMap<K, V> {
+impl<K: Eq + Hash, Q: Eq + Hash + ?Sized, V> Get<K, Q> for HashMap<K, V>
+where
+    K: Borrow<Q>,
+{
     #[inline(always)]
-    fn get(&self, key: &K) -> Option<&V> {
+    fn get(&self, key: &Q) -> Option<&V> {
         HashMap::get(self, key)
     }
 }
@@ -32,13 +37,16 @@ impl<K: Eq + Hash, V> Set<K> for HashMap<K, V> {
     }
 }
 
-impl<K: Eq + Hash, V> Modify<K> for HashMap<K, V> {
+impl<K: Eq + Hash, Q: Eq + Hash + ?Sized, V> Modify<K, Q> for HashMap<K, V>
+where
+    K: Borrow<Q>,
+{
     #[inline(always)]
-    fn modify<F>(&mut self, key: K, f: F)
+    fn modify<F>(&mut self, key: &Q, f: F)
     where
         F: FnOnce(&mut V),
     {
-        f(self.get_mut(&key).expect("no value under key"));
+        f(self.get_mut(key).expect("no value under key"));
     }
 }
 
@@ -49,9 +57,12 @@ impl<K: Eq + Hash, V> Insert<K> for HashMap<K, V> {
     }
 }
 
-impl<K: Eq + Hash, V> Remove<K> for HashMap<K, V> {
+impl<K: Eq + Hash, Q: Eq + Hash + ?Sized, V> Remove<K, Q> for HashMap<K, V>
+where
+    K: Borrow<Q>,
+{
     #[inline(always)]
-    fn remove(&mut self, key: &K) -> Option<V> {
+    fn remove(&mut self, key: &Q) -> Option<V> {
         HashMap::remove(self, key)
     }
 }

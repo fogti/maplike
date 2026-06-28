@@ -34,11 +34,11 @@ impl<V> Set<Index> for Arena<V> {
 
 impl<V> Modify<Index> for Arena<V> {
     #[inline(always)]
-    fn modify<F>(&mut self, key: Index, f: F)
+    fn modify<F>(&mut self, key: &Index, f: F)
     where
         F: FnOnce(&mut V),
     {
-        f(self.get_mut(key).expect("no value under key"));
+        f(self.get_mut(*key).expect("no value under key"));
     }
 }
 

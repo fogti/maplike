@@ -2,6 +2,8 @@
 //
 // SPDX-License-Identifier: MIT OR Apache-2.0
 
+use core::borrow::Borrow;
+
 use std_::{collections::HashSet, hash::Hash};
 
 use crate::{Assign, Clear, Container, Get, Insert, IntoIter, Remove, Set};
@@ -18,9 +20,12 @@ impl<K> Assign for HashSet<K> {
     }
 }
 
-impl<K: Eq + Hash> Get<K> for HashSet<K> {
+impl<K: Eq + Hash, Q: Eq + Hash + ?Sized> Get<K, Q> for HashSet<K>
+where
+    K: Borrow<Q>,
+{
     #[inline(always)]
-    fn get(&self, key: &K) -> Option<&()> {
+    fn get(&self, key: &Q) -> Option<&()> {
         HashSet::get(self, key).map(|_| &())
     }
 }
@@ -39,9 +44,12 @@ impl<K: Eq + Hash> Insert<K> for HashSet<K> {
     }
 }
 
-impl<K: Eq + Hash> Remove<K> for HashSet<K> {
+impl<K: Eq + Hash, Q: Eq + Hash + ?Sized> Remove<K, Q> for HashSet<K>
+where
+    K: Borrow<Q>,
+{
     #[inline(always)]
-    fn remove(&mut self, key: &K) -> Option<()> {
+    fn remove(&mut self, key: &Q) -> Option<()> {
         HashSet::remove(self, key).then_some(())
     }
 }

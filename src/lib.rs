@@ -9,6 +9,7 @@
 #![forbid(unsafe_code)]
 #![no_std]
 
+use core::borrow::Borrow;
 use core::ops::Index;
 
 #[cfg(feature = "std")]
@@ -46,9 +47,12 @@ pub trait Assign<V = Self>: Container {
 }
 
 /// Returns a reference to the value corresponding to the key.
-pub trait Get<K>: Container {
+pub trait Get<K, Q: ?Sized = K>: Container
+where
+    K: Borrow<Q>,
+{
     /// Returns a reference to the value corresponding to the key.
-    fn get(&self, key: &K) -> Option<&Self::Value>;
+    fn get(&self, key: &Q) -> Option<&Self::Value>;
 }
 
 /// Returns a reference to the right value corresponding to the given left value
@@ -57,9 +61,12 @@ pub trait Get<K>: Container {
 /// Should be only implemented only for bidirectional maps (not for
 /// unidirectional maps) along with [`GetByRight::get_by_right()`], and should
 /// behave identically to [`Get`].
-pub trait GetByLeft<K>: Container {
+pub trait GetByLeft<K, Q: ?Sized = K>: Container
+where
+    K: Borrow<Q>,
+{
     /// Returns a reference to the right value corresponding to the given left value.
-    fn get_by_left(&self, key: &K) -> Option<&Self::Value>;
+    fn get_by_left(&self, key: &Q) -> Option<&Self::Value>;
 }
 
 /// Returns a reference to the left value corresponding to the given right value
@@ -70,9 +77,12 @@ pub trait GetByLeft<K>: Container {
 ///
 /// Note that key and value are unusually inverted here: `Self::Value` is
 /// actually the key, while `K` is the value.
-pub trait GetByRight<K>: Container {
+pub trait GetByRight<K, Q: ?Sized = <Self as Container>::Value>: Container
+where
+    Self::Value: Borrow<Q>,
+{
     /// Returns a reference to the right value corresponding to the given left value.
-    fn get_by_right(&self, key: &Self::Value) -> Option<&K>;
+    fn get_by_right(&self, key: &Q) -> Option<&K>;
 }
 
 /// Set the value of an already existing element under a key.
@@ -85,9 +95,12 @@ pub trait Set<K>: Container {
 ///
 /// This is useful if something always has to be done before or after the
 /// modification to maintain an invariant.
-pub trait Modify<K>: Container {
+pub trait Modify<K, Q: ?Sized = K>: Container
+where
+    K: Borrow<Q>,
+{
     /// Modify the value under key with a closure.
-    fn modify<F>(&mut self, key: K, f: F)
+    fn modify<F>(&mut self, key: &Q, f: F)
     where
         F: FnOnce(&mut Self::Value);
 }
@@ -109,11 +122,14 @@ pub trait Insert<K>: Container {
 /// If you need this trait on a contiguous data type with constant-time
 /// insertion, lookup, and removal, try [`stable_vec::StableVec`] or
 /// [`thunderdome::Arena`].
-pub trait Remove<K>: Container {
+pub trait Remove<K, Q: ?Sized = K>: Container
+where
+    K: Borrow<Q>,
+{
     /// Remove an element under a key from the collection, returning the value
     /// at the key if the key was previously in the map. Other keys are not
     /// invalidated.
-    fn remove(&mut self, key: &K) -> Option<Self::Value>;
+    fn remove(&mut self, key: &Q) -> Option<Self::Value>;
 }
 
 /// Remove the left and right values from pair corresponding to the given left
@@ -122,10 +138,13 @@ pub trait Remove<K>: Container {
 /// Should be only implemented only for bidirectional maps (not for
 /// unidirectional maps) along with [`RemoveByRight::remove_by_right()`], and should
 /// behave identically to [`Remove`].
-pub trait RemoveByLeft<K>: Container {
+pub trait RemoveByLeft<K, Q: ?Sized = K>: Container
+where
+    K: Borrow<Q>,
+{
     /// Remove the left and right values from pair corresponding to the given
     /// left value in a bidirectional map.
-    fn remove_by_left(&mut self, key: &K) -> Option<Self::Value>;
+    fn remove_by_left(&mut self, key: &Q) -> Option<Self::Value>;
 }
 
 /// Remove the left and right values from pair corresponding to the given right
@@ -136,10 +155,13 @@ pub trait RemoveByLeft<K>: Container {
 ///
 /// Note that key and value are unusually inverted here: `Self::Value` is
 /// actually the key, while `K` is the value.
-pub trait RemoveByRight<K>: Container {
+pub trait RemoveByRight<K, Q: ?Sized = <Self as Container>::Value>: Container
+where
+    Self::Value: Borrow<Q>,
+{
     /// Remove the left and right values from pair corresponding to the given
     /// left value in a bidirectional map.
-    fn remove_by_right(&mut self, key: &Self::Value) -> Option<K>;
+    fn remove_by_right(&mut self, key: &Q) -> Option<K>;
 }
 
 /// Insert a value into the collection without specifying a key, returning

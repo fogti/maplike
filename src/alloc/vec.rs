@@ -34,11 +34,11 @@ impl<V> Set<usize> for Vec<V> {
 
 impl<V> Modify<usize> for Vec<V> {
     #[inline(always)]
-    fn modify<F>(&mut self, index: usize, f: F)
+    fn modify<F>(&mut self, index: &usize, f: F)
     where
         F: FnOnce(&mut V),
     {
-        f(&mut self[index]);
+        f(&mut self[*index]);
     }
 }
 
