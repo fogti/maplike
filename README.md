@@ -42,7 +42,22 @@ For brevity and convenience, we also provide
 which represent complete abstract containers that join together traits of
 multiple operations.
 
-## Examples
+## Usage
+
+### Adding dependency
+
+First, add `maplike` as a dependency to your Cargo.toml:
+
+```toml
+[dependencies]
+maplike = { version = "0.11.0", features = ["derive"] }
+```
+
+The `derive` feature flag is only needed if you want to derive `Assign`
+or `Container` traits using derive macros: `#[derive(Assign)]` or
+`#[derive(Container)]`.
+
+### Usage examples
 
 `maplike`'s traits allow you to write functions that are generic over many
 different collection types. A single trait like
@@ -63,7 +78,7 @@ fn get_second_element<C: Get<usize>>(collection: &C) -> Option<&C::Value> {
 // same code.
 assert_eq!(get_second_element(&vec![10, 20, 30]), Some(&20));
 assert_eq!(get_second_element(&[10, 20, 30]), Some(&20));
-assert_eq!(get_second_element(&BTreeMap::from([(0usize, 10), (1usize, 20)])), Some(&20));
+assert_eq!(get_second_element(&BTreeMap::from([(0, 10), (1, 20)])), Some(&20));
 ```
 
 An abstract container trait like
@@ -82,7 +97,7 @@ one bound:
 use maplike::{Clear, Push, Veclike};
 
 // This function is generic over any `Veclike` collection. The `Veclike` bound
-// provides `clear`, `push`, and many other methods at once.
+// provides `clear`, `push` and many other methods at once.
 fn replace_all<C: Veclike<usize, Value = i32>>(collection: &mut C, values: &[i32]) {
     collection.clear();
     for &value in values {
