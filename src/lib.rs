@@ -4,6 +4,8 @@
 
 #![doc(html_root_url = "https://docs.rs/maplike")]
 #![doc = include_str!("../README.md")]
+#![cfg_attr(docsrs, doc = "\n## Feature flags\n")]
+#![cfg_attr(docsrs, doc = document_features::document_features!())]
 #![cfg_attr(docsrs, feature(doc_cfg))]
 #![deny(missing_docs)]
 #![forbid(unsafe_code)]
@@ -73,7 +75,7 @@ where
 /// in a bidirectional map.
 ///
 /// Should be only implemented only for bidirectional maps (not for
-/// unidirectional maps) along with [`GetByRight::get_by_left()`].
+/// unidirectional maps) along with [`GetByLeft::get_by_left()`].
 ///
 /// Note that key and value are unusually inverted here: `Self::Value` is
 /// actually the key, while `K` is the value.
@@ -115,13 +117,17 @@ pub trait Insert<K>: Container {
 /// at the key if the key was previously in the map. Other keys are not
 /// invalidated.
 ///
-/// [`Vec`] obviously does not implement this trait because its element removal
-/// methods, [`Vec::insert()`] and [`Vec::swap_insert()`], invalidate existing
-/// indices.
+/// [`Vec`](https://doc.rust-lang.org/alloc/vec/struct.Vec.html) obviously does
+/// not implement this trait because its element removal methods,
+/// [`Vec::remove()`](https://doc.rust-lang.org/alloc/vec/struct.Vec.html#method.remove)
+/// and
+/// [`Vec::swap_remove()`](https://doc.rust-lang.org/alloc/vec/struct.Vec.html#method.swap_remove),
+/// invalidate existing indices.
 ///
 /// If you need this trait on a contiguous data type with constant-time
-/// insertion, lookup, and removal, try [`stable_vec::StableVec`] or
-/// [`thunderdome::Arena`].
+/// insertion, lookup, and removal, try
+/// [`stable_vec::StableVec`](https://docs.rs/stable-vec/latest/stable_vec/type.StableVec.html)
+/// or [`thunderdome::Arena`](https://docs.rs/thunderdome/latest/thunderdome/struct.Arena.html).
 pub trait Remove<K, Q: ?Sized = K>: Container
 where
     K: Borrow<Q>,
@@ -190,7 +196,8 @@ pub trait Clear: Container {
 /// Returns the length of the collection.
 ///
 /// Should be only implemented for truly contiguous data structures, for which
-/// it makes sense to have a `.pop()` operation. Currently [`Vec`] is the only
+/// it makes sense to have a `.pop()` operation. Currently
+/// [`Vec`](https://doc.rust-lang.org/alloc/vec/struct.Vec.html) is the only
 /// supported data structure that satisfies this property.
 pub trait Len: Container {
     /// Returns the length of the collection.
