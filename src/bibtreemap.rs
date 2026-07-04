@@ -54,9 +54,11 @@ where
 }
 
 impl<L: Ord, R: Ord> Set<L> for BiBTreeMap<L, R> {
+    type Output = Overwritten<L, R>;
+
     #[inline(always)]
-    fn set(&mut self, key: L, value: R) {
-        BiBTreeMap::insert(self, key, value);
+    fn set(&mut self, key: L, value: R) -> Overwritten<L, R> {
+        BiBTreeMap::insert(self, key, value)
     }
 }
 

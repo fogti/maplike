@@ -31,9 +31,11 @@ where
 }
 
 impl<K: Eq + Hash> Set<K> for HashSet<K> {
+    type Output = bool;
+
     #[inline(always)]
-    fn set(&mut self, key: K, _value: ()) {
-        HashSet::insert(self, key);
+    fn set(&mut self, key: K, _value: ()) -> bool {
+        HashSet::insert(self, key)
     }
 }
 

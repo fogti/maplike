@@ -31,9 +31,11 @@ where
 }
 
 impl<K: Eq + Hash, V> Set<K> for HashMap<K, V> {
+    type Output = Option<V>;
+
     #[inline(always)]
-    fn set(&mut self, key: K, value: V) {
-        HashMap::insert(self, key, value);
+    fn set(&mut self, key: K, value: V) -> Option<V> {
+        HashMap::insert(self, key, value)
     }
 }
 

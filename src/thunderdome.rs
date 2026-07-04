@@ -26,9 +26,11 @@ impl<V> Get<Index> for Arena<V> {
 }
 
 impl<V> Set<Index> for Arena<V> {
+    type Output = Option<V>;
+
     #[inline(always)]
-    fn set(&mut self, key: Index, value: V) {
-        Arena::insert_at(self, key, value);
+    fn set(&mut self, key: Index, value: V) -> Option<V> {
+        Arena::insert_at(self, key, value)
     }
 }
 

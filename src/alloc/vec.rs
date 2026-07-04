@@ -26,6 +26,8 @@ impl<V> Get<usize> for Vec<V> {
 }
 
 impl<V> Set<usize> for Vec<V> {
+    type Output = ();
+
     #[inline(always)]
     fn set(&mut self, index: usize, value: V) {
         self[index] = value;

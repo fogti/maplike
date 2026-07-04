@@ -88,9 +88,24 @@ where
 }
 
 /// Set the value of an already existing element under a key.
+///
+/// Unlike [`insert`](Insert::insert), the key must already exist in the
+/// container.
+///
+/// If the setting has happened to overridde (displace) an existing element,
+/// this may be represented by the returned [`Output`](Set::Output) value.
 pub trait Set<K>: Container {
+    /// Return type of [`set`](Set::set).
+    type Output;
+
     /// Set the value of an already existing element under a key.
-    fn set(&mut self, key: K, value: Self::Value);
+    ///
+    /// Unlike [`insert`](Insert::insert), the key must already exist in the
+    /// container.
+    ///
+    /// If the setting has happened to overridde (displace) an existing element,
+    /// this may be represented by the returned [`Output`](Set::Output) value.
+    fn set(&mut self, key: K, value: Self::Value) -> Self::Output;
 }
 
 /// Modify the value under key with a closure.
@@ -107,12 +122,22 @@ where
         F: FnOnce(&mut Self::Value);
 }
 
-/// Insert a new key-value pair into the collection at an arbitrary key.
+/// Insert a new key-value pair into the container at an arbitrary key.
+///
+/// The key can but does not have to already exist in the container.
+///
+/// If the insertion has happened to overridde (displace) an existing element,
+/// this may be represented by the returned [`Output`](Insert::Output) value.
 pub trait Insert<K>: Container {
     /// Return type of [`insert`](Insert::insert).
     type Output;
 
-    /// Insert a new key-value pair into the collection at an arbitrary key.
+    /// Insert a new key-value pair into the container at an arbitrary key.
+    ///
+    /// The key can but does not have to already exist in the container.
+    ///
+    /// If the insertion has happened to overridde (displace) an existing element,
+    /// this may be represented by the returned [`Output`](Insert::Output) value.
     fn insert(&mut self, key: K, value: Self::Value) -> Self::Output;
 }
 

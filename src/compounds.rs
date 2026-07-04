@@ -54,6 +54,8 @@ impl<V, const N: usize> Get<usize> for [V; N] {
 }
 
 impl<V, const N: usize> Set<usize> for [V; N] {
+    type Output = ();
+
     #[inline(always)]
     fn set(&mut self, index: usize, value: V) {
         self[index] = value;
@@ -90,6 +92,8 @@ impl<V> Get<usize> for [V] {
 }
 
 impl<V> Set<usize> for [V] {
+    type Output = ();
+
     #[inline(always)]
     fn set(&mut self, index: usize, value: V) {
         self[index] = value;

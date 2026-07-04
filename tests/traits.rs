@@ -218,7 +218,7 @@ where
         + Get<String>
         + GetByLeft<String, str>
         + GetByRight<String>
-        + Set<String>
+        + Set<String, Output = Overwritten<String, i32>>
         + Insert<String, Output = Overwritten<String, i32>>
         + RemoveByLeft<String, str>
         + RemoveByRight<String>
@@ -231,7 +231,10 @@ where
     assert_eq!(c.get_by_left("a"), Some(&1));
     assert_eq!(c.get_by_right(&2), Some(&"b".to_string()));
 
-    c.set("a".to_string(), 11);
+    assert_eq!(
+        c.set("a".to_string(), 11),
+        Overwritten::Left("a".to_string(), 1)
+    );
     assert_eq!(c.get_by_left("a"), Some(&11));
     assert_eq!(c.get_by_right(&11), Some(&"a".to_string()));
 

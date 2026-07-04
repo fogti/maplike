@@ -55,9 +55,11 @@ where
 }
 
 impl<L: Eq + Hash, R: Eq + Hash> Set<L> for BiHashMap<L, R> {
+    type Output = Overwritten<L, R>;
+
     #[inline(always)]
-    fn set(&mut self, key: L, value: R) {
-        BiHashMap::insert(self, key, value);
+    fn set(&mut self, key: L, value: R) -> Overwritten<L, R> {
+        BiHashMap::insert(self, key, value)
     }
 }
 

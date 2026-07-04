@@ -31,9 +31,11 @@ where
 }
 
 impl<K: Ord> Set<K> for BTreeSet<K> {
+    type Output = bool;
+
     #[inline(always)]
-    fn set(&mut self, key: K, _value: ()) {
-        BTreeSet::insert(self, key);
+    fn set(&mut self, key: K, _value: ()) -> bool {
+        BTreeSet::insert(self, key)
     }
 }
 

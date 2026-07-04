@@ -31,9 +31,11 @@ where
 }
 
 impl<K: Ord, V> Set<K> for BTreeMap<K, V> {
+    type Output = Option<V>;
+
     #[inline(always)]
-    fn set(&mut self, key: K, value: V) {
-        BTreeMap::insert(self, key, value);
+    fn set(&mut self, key: K, value: V) -> Option<V> {
+        BTreeMap::insert(self, key, value)
     }
 }
 

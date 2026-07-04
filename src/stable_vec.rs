@@ -26,9 +26,11 @@ impl<V, C: stable_vec::core::Core<V>> Get<usize> for StableVecFacade<V, C> {
 }
 
 impl<V, C: stable_vec::core::Core<V>> Set<usize> for StableVecFacade<V, C> {
+    type Output = Option<V>;
+
     #[inline(always)]
-    fn set(&mut self, index: usize, value: V) {
-        StableVecFacade::insert(self, index, value);
+    fn set(&mut self, index: usize, value: V) -> Option<V> {
+        StableVecFacade::insert(self, index, value)
     }
 }
 
