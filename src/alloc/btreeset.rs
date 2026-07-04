@@ -38,9 +38,11 @@ impl<K: Ord> Set<K> for BTreeSet<K> {
 }
 
 impl<K: Ord> Insert<K> for BTreeSet<K> {
+    type Output = bool;
+
     #[inline(always)]
-    fn insert(&mut self, key: K, _value: ()) {
-        BTreeSet::insert(self, key);
+    fn insert(&mut self, key: K, _value: ()) -> bool {
+        BTreeSet::insert(self, key)
     }
 }
 

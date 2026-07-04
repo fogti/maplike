@@ -38,9 +38,11 @@ impl<K: Eq + Hash> Set<K> for HashSet<K> {
 }
 
 impl<K: Eq + Hash> Insert<K> for HashSet<K> {
+    type Output = bool;
+
     #[inline(always)]
-    fn insert(&mut self, key: K, _value: ()) {
-        HashSet::insert(self, key);
+    fn insert(&mut self, key: K, _value: ()) -> bool {
+        HashSet::insert(self, key)
     }
 }
 

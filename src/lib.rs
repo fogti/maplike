@@ -109,8 +109,11 @@ where
 
 /// Insert a new key-value pair into the collection at an arbitrary key.
 pub trait Insert<K>: Container {
+    /// Return type of [`insert`](Insert::insert).
+    type Output;
+
     /// Insert a new key-value pair into the collection at an arbitrary key.
-    fn insert(&mut self, key: K, value: Self::Value);
+    fn insert(&mut self, key: K, value: Self::Value) -> Self::Output;
 }
 
 /// Remove an element under a key from the collection, returning the value

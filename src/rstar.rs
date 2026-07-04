@@ -34,6 +34,8 @@ impl<K: RTreeObject + PartialEq> Set<K> for RTree<K> {
 }
 
 impl<K: RTreeObject> Insert<K> for RTree<K> {
+    type Output = ();
+
     #[inline(always)]
     fn insert(&mut self, key: K, _value: ()) {
         RTree::insert(self, key);

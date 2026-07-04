@@ -43,10 +43,12 @@ impl<V, C: stable_vec::core::Core<V>> Modify<usize> for StableVecFacade<V, C> {
 }
 
 impl<V, C: stable_vec::core::Core<V>> Insert<usize> for StableVecFacade<V, C> {
+    type Output = Option<V>;
+
     #[inline(always)]
-    fn insert(&mut self, index: usize, value: V) {
+    fn insert(&mut self, index: usize, value: V) -> Option<V> {
         self.reserve_for(index);
-        StableVecFacade::insert(self, index, value);
+        StableVecFacade::insert(self, index, value)
     }
 }
 

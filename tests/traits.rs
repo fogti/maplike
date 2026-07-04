@@ -208,20 +208,24 @@ where
     assert_eq!(c.get(&2), Some(&35));
 }
 
-fn check_bidimap<C>(mut c: C)
+#[cfg(feature = "bidimap")]
+use bidimap::Overwritten;
+
+#[cfg(feature = "bidimap")]
+fn check_bidirectional_map<C>(mut c: C)
 where
     C: Container<Key = String, Value = i32>
         + Get<String>
         + GetByLeft<String, str>
         + GetByRight<String>
         + Set<String>
-        + Insert<String>
+        + Insert<String, Output = Overwritten<String, i32>>
         + RemoveByLeft<String, str>
         + RemoveByRight<String>
         + Clear,
 {
-    c.insert("a".to_string(), 1);
-    c.insert("b".to_string(), 2);
+    assert_eq!(c.insert("a".to_string(), 1), Overwritten::Neither);
+    assert_eq!(c.insert("b".to_string(), 2), Overwritten::Neither);
 
     assert_eq!(c.get(&"a".to_string()), Some(&1));
     assert_eq!(c.get_by_left("a"), Some(&1));
@@ -424,7 +428,7 @@ mod bibtreemap {
 
     #[test]
     fn test_traits() {
-        check_bidimap(BiBTreeMap::<String, i32>::new());
+        check_bidirectional_map(BiBTreeMap::<String, i32>::new());
         check_into_iter::<usize, i32, BiBTreeMap<usize, i32>>(BiBTreeMap::new());
 
         let mut a = BiBTreeMap::new();
@@ -442,7 +446,7 @@ mod bihashmap {
 
     #[test]
     fn test_traits() {
-        check_bidimap(BiHashMap::<String, i32>::new());
+        check_bidirectional_map(BiHashMap::<String, i32>::new());
         check_into_iter::<usize, i32, BiHashMap<usize, i32>>(BiHashMap::new());
 
         let mut a = BiHashMap::new();

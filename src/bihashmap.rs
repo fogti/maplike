@@ -4,7 +4,7 @@
 
 use core::borrow::Borrow;
 
-use bidimap::BiHashMap;
+use bidimap::{BiHashMap, Overwritten};
 use std_::hash::Hash;
 
 use crate::{
@@ -62,9 +62,11 @@ impl<L: Eq + Hash, R: Eq + Hash> Set<L> for BiHashMap<L, R> {
 }
 
 impl<L: Eq + Hash, R: Eq + Hash> Insert<L> for BiHashMap<L, R> {
+    type Output = Overwritten<L, R>;
+
     #[inline(always)]
-    fn insert(&mut self, key: L, value: R) {
-        BiHashMap::insert(self, key, value);
+    fn insert(&mut self, key: L, value: R) -> Overwritten<L, R> {
+        BiHashMap::insert(self, key, value)
     }
 }
 

@@ -4,7 +4,7 @@
 
 use core::borrow::Borrow;
 
-use bidimap::BiBTreeMap;
+use bidimap::{BiBTreeMap, Overwritten};
 
 use crate::{
     Assign, Clear, Container, Get, GetByLeft, GetByRight, Insert, IntoIter, RemoveByLeft,
@@ -61,9 +61,11 @@ impl<L: Ord, R: Ord> Set<L> for BiBTreeMap<L, R> {
 }
 
 impl<L: Ord, R: Ord> Insert<L> for BiBTreeMap<L, R> {
+    type Output = Overwritten<L, R>;
+
     #[inline(always)]
-    fn insert(&mut self, key: L, value: R) {
-        BiBTreeMap::insert(self, key, value);
+    fn insert(&mut self, key: L, value: R) -> Overwritten<L, R> {
+        BiBTreeMap::insert(self, key, value)
     }
 }
 

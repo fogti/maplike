@@ -43,9 +43,11 @@ impl<V> Modify<Index> for Arena<V> {
 }
 
 impl<V> Insert<Index> for Arena<V> {
+    type Output = Option<V>;
+
     #[inline(always)]
-    fn insert(&mut self, key: Index, value: V) {
-        Arena::insert_at(self, key, value);
+    fn insert(&mut self, key: Index, value: V) -> Option<V> {
+        Arena::insert_at(self, key, value)
     }
 }
 
