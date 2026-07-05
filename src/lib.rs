@@ -284,6 +284,7 @@ pub trait Veclike<K>: Index<K> + Get<K> + Set<K> + Push<K> + Pop + Clear + Len {
 impl<K, T: Arraylike<K> + Push<K> + Pop + Clear> Veclike<K> for T {}
 
 mod compounds;
+mod option;
 mod scalars;
 
 #[cfg(feature = "std")]

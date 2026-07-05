@@ -55,9 +55,12 @@ First, add `maplike` as a dependency to your Cargo.toml:
 maplike = { version = "0.11.1", features = ["derive"] }
 ```
 
-The `derive` feature flag is only needed if you want to derive `Assign`
-or `Container` traits using derive macros: `#[derive(Assign)]` or
-`#[derive(Container)]`.
+The `derive` feature flag is only needed if you want to
+derive `Assign` or `Container` traits using derive macros:
+[`#[derive(Assign)]`](https://docs.rs/maplike/latest/maplike/derive.Assign.html)
+or
+[`#[derive(Container)]`](https://docs.rs/maplike/latest/maplike/derive.Container
+.html).
 
 ### Usage examples
 
@@ -126,7 +129,8 @@ implementations:
 - [`HashSet`](https://doc.rust-lang.org/stable/std/collections/struct.HashSet.html), gated by the `std` feature (enabled by default);
 - [`BTreeMap`](https://doc.rust-lang.org/std/collections/struct.BTreeMap.html), not feature-gated;
 - [`BTreeSet`](https://doc.rust-lang.org/stable/std/collections/struct.BTreeSet.html), not feature-gated;
-- [`Vec`](https://doc.rust-lang.org/std/vec/struct.Vec.html), not feature-gated, but does not support stable removal.
+- [`Option`](https://doc.rust-lang.org/std/option/enum.Option.html), not feature-gated;
+- [`Vec`](https://doc.rust-lang.org/std/vec/struct.Vec.html), not feature-gated.
 
 ### Third-party types
 

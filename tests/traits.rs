@@ -213,6 +213,40 @@ where
     assert_eq!(Len::len(&c), 0usize);
 }
 
+fn check_option<V>(mut c: Option<V>)
+where
+    V: FromUsize + Clone + PartialEq + Debug,
+{
+    assert_eq!(c.get(&0), None);
+    assert_eq!(c.get(&1), None);
+    assert_eq!(c.len(), 0);
+
+    assert_eq!(c.push(V::from_usize(10)), 0);
+    assert_eq!(c.get(&0), Some(&V::from_usize(10)));
+    assert_eq!(c.len(), 1);
+
+    assert_eq!(c.set(0, V::from_usize(11)), Some(V::from_usize(10)));
+    assert_eq!(c.get(&0), Some(&V::from_usize(11)));
+
+    c.modify(&0, |v| *v = V::from_usize(12));
+    assert_eq!(c.get(&0), Some(&V::from_usize(12)));
+
+    assert_eq!(
+        Insert::insert(&mut c, 0, V::from_usize(13)),
+        Some(V::from_usize(12))
+    );
+    assert_eq!(c.put(V::from_usize(14)), Some(V::from_usize(13)));
+    assert_eq!(c.get(&0), Some(&V::from_usize(14)));
+
+    assert_eq!(c.remove(&1), None);
+    assert_eq!(c.remove(&0), Some(V::from_usize(14)));
+    assert_eq!(c.pop(), None);
+    assert_eq!(c.len(), 0);
+
+    c.clear();
+    assert_eq!(c.get(&0), None);
+}
+
 fn check_indexed<C>(c: &mut C)
 where
     C: ?Sized + Container<Key = usize, Value = i32> + Get<usize> + Set<usize> + Modify<usize> + Len,
@@ -376,6 +410,20 @@ mod tuple {
     #[test]
     fn test_traits() {
         check_assign_eq((0i32, 0i32), (1i32, 2i32));
+    }
+}
+
+mod option_tests {
+    use super::*;
+
+    #[test]
+    fn test_traits() {
+        check_option::<i32>(None);
+        assert_eq!(Option::<i32>::with_one(5), Some(5));
+        assert_eq!(
+            IntoIter::into_iter(Option::<i32>::with_one(9)).collect::<Vec<_>>(),
+            [(0, 9)],
+        );
     }
 }
 
