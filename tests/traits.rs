@@ -2,7 +2,7 @@
 //
 // SPDX-License-Identifier: MIT OR Apache-2.0
 
-// This file was generated using Claude Opus 4.8 Medium with some manual
+// This file was generated using Claude Opus 4.8 Medium with many manual
 // modifications.
 
 #![allow(dead_code)]
@@ -12,7 +12,7 @@ use std::fmt::Debug;
 
 use maplike::{
     Assign, Clear, Container, Get, GetByLeft, GetByRight, Insert, IntoIter, Len, Modify, Pop, Push,
-    Remove, RemoveByLeft, RemoveByRight, Set,
+    Put, Remove, RemoveByLeft, RemoveByRight, Set,
 };
 
 trait FromUsize {
@@ -118,7 +118,7 @@ where
     assert_eq!(c, replacement);
 }
 
-fn check_borrowed_str<C>(mut c: C)
+fn check_borrow_str<C>(mut c: C)
 where
     C: Container<Key = String, Value = i32>
         + Insert<String>
@@ -139,11 +139,11 @@ where
     assert_eq!(c.get("one"), None);
 }
 
-fn check_pushed<K, V, C>(mut c: C)
+fn check_push_put<K, V, C>(mut c: C)
 where
     K: Clone,
-    V: FromUsize + Clone + PartialEq + Debug,
-    C: Container<Key = K, Value = V> + Push<K> + Get<K> + Set<K> + Modify<K>,
+    V: FromUsize + Clone + Ord + PartialEq + Debug,
+    C: Container<Key = K, Value = V> + Push<K> + Get<K> + Set<K> + Modify<K> + Put<V> + IntoIter<K>,
 {
     let k0 = c.push(V::from_usize(10));
     let k1 = c.push(V::from_usize(20));
@@ -156,6 +156,15 @@ where
 
     c.modify(&k1, |v| *v = V::from_usize(21));
     assert_eq!(c.get(&k1), Some(&V::from_usize(21)));
+
+    assert_eq!(c.put(V::from_usize(30)), None);
+
+    let mut values: Vec<V> = IntoIter::into_iter(c).map(|(_, v)| v).collect();
+    values.sort();
+    assert_eq!(
+        values,
+        [V::from_usize(11), V::from_usize(21), V::from_usize(30),],
+    );
 }
 
 fn check_pushed_insert_remove<K, V, C>(mut c: C)
@@ -256,7 +265,7 @@ mod hashmap {
         check_keyed::<usize, i32, HashMap<usize, i32>>(HashMap::new());
         check_modify::<usize, i32, HashMap<usize, i32>>(HashMap::new());
         check_into_iter::<usize, i32, HashMap<usize, i32>>(HashMap::new());
-        check_borrowed_str(HashMap::<String, i32>::new());
+        check_borrow_str(HashMap::<String, i32>::new());
         check_assign_eq(
             HashMap::from([(1usize, 1i32)]),
             HashMap::from([(2usize, 2i32), (3usize, 3i32)]),
@@ -287,7 +296,7 @@ mod btreemap {
         check_keyed::<usize, i32, BTreeMap<usize, i32>>(BTreeMap::new());
         check_modify::<usize, i32, BTreeMap<usize, i32>>(BTreeMap::new());
         check_into_iter::<usize, i32, BTreeMap<usize, i32>>(BTreeMap::new());
-        check_borrowed_str(BTreeMap::<String, i32>::new());
+        check_borrow_str(BTreeMap::<String, i32>::new());
         check_assign_eq(
             BTreeMap::from([(1usize, 1i32)]),
             BTreeMap::from([(2usize, 2i32), (3usize, 3i32)]),
@@ -314,7 +323,7 @@ mod vec {
 
     #[test]
     fn test_traits() {
-        check_pushed::<usize, i32, Vec<i32>>(Vec::new());
+        check_push_put::<usize, i32, Vec<i32>>(Vec::new());
         check_vec::<i32, Vec<i32>>(Vec::new());
         check_assign_eq(vec![1i32], vec![2i32, 3i32]);
 
@@ -366,7 +375,7 @@ mod stable_vec_tests {
         check_keyed::<usize, i32, StableVec<i32>>(StableVec::new());
         check_modify::<usize, i32, StableVec<i32>>(StableVec::new());
         check_into_iter::<usize, i32, StableVec<i32>>(StableVec::new());
-        check_pushed::<usize, i32, StableVec<i32>>(StableVec::new());
+        check_push_put::<usize, i32, StableVec<i32>>(StableVec::new());
         check_pushed_insert_remove::<usize, i32, StableVec<i32>>(StableVec::new());
 
         let mut a = StableVec::new();
@@ -385,7 +394,7 @@ mod thunderdome_tests {
 
     #[test]
     fn test_traits() {
-        check_pushed::<thunderdome::Index, i32, Arena<i32>>(Arena::new());
+        check_push_put::<thunderdome::Index, i32, Arena<i32>>(Arena::new());
         check_pushed_insert_remove::<thunderdome::Index, i32, Arena<i32>>(Arena::new());
 
         let mut a: Arena<i32> = Arena::new();

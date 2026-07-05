@@ -6,7 +6,7 @@ use core::borrow::Borrow;
 
 use std_::{collections::HashSet, hash::Hash};
 
-use crate::{Assign, Clear, Container, Get, Insert, IntoIter, Remove, Set};
+use crate::{Assign, Clear, Container, Get, Insert, IntoIter, Put, Remove, Set};
 
 impl<K> Container for HashSet<K> {
     type Key = K;
@@ -55,6 +55,15 @@ where
     #[inline(always)]
     fn remove(&mut self, key: &Q) -> Option<()> {
         HashSet::remove(self, key).then_some(())
+    }
+}
+
+impl<V: Eq + Hash> Put<V> for HashSet<V> {
+    #[inline(always)]
+    fn put(&mut self, value: V) -> Option<V> {
+        HashSet::insert(self, value);
+
+        None
     }
 }
 

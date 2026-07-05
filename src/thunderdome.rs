@@ -4,7 +4,7 @@
 
 use thunderdome::{Arena, Index};
 
-use crate::{Assign, Clear, Container, Get, Insert, IntoIter, Modify, Push, Remove, Set};
+use crate::{Assign, Clear, Container, Get, Insert, IntoIter, Modify, Push, Put, Remove, Set};
 
 impl<V> Container for Arena<V> {
     type Key = Index;
@@ -64,6 +64,15 @@ impl<V> Push<Index> for Arena<V> {
     #[inline(always)]
     fn push(&mut self, value: V) -> Index {
         Arena::insert(self, value)
+    }
+}
+
+impl<V> Put<V> for Arena<V> {
+    #[inline(always)]
+    fn put(&mut self, value: V) -> Option<V> {
+        Arena::insert(self, value);
+
+        None
     }
 }
 

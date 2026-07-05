@@ -91,9 +91,6 @@ where
 ///
 /// Unlike [`insert`](Insert::insert), the key must already exist in the
 /// container.
-///
-/// If the setting has happened to overridde (displace) an existing element,
-/// this may be represented by the returned [`Output`](Set::Output) value.
 pub trait Set<K>: Container {
     /// Return type of [`set`](Set::set).
     type Output;
@@ -102,9 +99,6 @@ pub trait Set<K>: Container {
     ///
     /// Unlike [`insert`](Insert::insert), the key must already exist in the
     /// container.
-    ///
-    /// If the setting has happened to overridde (displace) an existing element,
-    /// this may be represented by the returned [`Output`](Set::Output) value.
     fn set(&mut self, key: K, value: Self::Value) -> Self::Output;
 }
 
@@ -125,9 +119,6 @@ where
 /// Insert a new key-value pair into the container at an arbitrary key.
 ///
 /// The key can but does not have to already exist in the container.
-///
-/// If the insertion has happened to overridde (displace) an existing element,
-/// this may be represented by the returned [`Output`](Insert::Output) value.
 pub trait Insert<K>: Container {
     /// Return type of [`insert`](Insert::insert).
     type Output;
@@ -135,9 +126,6 @@ pub trait Insert<K>: Container {
     /// Insert a new key-value pair into the container at an arbitrary key.
     ///
     /// The key can but does not have to already exist in the container.
-    ///
-    /// If the insertion has happened to overridde (displace) an existing element,
-    /// this may be represented by the returned [`Output`](Insert::Output) value.
     fn insert(&mut self, key: K, value: Self::Value) -> Self::Output;
 }
 
@@ -213,6 +201,26 @@ pub trait Push<K>: Container {
 pub trait Pop: Container {
     /// Remove the last element of the collection, returning it.
     fn pop(&mut self) -> Option<Self::Value>;
+}
+
+/// Put a new value in the container.
+///
+/// This is basically [`push`](Push::push), but also works for sets and if an
+/// element was overridden (displaced) by the put operation, it is returned.
+/// This interface can be useful for collections with a finite number of elements,
+/// such as `Option` and cyclic buffers.
+///
+/// If the insertion has happened to override (displace) an existing element,
+/// this element is returned.
+pub trait Put<E>: Container {
+    /// Put a new value in the container.
+    ///
+    /// This is basically [`push`](Push::push), but also works for sets and it does
+    /// not matter what is the key.
+    ///
+    /// If the insertion has happened to override (displace) an existing element,
+    /// this element is returned.
+    fn put(&mut self, element: E) -> Option<E>;
 }
 
 /// Remove all elements from the collection.

@@ -4,7 +4,7 @@
 
 use stable_vec::StableVecFacade;
 
-use crate::{Assign, Clear, Container, Get, Insert, IntoIter, Modify, Push, Remove, Set};
+use crate::{Assign, Clear, Container, Get, Insert, IntoIter, Modify, Push, Put, Remove, Set};
 
 impl<V, C: stable_vec::core::Core<V>> Container for StableVecFacade<V, C> {
     type Key = usize;
@@ -66,6 +66,15 @@ impl<V, C: stable_vec::core::Core<V>> Push<usize> for StableVecFacade<V, C> {
     #[inline(always)]
     fn push(&mut self, value: V) -> usize {
         StableVecFacade::push(self, value)
+    }
+}
+
+impl<V, C: stable_vec::core::Core<V>> Put<V> for StableVecFacade<V, C> {
+    #[inline(always)]
+    fn put(&mut self, value: V) -> Option<V> {
+        StableVecFacade::push(self, value);
+
+        None
     }
 }
 

@@ -4,7 +4,7 @@
 
 use rstar::{RTree, RTreeObject};
 
-use crate::{Assign, Clear, Container, Get, Insert, IntoIter, Remove, Set};
+use crate::{Assign, Clear, Container, Get, Insert, IntoIter, Put, Remove, Set};
 
 impl<K: RTreeObject> Container for RTree<K> {
     type Key = K;
@@ -48,6 +48,15 @@ impl<K: RTreeObject + PartialEq> Remove<K> for RTree<K> {
     #[inline(always)]
     fn remove(&mut self, key: &K) -> Option<()> {
         RTree::remove(self, key).map(|_| ())
+    }
+}
+
+impl<K: RTreeObject> Put<K> for RTree<K> {
+    #[inline(always)]
+    fn put(&mut self, key: K) -> Option<K> {
+        RTree::insert(self, key);
+
+        None
     }
 }
 

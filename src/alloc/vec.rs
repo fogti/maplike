@@ -4,7 +4,7 @@
 
 use alloc_::vec::Vec;
 
-use crate::{Assign, Clear, Container, Get, IntoIter, Len, Modify, Pop, Push, Set};
+use crate::{Assign, Clear, Container, Get, IntoIter, Len, Modify, Pop, Push, Put, Set};
 
 impl<V> Container for Vec<V> {
     type Key = usize;
@@ -48,6 +48,7 @@ impl<V> Push<usize> for Vec<V> {
     #[inline(always)]
     fn push(&mut self, value: V) -> usize {
         Vec::push(self, value);
+
         self.len() - 1
     }
 }
@@ -56,6 +57,15 @@ impl<V> Pop for Vec<V> {
     #[inline(always)]
     fn pop(&mut self) -> Option<V> {
         Vec::pop(self)
+    }
+}
+
+impl<V> Put<V> for Vec<V> {
+    #[inline(always)]
+    fn put(&mut self, value: V) -> Option<V> {
+        Vec::push(self, value);
+
+        None
     }
 }
 

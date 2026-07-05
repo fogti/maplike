@@ -6,7 +6,7 @@ use core::borrow::Borrow;
 
 use alloc_::collections::BTreeSet;
 
-use crate::{Assign, Clear, Container, Get, Insert, IntoIter, Remove, Set};
+use crate::{Assign, Clear, Container, Get, Insert, IntoIter, Put, Remove, Set};
 
 impl<K> Container for BTreeSet<K> {
     type Key = K;
@@ -55,6 +55,15 @@ where
     #[inline(always)]
     fn remove(&mut self, key: &Q) -> Option<()> {
         BTreeSet::remove(self, key).then_some(())
+    }
+}
+
+impl<V: Ord> Put<V> for BTreeSet<V> {
+    #[inline(always)]
+    fn put(&mut self, value: V) -> Option<V> {
+        BTreeSet::insert(self, value);
+
+        None
     }
 }
 
