@@ -28,8 +28,8 @@ vec-like data structures:
 [`assign`](https://docs.rs/maplike/latest/maplike/trait.Assign.html#tymethod.assign), and
 [`into_iter`](https://docs.rs/maplike/latest/maplike/trait.IntoIter.html#tymethod.into_iter).
 
-For bidirectional maps, there are also left-key and right-key variants of
-the get and remove operations:
+For bidirectional maps, there are also variants of the get and remove operations
+by left and right key:
 [`get_by_left`](https://docs.rs/maplike/latest/maplike/trait.GetByLeft.html#tymethod.get_by_left),
 [`get_by_right`](https://docs.rs/maplike/latest/maplike/trait.GetByRight.html#tymethod.get_by_right),
 [`remove_by_left`](https://docs.rs/maplike/latest/maplike/trait.RemoveByLeft.html#tymethod.remove_by_left),
@@ -46,7 +46,18 @@ multiple operations.
 
 Basically, this is Python's
 [collections.abc](https://docs.python.org/3/library/collections.abc.html), but
-for Rust.
+in Rust, and with traits not only for different kinds of containers, but also
+for each operation.
+
+This library is maintained and champaigned (aka.
+[dogfooded](https://en.wikipedia.org/wiki/Eating_your_own_dog_food)) by the
+author, who uses has it as a dependency for
+- [`undoredo`](https://github.com/mikwielgus/undoredo), a versatile crate for
+implementing Undo/Redo and non-linear history tree using sparse deltas (diffs),
+snapshots, or commands on arbitrary data structures;
+- [`dcel`](https://github.com/mikwielgus/dcel), a crate that implements the
+half-edge data structure (aka. doubly connected edge list, DCEL) generically
+over its underlying containers.
 
 ## Usage
 
