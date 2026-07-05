@@ -4,11 +4,23 @@
 
 use thunderdome::{Arena, Index};
 
-use crate::{Assign, Clear, Container, Get, Insert, IntoIter, Modify, Push, Put, Remove, Set};
+use crate::{
+    Assign, Clear, Container, Get, Insert, IntoIter, Modify, Push, Put, Remove, Set, WithOne,
+};
 
 impl<V> Container for Arena<V> {
     type Key = Index;
     type Value = V;
+}
+
+impl<V> WithOne<V> for Arena<V> {
+    #[inline(always)]
+    fn with_one(element: V) -> Self {
+        let mut arena = Arena::new();
+        Arena::insert(&mut arena, element);
+
+        arena
+    }
 }
 
 impl<V> Assign for Arena<V> {

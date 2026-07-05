@@ -39,6 +39,12 @@ pub trait Container {
     type Value;
 }
 
+/// Construct a container with exactly one element.
+pub trait WithOne<E>: Container {
+    /// Construct a container containing only the given element.
+    fn with_one(element: E) -> Self;
+}
+
 /// Replace self with a new value.
 ///
 /// This is mainly useful for scalars: these do not have get, set, insert,

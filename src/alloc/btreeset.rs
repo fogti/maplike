@@ -6,11 +6,21 @@ use core::borrow::Borrow;
 
 use alloc_::collections::BTreeSet;
 
-use crate::{Assign, Clear, Container, Get, Insert, IntoIter, Put, Remove, Set};
+use crate::{Assign, Clear, Container, Get, Insert, IntoIter, Put, Remove, Set, WithOne};
 
 impl<K> Container for BTreeSet<K> {
     type Key = K;
     type Value = ();
+}
+
+impl<K: Ord> WithOne<K> for BTreeSet<K> {
+    #[inline(always)]
+    fn with_one(element: K) -> Self {
+        let mut btreeset = BTreeSet::new();
+        BTreeSet::insert(&mut btreeset, element);
+
+        btreeset
+    }
 }
 
 impl<K> Assign for BTreeSet<K> {

@@ -4,11 +4,23 @@
 
 use stable_vec::StableVecFacade;
 
-use crate::{Assign, Clear, Container, Get, Insert, IntoIter, Modify, Push, Put, Remove, Set};
+use crate::{
+    Assign, Clear, Container, Get, Insert, IntoIter, Modify, Push, Put, Remove, Set, WithOne,
+};
 
 impl<V, C: stable_vec::core::Core<V>> Container for StableVecFacade<V, C> {
     type Key = usize;
     type Value = V;
+}
+
+impl<V, C: stable_vec::core::Core<V>> WithOne<V> for StableVecFacade<V, C> {
+    #[inline(always)]
+    fn with_one(element: V) -> Self {
+        let mut stable_vec = StableVecFacade::new();
+        StableVecFacade::push(&mut stable_vec, element);
+
+        stable_vec
+    }
 }
 
 impl<V, C: stable_vec::core::Core<V>> Assign for StableVecFacade<V, C> {

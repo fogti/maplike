@@ -24,6 +24,7 @@ vec-like data structures:
 [`put`](https://docs.rs/maplike/latest/maplike/trait.Put.html#tymethod.put),
 [`clear`](https://docs.rs/maplike/latest/maplike/trait.Clear.html#tymethod.clear),
 [`len`](https://docs.rs/maplike/latest/maplike/trait.Len.html#tymethod.len),
+[`with_one`](https://docs.rs/maplike/latest/maplike/trait.WithOne#tymethod.with_one),
 [`assign`](https://docs.rs/maplike/latest/maplike/trait.Assign.html#tymethod.assign), and
 [`into_iter`](https://docs.rs/maplike/latest/maplike/trait.IntoIter.html#tymethod.into_iter).
 

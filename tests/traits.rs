@@ -12,7 +12,7 @@ use std::fmt::Debug;
 
 use maplike::{
     Assign, Clear, Container, Get, GetByLeft, GetByRight, Insert, IntoIter, Len, Modify, Pop, Push,
-    Put, Remove, RemoveByLeft, RemoveByRight, Set,
+    Put, Remove, RemoveByLeft, RemoveByRight, Set, WithOne,
 };
 
 trait FromUsize {
@@ -167,6 +167,17 @@ where
     );
 }
 
+fn check_with_one<E, V, C>(element: E, expected: V)
+where
+    V: PartialEq + Debug,
+    C: Container<Value = V> + WithOne<E> + IntoIter<<C as Container>::Key>,
+{
+    let values: Vec<V> = IntoIter::into_iter(C::with_one(element))
+        .map(|(_, value)| value)
+        .collect();
+    assert_eq!(values, [expected]);
+}
+
 fn check_pushed_insert_remove<K, V, C>(mut c: C)
 where
     K: Clone,
@@ -282,6 +293,7 @@ mod hashset {
     fn test_traits() {
         check_keyed::<usize, (), HashSet<usize>>(HashSet::new());
         check_into_iter::<usize, (), HashSet<usize>>(HashSet::new());
+        check_with_one::<usize, (), HashSet<usize>>(7, ());
         check_assign_eq(HashSet::from([1usize]), HashSet::from([2usize, 3usize]));
     }
 }
@@ -313,6 +325,7 @@ mod btreeset {
     fn test_traits() {
         check_keyed::<usize, (), BTreeSet<usize>>(BTreeSet::new());
         check_into_iter::<usize, (), BTreeSet<usize>>(BTreeSet::new());
+        check_with_one::<usize, (), BTreeSet<usize>>(7, ());
         check_assign_eq(BTreeSet::from([1usize]), BTreeSet::from([2usize, 3usize]));
     }
 }
@@ -324,6 +337,7 @@ mod vec {
     #[test]
     fn test_traits() {
         check_push_put::<usize, i32, Vec<i32>>(Vec::new());
+        check_with_one::<i32, i32, Vec<i32>>(30, 30);
         check_vec::<i32, Vec<i32>>(Vec::new());
         check_assign_eq(vec![1i32], vec![2i32, 3i32]);
 
@@ -376,6 +390,7 @@ mod stable_vec_tests {
         check_modify::<usize, i32, StableVec<i32>>(StableVec::new());
         check_into_iter::<usize, i32, StableVec<i32>>(StableVec::new());
         check_push_put::<usize, i32, StableVec<i32>>(StableVec::new());
+        check_with_one::<i32, i32, StableVec<i32>>(30, 30);
         check_pushed_insert_remove::<usize, i32, StableVec<i32>>(StableVec::new());
 
         let mut a = StableVec::new();
@@ -395,6 +410,7 @@ mod thunderdome_tests {
     #[test]
     fn test_traits() {
         check_push_put::<thunderdome::Index, i32, Arena<i32>>(Arena::new());
+        check_with_one::<i32, i32, Arena<i32>>(30, 30);
         check_pushed_insert_remove::<thunderdome::Index, i32, Arena<i32>>(Arena::new());
 
         let mut a: Arena<i32> = Arena::new();
@@ -422,6 +438,7 @@ mod rstar_tests {
     fn test_traits() {
         check_keyed::<(i32, i32), (), RTree<(i32, i32)>>(RTree::new());
         check_into_iter::<(i32, i32), (), RTree<(i32, i32)>>(RTree::new());
+        check_with_one::<(i32, i32), (), RTree<(i32, i32)>>((3, 4), ());
 
         let mut r: RTree<(i32, i32)> = RTree::new();
         Insert::insert(&mut r, (1, 0), ());

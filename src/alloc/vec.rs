@@ -4,11 +4,21 @@
 
 use alloc_::vec::Vec;
 
-use crate::{Assign, Clear, Container, Get, IntoIter, Len, Modify, Pop, Push, Put, Set};
+use crate::{Assign, Clear, Container, Get, IntoIter, Len, Modify, Pop, Push, Put, Set, WithOne};
 
 impl<V> Container for Vec<V> {
     type Key = usize;
     type Value = V;
+}
+
+impl<V> WithOne<V> for Vec<V> {
+    #[inline(always)]
+    fn with_one(element: V) -> Self {
+        let mut vec = Vec::new();
+        Vec::push(&mut vec, element);
+
+        vec
+    }
 }
 
 impl<V> Assign for Vec<V> {

@@ -4,11 +4,21 @@
 
 use rstar::{RTree, RTreeObject};
 
-use crate::{Assign, Clear, Container, Get, Insert, IntoIter, Put, Remove, Set};
+use crate::{Assign, Clear, Container, Get, Insert, IntoIter, Put, Remove, Set, WithOne};
 
 impl<K: RTreeObject> Container for RTree<K> {
     type Key = K;
     type Value = ();
+}
+
+impl<K: RTreeObject> WithOne<K> for RTree<K> {
+    #[inline(always)]
+    fn with_one(element: K) -> Self {
+        let mut rtree = RTree::new();
+        RTree::insert(&mut rtree, element);
+
+        rtree
+    }
 }
 
 impl<K: RTreeObject> Assign for RTree<K> {

@@ -6,11 +6,21 @@ use core::borrow::Borrow;
 
 use std_::{collections::HashSet, hash::Hash};
 
-use crate::{Assign, Clear, Container, Get, Insert, IntoIter, Put, Remove, Set};
+use crate::{Assign, Clear, Container, Get, Insert, IntoIter, Put, Remove, Set, WithOne};
 
 impl<K> Container for HashSet<K> {
     type Key = K;
     type Value = ();
+}
+
+impl<K: Eq + Hash> WithOne<K> for HashSet<K> {
+    #[inline(always)]
+    fn with_one(element: K) -> Self {
+        let mut hashset = HashSet::new();
+        HashSet::insert(&mut hashset, element);
+
+        hashset
+    }
 }
 
 impl<K> Assign for HashSet<K> {
