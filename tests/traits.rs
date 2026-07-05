@@ -480,10 +480,10 @@ mod thunderdome_tests {
 #[cfg(feature = "tinyvec")]
 mod tinyvec_tests {
     use super::*;
-    use tinyvec::ArrayVec;
+    use tinyvec::{ArrayVec, TinyVec};
 
     #[test]
-    fn test_traits() {
+    fn test_traits_on_arrayvec() {
         check_push_put::<usize, i32, ArrayVec<[i32; 8]>>(ArrayVec::new());
         check_with_one::<i32, i32, ArrayVec<[i32; 8]>>(30, 30);
         check_vec::<i32, ArrayVec<[i32; 8]>>(ArrayVec::new());
@@ -491,6 +491,20 @@ mod tinyvec_tests {
             ArrayVec::from_array_len([1i32, 0, 0, 0, 0, 0, 0, 0], 1),
             ArrayVec::from_array_len([2i32, 3, 0, 0, 0, 0, 0, 0], 2),
         );
+    }
+
+    #[test]
+    fn test_traits_on_tinyvec() {
+        check_push_put::<usize, i32, TinyVec<[i32; 8]>>(TinyVec::new());
+        check_with_one::<i32, i32, TinyVec<[i32; 8]>>(30, 30);
+        check_vec::<i32, TinyVec<[i32; 8]>>(TinyVec::new());
+
+        let mut a = TinyVec::<[i32; 8]>::new();
+        a.push(1);
+        let mut b = TinyVec::<[i32; 8]>::new();
+        b.push(2);
+        b.push(3);
+        check_assign_eq(a, b);
     }
 }
 
