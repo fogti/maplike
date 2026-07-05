@@ -111,7 +111,7 @@ use maplike::{Clear, Push, Veclike};
 use tinyvec::{ArrayVec, TinyVec};
 
 // This function is generic over any `Veclike` collection. The `Veclike` bound
-// provides `clear()`, `push()` and many other methods at once.
+// provides `.clear()`, `.push()` and many other methods at once.
 fn replace_all<C: Veclike<usize, Value = i32>>(collection: &mut C, values: &[i32]) {
     collection.clear();
     for &value in values {

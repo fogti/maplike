@@ -206,9 +206,6 @@ where
     c.push(V::from_usize(30));
     assert_eq!(Len::len(&c), 3usize);
 
-    assert_eq!(c.pop(), Some(V::from_usize(30)));
-    assert_eq!(Len::len(&c), 2usize);
-
     c.clear();
     assert_eq!(Len::len(&c), 0usize);
 }
@@ -221,7 +218,7 @@ where
     assert_eq!(c.get(&1), None);
     assert_eq!(c.len(), 0);
 
-    assert_eq!(c.push(V::from_usize(10)), 0);
+    assert_eq!(c.put(V::from_usize(10)), None);
     assert_eq!(c.get(&0), Some(&V::from_usize(10)));
     assert_eq!(c.len(), 1);
 
@@ -240,7 +237,6 @@ where
 
     assert_eq!(c.remove(&1), None);
     assert_eq!(c.remove(&0), Some(V::from_usize(14)));
-    assert_eq!(c.pop(), None);
     assert_eq!(c.len(), 0);
 
     c.clear();

@@ -3,8 +3,7 @@
 // SPDX-License-Identifier: MIT OR Apache-2.0
 
 use crate::{
-    Assign, Clear, Container, Get, Insert, IntoIter, Len, Modify, Pop, Push, Put, Remove, Set,
-    WithOne,
+    Assign, Clear, Container, Get, Insert, IntoIter, Len, Modify, Put, Remove, Set, WithOne,
 };
 
 impl<V> Container for Option<V> {
@@ -68,23 +67,6 @@ impl<V> Remove<usize> for Option<V> {
     #[inline(always)]
     fn remove(&mut self, index: &usize) -> Option<V> {
         if *index == 0 { self.take() } else { None }
-    }
-}
-
-impl<V> Push<usize> for Option<V> {
-    #[inline(always)]
-    fn push(&mut self, value: V) -> usize {
-        assert!(self.is_none());
-        *self = Some(value);
-
-        0
-    }
-}
-
-impl<V> Pop for Option<V> {
-    #[inline(always)]
-    fn pop(&mut self) -> Option<V> {
-        self.take()
     }
 }
 
