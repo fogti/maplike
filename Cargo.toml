@@ -47,6 +47,9 @@ stable-vec = ["dep:stable-vec"]
 ## Enables convenience implementations for `thunderdome::Arena`.
 thunderdome = ["dep:thunderdome"]
 
+## Enables convenience implementations for `tinyvec::ArrayVec`.
+tinyvec = ["dep:tinyvec"]
+
 [dependencies]
 maplike_derive = { version = "0.11", optional = true, path = "maplike_derive" }
 bidimap = { version = "0.7", optional = true }
@@ -54,11 +57,13 @@ document-features = { version = "0.2", optional = true }
 rstar = { version = "0.12", optional = true }
 stable-vec = { version = "0.4", optional = true }
 thunderdome = { version = "0.6", optional = true }
+tinyvec = { version = "1", optional = true }
 
 [dev-dependencies]
 stable-vec = "0.4"
 thunderdome = "0.6"
 rstar = "0.12"
+tinyvec = "1"
 
 # Version replacements apply only to this crate. We have to keep this here
 # and not in `release.toml` because the replacements are applied to each

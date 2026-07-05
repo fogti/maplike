@@ -477,6 +477,23 @@ mod thunderdome_tests {
     }
 }
 
+#[cfg(feature = "tinyvec")]
+mod tinyvec_tests {
+    use super::*;
+    use tinyvec::ArrayVec;
+
+    #[test]
+    fn test_traits() {
+        check_push_put::<usize, i32, ArrayVec<[i32; 8]>>(ArrayVec::new());
+        check_with_one::<i32, i32, ArrayVec<[i32; 8]>>(30, 30);
+        check_vec::<i32, ArrayVec<[i32; 8]>>(ArrayVec::new());
+        check_assign_eq(
+            ArrayVec::from_array_len([1i32, 0, 0, 0, 0, 0, 0, 0], 1),
+            ArrayVec::from_array_len([2i32, 3, 0, 0, 0, 0, 0, 0], 2),
+        );
+    }
+}
+
 #[cfg(feature = "rstar")]
 mod rstar_tests {
     use super::*;

@@ -239,8 +239,9 @@ pub trait Clear: Container {
 ///
 /// Should be only implemented for truly contiguous data structures, for which
 /// it makes sense to have a `.pop()` operation. Currently
-/// [`Vec`](https://doc.rust-lang.org/alloc/vec/struct.Vec.html) is the only
-/// supported data structure that satisfies this property.
+/// [`Vec`](https://doc.rust-lang.org/alloc/vec/struct.Vec.html) and
+/// [`tinyvec::ArrayVec`](https://docs.rs/tinyvec/latest/tinyvec/struct.ArrayVec.html)
+/// satisfy this property.
 pub trait Len: Container {
     /// Returns the length of the collection.
     fn len(&self) -> Self::Key;
@@ -314,3 +315,7 @@ mod stable_vec;
 #[cfg(feature = "thunderdome")]
 #[cfg_attr(docsrs, doc(cfg(feature = "thunderdome")))]
 mod thunderdome;
+
+#[cfg(feature = "tinyvec")]
+#[cfg_attr(docsrs, doc(cfg(feature = "tinyvec")))]
+mod tinyvec;

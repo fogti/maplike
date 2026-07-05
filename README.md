@@ -151,7 +151,9 @@ convenience implementations for data structures from certain external crates:
 - [`stable_vec::StableVec`](https://docs.rs/stable-vec/latest/stable_vec/),
   gated by the `stable-vec` feature flag;
 - [`thunderdome::Arena`](https://docs.rs/thunderdome/latest/thunderdome/),
-  gated by the `thunderdome` feature flag.
+  gated by the `thunderdome` feature flag;
+- [`tinyvec::ArrayVec`](https://docs.rs/tinyvec/latest/tinyvec/struct.ArrayVec.html),
+  gated by the `tinyvec` feature flag.
 
 For examples, see
 [examples](https://github.com/mikwielgus/undoredo/tree/develop/examples)
