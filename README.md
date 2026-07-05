@@ -44,6 +44,10 @@ For brevity and convenience, we also provide
 which represent complete abstract containers that join together traits of
 multiple operations.
 
+Basically, this is Python's
+[collections.abc](https://docs.python.org/3/library/collections.abc.html), but
+for Rust.
+
 ## Usage
 
 ### Adding dependency
@@ -79,30 +83,35 @@ fn get_second_element<C: Get<usize>>(collection: &C) -> Option<&C::Value> {
     collection.get(&1)
 }
 
-// `get_second_element()` works for vectors, arrays, and maps with the very
+// `get_second_element()` works for `Vec`s, arrays, and maps with the very
 // same code.
 assert_eq!(get_second_element(&vec![10, 20, 30]), Some(&20));
 assert_eq!(get_second_element(&[10, 20, 30]), Some(&20));
 assert_eq!(get_second_element(&BTreeMap::from([(0, 10), (1, 20)])), Some(&20));
 ```
 
-An abstract container trait like
-[`Veclike`](https://docs.rs/maplike/latest/maplike/trait.Veclike.html) bundles
-several traits
+An abstract container trait can bundle together several traits
+for container methods together in one short bound. For example,
+[`Veclike`](https://docs.rs/maplike/latest/maplike/trait.Veclike.html) joins
+together
 ([`Get`](https://docs.rs/maplike/latest/maplike/trait.Get.html),
 [`Set`](https://docs.rs/maplike/latest/maplike/trait.Set.html),
 [`Push`](https://docs.rs/maplike/latest/maplike/trait.Push.html),
 [`Pop`](https://docs.rs/maplike/latest/maplike/trait.Pop.html),
 [`Clear`](https://docs.rs/maplike/latest/maplike/trait.Clear.html),
 [`Len`](https://docs.rs/maplike/latest/maplike/trait.Len.html), and
-[`Index`](https://doc.rust-lang.org/std/ops/trait.Index.html)) together behind
-one bound:
+[`Index`](https://doc.rust-lang.org/std/ops/trait.Index.html)), thus allowing
+code that is generic over
+[`Vec`](https://doc.rust-lang.org/std/vec/struct.Vec.html),
+[`tinyvec::ArrayVec`](https://docs.rs/tinyvec/latest/tinyvec/struct.ArrayVec.html),
+and [`tinyvec::TinyVec`](https://docs.rs/tinyvec/latest/tinyvec/enum.TinyVec.html).
 
 ```rust
 use maplike::{Clear, Push, Veclike};
+use tinyvec::{ArrayVec, TinyVec};
 
 // This function is generic over any `Veclike` collection. The `Veclike` bound
-// provides `clear`, `push` and many other methods at once.
+// provides `clear()`, `push()` and many other methods at once.
 fn replace_all<C: Veclike<usize, Value = i32>>(collection: &mut C, values: &[i32]) {
     collection.clear();
     for &value in values {
@@ -110,19 +119,31 @@ fn replace_all<C: Veclike<usize, Value = i32>>(collection: &mut C, values: &[i32
     }
 }
 
-// `replace_all` works for any `Veclike` collection, such as `Vec`.
+// `replace_all()` now works for any `Veclike` collection.
+
+// Works on `Vec`,
 let mut vec = Vec::new();
 replace_all(&mut vec, &[1, 2, 3]);
 assert_eq!(vec, [1, 2, 3]);
 replace_all(&mut vec, &[4, 5, 6]);
 assert_eq!(vec, [4, 5, 6]);
+
+// Works on `tinyvec::ArrayVec`.
+let mut array_vec: ArrayVec<[i32; 8]> = ArrayVec::new();
+replace_all(&mut array_vec, &[7, 8, 9]);
+assert_eq!(array_vec.as_slice(), [7, 8, 9]);
+
+// Works on `tinyvec::TinyVec`.
+let mut tiny_vec: TinyVec<[i32; 8]> = TinyVec::new();
+replace_all(&mut tiny_vec, &[10, 11, 12]);
+assert_eq!(tiny_vec.as_slice(), [10, 11, 12]);
 ```
 
 ## Supported collections
 
 ### Standard library
 
-Rust's standard library collections are supported via built-in convenience
+Rust's standard library containers are supported via built-in convenience
 implementations:
 
 - [`HashMap`](https://doc.rust-lang.org/std/collections/struct.HashMap.html), gated by the `std` feature (enabled by default);
