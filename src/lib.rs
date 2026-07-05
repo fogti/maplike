@@ -211,20 +211,24 @@ pub trait Pop: Container {
 
 /// Put a new value in the container.
 ///
-/// This is basically [`push`](Push::push), but also works for sets and if an
-/// element was overridden (displaced) by the put operation, it is returned.
-/// This interface can be useful for collections with a finite number of elements,
-/// such as `Option` and cyclic buffers.
+/// This is basically [`push`](Push::push), but unlike it:
 ///
-/// If the insertion has happened to override (displace) an existing element,
+/// - it also works for sets,
+/// - it does not matter what is the key,
+/// - in some containers, `.put()` may evict elements.
+///
+/// If the insertion has happened to evict (aka. override or displace) an existing element,
 /// this element is returned.
 pub trait Put<E>: Container {
     /// Put a new value in the container.
     ///
-    /// This is basically [`push`](Push::push), but also works for sets and it does
-    /// not matter what is the key.
+    /// This is basically [`push`](Push::push), but unlike it:
     ///
-    /// If the insertion has happened to override (displace) an existing element,
+    /// - it also works for sets,
+    /// - it does not matter what is the key,
+    /// - in some containers, `.put()` may evict elements.
+    ///
+    /// If the insertion has happened to evict (aka. override or displace) an existing element,
     /// this element is returned.
     fn put(&mut self, element: E) -> Option<E>;
 }
