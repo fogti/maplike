@@ -44,6 +44,10 @@ For brevity and convenience, we also provide
 which represent complete abstract containers that join together traits of
 multiple operations.
 
+The traits are implemented for many containers from `std` and third-party
+crates. See the [Supported collections](#supported-collections) section for a
+complete list.
+
 Basically, this is Python's
 [collections.abc](https://docs.python.org/3/library/collections.abc.html), but
 in Rust, and with traits not only for different kinds of containers, but also
@@ -164,10 +168,18 @@ implementations:
 - [`Option`](https://doc.rust-lang.org/std/option/enum.Option.html), not feature-gated;
 - [`Vec`](https://doc.rust-lang.org/std/vec/struct.Vec.html), not feature-gated.
 
+### `maplike`'s types
+
+`maplike` provides and supports its own generic type,
+[`One`](https://docs.rs/maplike/latest/maplike/struct.One.html), for a
+collection that always has only one element (think `Option` but without `None`
+or `Box` but without pointer indirection, behaving like a collection despite
+holding a value not reference, allocated on the stack).
+
 ### Third-party types
 
 In addition to the standard library, `maplike` has built-in feature-gated
-convenience implementations for data structures from certain external crates:
+trait implementations for data structures from certain external crates:
 
 - [`bidimap::BiBTreeMap`](https://docs.rs/bidimap/latest/bidimap/), gated by
   the `bidimap` feature flag, and

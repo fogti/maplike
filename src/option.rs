@@ -72,8 +72,8 @@ impl<V> Remove<usize> for Option<V> {
 
 impl<V> Put<V> for Option<V> {
     #[inline(always)]
-    fn put(&mut self, element: V) -> Option<V> {
-        self.replace(element)
+    fn put(&mut self, value: V) -> Option<V> {
+        self.replace(value)
     }
 }
 

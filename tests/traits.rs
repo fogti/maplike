@@ -109,7 +109,7 @@ where
     assert!(items.contains(&(K::from_usize(3), V::from_usize(30))));
 }
 
-fn check_assign_eq<C>(initial: C, replacement: C)
+fn check_assign<C>(initial: C, replacement: C)
 where
     C: Assign + Clone + PartialEq + Debug,
 {
@@ -210,39 +210,6 @@ where
     assert_eq!(Len::len(&c), 0usize);
 }
 
-fn check_option<V>(mut c: Option<V>)
-where
-    V: FromUsize + Clone + PartialEq + Debug,
-{
-    assert_eq!(c.get(&0), None);
-    assert_eq!(c.get(&1), None);
-    assert_eq!(c.len(), 0);
-
-    assert_eq!(c.put(V::from_usize(10)), None);
-    assert_eq!(c.get(&0), Some(&V::from_usize(10)));
-    assert_eq!(c.len(), 1);
-
-    assert_eq!(c.set(0, V::from_usize(11)), Some(V::from_usize(10)));
-    assert_eq!(c.get(&0), Some(&V::from_usize(11)));
-
-    c.modify(&0, |v| *v = V::from_usize(12));
-    assert_eq!(c.get(&0), Some(&V::from_usize(12)));
-
-    assert_eq!(
-        Insert::insert(&mut c, 0, V::from_usize(13)),
-        Some(V::from_usize(12))
-    );
-    assert_eq!(c.put(V::from_usize(14)), Some(V::from_usize(13)));
-    assert_eq!(c.get(&0), Some(&V::from_usize(14)));
-
-    assert_eq!(c.remove(&1), None);
-    assert_eq!(c.remove(&0), Some(V::from_usize(14)));
-    assert_eq!(c.len(), 0);
-
-    c.clear();
-    assert_eq!(c.get(&0), None);
-}
-
 fn check_indexed<C>(c: &mut C)
 where
     C: ?Sized + Container<Key = usize, Value = i32> + Get<usize> + Set<usize> + Modify<usize> + Len,
@@ -296,6 +263,28 @@ where
     assert_eq!(c.get_by_left("b"), None);
 }
 
+mod one {
+    use super::*;
+    use maplike::One;
+
+    #[test]
+    fn test_traits() {
+        let mut c = One::new(10);
+
+        assert_eq!(c.get(&0), Some(&10));
+        assert_eq!(c.get(&1), None);
+
+        assert_eq!(c.set(0, 20), Some(10));
+        assert_eq!(c.get(&0), Some(&20));
+
+        assert_eq!(c.put(30), Some(20));
+        assert_eq!(c.get(&0), Some(&30));
+
+        check_with_one::<i32, i32, One<i32>>(40, 40);
+        check_assign(One::new(1), One::new(2));
+    }
+}
+
 #[cfg(feature = "std")]
 mod hashmap {
     use super::*;
@@ -307,7 +296,7 @@ mod hashmap {
         check_modify::<usize, i32, HashMap<usize, i32>>(HashMap::new());
         check_into_iter::<usize, i32, HashMap<usize, i32>>(HashMap::new());
         check_borrow_str(HashMap::<String, i32>::new());
-        check_assign_eq(
+        check_assign(
             HashMap::from([(1usize, 1i32)]),
             HashMap::from([(2usize, 2i32), (3usize, 3i32)]),
         );
@@ -324,7 +313,7 @@ mod hashset {
         check_keyed::<usize, (), HashSet<usize>>(HashSet::new());
         check_into_iter::<usize, (), HashSet<usize>>(HashSet::new());
         check_with_one::<usize, (), HashSet<usize>>(7, ());
-        check_assign_eq(HashSet::from([1usize]), HashSet::from([2usize, 3usize]));
+        check_assign(HashSet::from([1usize]), HashSet::from([2usize, 3usize]));
     }
 }
 
@@ -339,7 +328,7 @@ mod btreemap {
         check_modify::<usize, i32, BTreeMap<usize, i32>>(BTreeMap::new());
         check_into_iter::<usize, i32, BTreeMap<usize, i32>>(BTreeMap::new());
         check_borrow_str(BTreeMap::<String, i32>::new());
-        check_assign_eq(
+        check_assign(
             BTreeMap::from([(1usize, 1i32)]),
             BTreeMap::from([(2usize, 2i32), (3usize, 3i32)]),
         );
@@ -356,7 +345,7 @@ mod btreeset {
         check_keyed::<usize, (), BTreeSet<usize>>(BTreeSet::new());
         check_into_iter::<usize, (), BTreeSet<usize>>(BTreeSet::new());
         check_with_one::<usize, (), BTreeSet<usize>>(7, ());
-        check_assign_eq(BTreeSet::from([1usize]), BTreeSet::from([2usize, 3usize]));
+        check_assign(BTreeSet::from([1usize]), BTreeSet::from([2usize, 3usize]));
     }
 }
 
@@ -369,7 +358,7 @@ mod vec {
         check_push_put::<usize, i32, Vec<i32>>(Vec::new());
         check_with_one::<i32, i32, Vec<i32>>(30, 30);
         check_vec::<i32, Vec<i32>>(Vec::new());
-        check_assign_eq(vec![1i32], vec![2i32, 3i32]);
+        check_assign(vec![1i32], vec![2i32, 3i32]);
 
         let mut c: Vec<i32> = Vec::new();
         c.push(10);
@@ -386,7 +375,7 @@ mod array {
     #[test]
     fn test_traits() {
         check_indexed(&mut [10i32, 20, 30]);
-        check_assign_eq([0i32, 0, 0], [1i32, 2, 3]);
+        check_assign([0i32, 0, 0], [1i32, 2, 3]);
     }
 }
 
@@ -405,7 +394,7 @@ mod tuple {
 
     #[test]
     fn test_traits() {
-        check_assign_eq((0i32, 0i32), (1i32, 2i32));
+        check_assign((0i32, 0i32), (1i32, 2i32));
     }
 }
 
@@ -414,12 +403,42 @@ mod option_tests {
 
     #[test]
     fn test_traits() {
-        check_option::<i32>(None);
+        let mut c = None;
+        assert_eq!(c.get(&0), None);
+        assert_eq!(c.get(&1), None);
+        assert_eq!(c.len(), 0);
+
+        assert_eq!(c.put(i32::from_usize(10)), None);
+        assert_eq!(c.get(&0), Some(&i32::from_usize(10)));
+        assert_eq!(c.len(), 1);
+
+        assert_eq!(c.set(0, i32::from_usize(11)), Some(i32::from_usize(10)));
+        assert_eq!(c.get(&0), Some(&i32::from_usize(11)));
+
+        c.modify(&0, |v| *v = i32::from_usize(12));
+        assert_eq!(c.get(&0), Some(&i32::from_usize(12)));
+
+        assert_eq!(
+            Insert::insert(&mut c, 0, i32::from_usize(13)),
+            Some(i32::from_usize(12))
+        );
+        assert_eq!(c.put(i32::from_usize(14)), Some(i32::from_usize(13)));
+        assert_eq!(c.get(&0), Some(&i32::from_usize(14)));
+
+        assert_eq!(c.remove(&1), None);
+        assert_eq!(c.remove(&0), Some(i32::from_usize(14)));
+        assert_eq!(c.len(), 0);
+
+        c.clear();
+        assert_eq!(c.get(&0), None);
+
         assert_eq!(Option::<i32>::with_one(5), Some(5));
         assert_eq!(
             IntoIter::into_iter(Option::<i32>::with_one(9)).collect::<Vec<_>>(),
             [(0, 9)],
         );
+
+        check_with_one::<i32, i32, Option<i32>>(30, 30);
     }
 }
 
@@ -442,7 +461,7 @@ mod stable_vec_tests {
         let mut b = StableVec::new();
         b.push(2i32);
         b.push(3i32);
-        check_assign_eq(a, b);
+        check_assign(a, b);
     }
 }
 
@@ -483,7 +502,7 @@ mod tinyvec_tests {
         check_push_put::<usize, i32, ArrayVec<[i32; 8]>>(ArrayVec::new());
         check_with_one::<i32, i32, ArrayVec<[i32; 8]>>(30, 30);
         check_vec::<i32, ArrayVec<[i32; 8]>>(ArrayVec::new());
-        check_assign_eq(
+        check_assign(
             ArrayVec::from_array_len([1i32, 0, 0, 0, 0, 0, 0, 0], 1),
             ArrayVec::from_array_len([2i32, 3, 0, 0, 0, 0, 0, 0], 2),
         );
@@ -500,7 +519,7 @@ mod tinyvec_tests {
         let mut b = TinyVec::<[i32; 8]>::new();
         b.push(2);
         b.push(3);
-        check_assign_eq(a, b);
+        check_assign(a, b);
     }
 }
 
@@ -539,7 +558,7 @@ mod bibtreemap {
         a.insert("a".to_string(), 1i32);
         let mut b = BiBTreeMap::new();
         b.insert("b".to_string(), 2i32);
-        check_assign_eq(a, b);
+        check_assign(a, b);
     }
 }
 
@@ -557,6 +576,6 @@ mod bihashmap {
         a.insert("a".to_string(), 1i32);
         let mut b = BiHashMap::new();
         b.insert("b".to_string(), 2i32);
-        check_assign_eq(a, b);
+        check_assign(a, b);
     }
 }

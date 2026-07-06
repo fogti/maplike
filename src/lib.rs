@@ -47,10 +47,15 @@ pub trait WithOne<E>: Container {
 
 /// Replace self with a new value.
 ///
-/// This is mainly useful for scalars: these do not have get, set, insert,
-/// remove, push, pop, clear, len operations, but may still be assigned to.
+/// This is mainly useful for scalars: these do not have collection operations,
+/// such as get, set, insert, remove, push, pop, clear, len, but may still be
+/// assigned to.
 pub trait Assign<V = Self>: Container {
     /// Replace self with a new value.
+    ///
+    /// This is mainly useful for scalars: these do not have operations specific
+    /// to collections, such as get, set, insert, remove, push, pop, clear, len,
+    /// but may still be assigned to.
     fn assign(&mut self, value: V);
 }
 
@@ -289,8 +294,11 @@ pub trait Veclike<K>: Index<K> + Get<K> + Set<K> + Push<K> + Pop + Clear + Len {
 impl<K, T: Arraylike<K> + Push<K> + Pop + Clear> Veclike<K> for T {}
 
 mod compounds;
+mod one;
 mod option;
 mod scalars;
+
+pub use one::One;
 
 #[cfg(feature = "std")]
 #[cfg_attr(docsrs, doc(cfg(feature = "std")))]
