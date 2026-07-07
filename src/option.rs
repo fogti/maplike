@@ -2,9 +2,7 @@
 //
 // SPDX-License-Identifier: MIT OR Apache-2.0
 
-use crate::{
-    Assign, Clear, Container, Get, Insert, IntoIter, Len, Modify, Put, Remove, Set, WithOne,
-};
+use crate::{Assign, Clear, Container, Get, IntoIter, Len, Modify, Put, Remove, Set, WithOne};
 
 impl<V> Container for Option<V> {
     type Key = usize;
@@ -50,16 +48,6 @@ impl<V> Modify<usize> for Option<V> {
     {
         assert_eq!(*index, 0);
         f(self.as_mut().expect("no value under key"));
-    }
-}
-
-impl<V> Insert<usize> for Option<V> {
-    type Output = Option<V>;
-
-    #[inline(always)]
-    fn insert(&mut self, index: usize, value: V) -> Option<V> {
-        assert_eq!(index, 0);
-        self.replace(value)
     }
 }
 

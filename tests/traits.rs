@@ -418,10 +418,7 @@ mod option_tests {
         c.modify(&0, |v| *v = i32::from_usize(12));
         assert_eq!(c.get(&0), Some(&i32::from_usize(12)));
 
-        assert_eq!(
-            Insert::insert(&mut c, 0, i32::from_usize(13)),
-            Some(i32::from_usize(12))
-        );
+        assert_eq!(c.put(i32::from_usize(13)), Some(i32::from_usize(12)));
         assert_eq!(c.put(i32::from_usize(14)), Some(i32::from_usize(13)));
         assert_eq!(c.get(&0), Some(&i32::from_usize(14)));
 

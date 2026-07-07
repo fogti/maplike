@@ -2,7 +2,7 @@
 //
 // SPDX-License-Identifier: MIT OR Apache-2.0
 
-use crate::{Assign, Container, Get, Insert, IntoIter, Len, Modify, Put, Set, WithOne};
+use crate::{Assign, Container, Get, IntoIter, Len, Modify, Put, Set, WithOne};
 
 /// A collection that holds exactly one element.
 #[derive(Clone, Copy, Debug, Eq, Ord, PartialEq, PartialOrd)]
@@ -61,16 +61,6 @@ impl<V> Modify<usize> for One<V> {
     {
         assert_eq!(*index, 0);
         f(&mut self.value)
-    }
-}
-
-impl<V> Insert<usize> for One<V> {
-    type Output = Option<V>;
-
-    #[inline(always)]
-    fn insert(&mut self, index: usize, value: V) -> Option<V> {
-        assert_eq!(index, 0);
-        Some(core::mem::replace(&mut self.value, value))
     }
 }
 

@@ -14,26 +14,26 @@ Traits for abstract containers and operations over them.
 
 This crate provides traits for common operations over map-like, set-like, and
 vec-like data structures:
-[`get`](https://docs.rs/maplike/latest/maplike/trait.Get.html#tymethod.get),
-[`set`](https://docs.rs/maplike/latest/maplike/trait.Set.html#tymethod.set),
-[`modify`](https://docs.rs/maplike/latest/maplike/trait.Modify.html#tymethod.modify),
-[`insert`](https://docs.rs/maplike/latest/maplike/trait.Insert.html#tymethod.insert),
-[`remove`](https://docs.rs/maplike/latest/maplike/trait.Remove.html#tymethod.remove),
-[`push`](https://docs.rs/maplike/latest/maplike/trait.Push.html#tymethod.push),
-[`pop`](https://docs.rs/maplike/latest/maplike/trait.Pop.html#tymethod.pop),
-[`put`](https://docs.rs/maplike/latest/maplike/trait.Put.html#tymethod.put),
-[`clear`](https://docs.rs/maplike/latest/maplike/trait.Clear.html#tymethod.clear),
-[`len`](https://docs.rs/maplike/latest/maplike/trait.Len.html#tymethod.len),
-[`with_one`](https://docs.rs/maplike/latest/maplike/trait.WithOne#tymethod.with_one),
-[`assign`](https://docs.rs/maplike/latest/maplike/trait.Assign.html#tymethod.assign), and
-[`into_iter`](https://docs.rs/maplike/latest/maplike/trait.IntoIter.html#tymethod.into_iter).
+[`.get()`](https://docs.rs/maplike/latest/maplike/trait.Get.html#tymethod.get),
+[`.set()`](https://docs.rs/maplike/latest/maplike/trait.Set.html#tymethod.set),
+[`.modify()`](https://docs.rs/maplike/latest/maplike/trait.Modify.html#tymethod.modify),
+[`.insert()`](https://docs.rs/maplike/latest/maplike/trait.Insert.html#tymethod.insert),
+[`.remove()`](https://docs.rs/maplike/latest/maplike/trait.Remove.html#tymethod.remove),
+[`.push()`](https://docs.rs/maplike/latest/maplike/trait.Push.html#tymethod.push),
+[`.pop()`](https://docs.rs/maplike/latest/maplike/trait.Pop.html#tymethod.pop),
+[`.put()`](https://docs.rs/maplike/latest/maplike/trait.Put.html#tymethod.put),
+[`.clear()`](https://docs.rs/maplike/latest/maplike/trait.Clear.html#tymethod.clear),
+[`.len()`](https://docs.rs/maplike/latest/maplike/trait.Len.html#tymethod.len),
+[`.with_one()`](https://docs.rs/maplike/latest/maplike/trait.WithOne#tymethod.with_one),
+[`.assign()`](https://docs.rs/maplike/latest/maplike/trait.Assign.html#tymethod.assign), and
+[`.into_iter()`](https://docs.rs/maplike/latest/maplike/trait.IntoIter.html#tymethod.into_iter).
 
 For bidirectional maps, there are also variants of the get and remove operations
 by left and right key:
-[`get_by_left`](https://docs.rs/maplike/latest/maplike/trait.GetByLeft.html#tymethod.get_by_left),
-[`get_by_right`](https://docs.rs/maplike/latest/maplike/trait.GetByRight.html#tymethod.get_by_right),
-[`remove_by_left`](https://docs.rs/maplike/latest/maplike/trait.RemoveByLeft.html#tymethod.remove_by_left),
-[`remove_by_right`](https://docs.rs/maplike/latest/maplike/trait.RemoveByRight.html#tymethod.remove_by_right).
+[`.get_by_left()`](https://docs.rs/maplike/latest/maplike/trait.GetByLeft.html#tymethod.get_by_left),
+[`.get_by_right()`](https://docs.rs/maplike/latest/maplike/trait.GetByRight.html#tymethod.get_by_right),
+[`.remove_by_left()`](https://docs.rs/maplike/latest/maplike/trait.RemoveByLeft.html#tymethod.remove_by_left),
+[`.remove_by_right()`](https://docs.rs/maplike/latest/maplike/trait.RemoveByRight.html#tymethod.remove_by_right).
 
 For brevity and convenience, we also provide
 [`Scalarlike`](https://docs.rs/maplike/latest/maplike/trait.Scalarlike.html),
@@ -89,7 +89,7 @@ different collection types. A single trait like
 abstract over vectors, arrays, and maps alike.
 
 ```rust
-use std::collections::BTreeMap;
+use std::collections::{BTreeMap, HashMap};
 
 use maplike::Get;
 
@@ -98,11 +98,12 @@ fn get_second_element<C: Get<usize>>(collection: &C) -> Option<&C::Value> {
     collection.get(&1)
 }
 
-// `get_second_element()` works for `Vec`s, arrays, and maps with the very
-// same code.
+// `get_second_element()` works for `Vec`s, arrays, `BTreeMap`s, `HashMap`s with
+// the very same code.
 assert_eq!(get_second_element(&vec![10, 20, 30]), Some(&20));
 assert_eq!(get_second_element(&[10, 20, 30]), Some(&20));
 assert_eq!(get_second_element(&BTreeMap::from([(0, 10), (1, 20)])), Some(&20));
+assert_eq!(get_second_element(&HashMap::from([(0, 10), (1, 20)])), Some(&20));
 ```
 
 An abstract container trait can bundle together several traits
