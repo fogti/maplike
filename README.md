@@ -40,18 +40,19 @@ For brevity and convenience, we also provide
 [`Maplike`](https://docs.rs/maplike/latest/maplike/trait.Maplike.html),
 [`Setlike`](https://docs.rs/maplike/latest/maplike/trait.Setlike.html),
 [`Arraylike`](https://docs.rs/maplike/latest/maplike/trait.Arraylike.html), and
-[`Veclike`](https://docs.rs/maplike/latest/maplike/trait.Veclike.html) traits,
-which represent complete abstract containers that join together traits of
-multiple operations.
+[`Veclike`](https://docs.rs/maplike/latest/maplike/trait.Veclike.html) abstract
+container traits that join together traits of multiple operations.
 
 The traits are implemented for many containers from `std` and third-party
 crates. See the [Supported collections](#supported-collections) section for a
 complete list.
 
-Basically, this is Python's
+Basically, this very similar to Python's
 [collections.abc](https://docs.python.org/3/library/collections.abc.html), but
-in Rust, and with traits not only for different kinds of containers, but also
-for each operation.
+is in Rust, and with traits not only for different kinds of containers, but also
+for each operation. And every container is treated as if it was a map. If it is
+not really a map, it is treated as if its key type was `usize`, even when there
+can be at most only one element. Hence the crate name, `maplike`.
 
 This library is maintained and champaigned (aka.
 [dogfooded](https://en.wikipedia.org/wiki/Eating_your_own_dog_food)) by the
@@ -184,11 +185,14 @@ trait implementations for data structures from certain external crates:
 
 - [`bidimap::BiBTreeMap`](https://docs.rs/bidimap/latest/bidimap/), gated by
   the `bidimap` feature flag, and
-  [`bidimap::BiHashMap`](https://docs.rs/bidimap/latest/bidimap/), which is also
-  gated by the `std` feature flag.
+  [`bidimap::BiHashMap`](https://docs.rs/bidimap/latest/bidimap/), which is
+  additionally gated by the `std` feature flag.
   [`bidimap`](https://github.com/urschrei/bidimap)
   is a maintained fork of the currently unmaintained
   [`bimap`](https://github.com/brson/bimap) crate;
+- [`indexmap::IndexMap`](https://docs.rs/indexmap/latest/indexmap/map/struct.IndexMap.html)
+  and [`indexmap::IndexSet`](https://docs.rs/indexmap/latest/indexmap/set/struct.IndexSet.html),
+  gated by the `indexmap` feature flag;
 - [`rstar::RTree`](https://docs.rs/rstar/0.12.2/rstar/index.html), gated by the
   `rstar` feature flag;
 - [`rstared::RTreed`](https://docs.rs/rstared/latest/rstared/), gated by the
@@ -201,7 +205,7 @@ trait implementations for data structures from certain external crates:
   and [`tinyvec::TinyVec`](https://docs.rs/tinyvec/latest/tinyvec/enum.TinyVec.html),
   gated by the `tinyvec` feature flag.
 
-For examples, see
+For some examples of practical use, see the
 [examples](https://github.com/mikwielgus/undoredo/tree/develop/examples)
 directory of the [`undoredo`](https://github.com/mikwielgus/undoredo) crate.
 

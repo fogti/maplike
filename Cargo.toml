@@ -34,9 +34,13 @@ std = ["alloc"]
 ## `BTreeSet`, `Vec`).
 alloc = []
 
-## Enables convenience implementations for `bidimap::BiBTreeMap` and, together
-## with the `std` feature, `bidimap::BiHashMap`.
+## Enables convenience implementations for `bidimap::BiBTreeMap` and,
+## additionally under the `std` feature, `bidimap::BiHashMap`.
 bidimap = ["dep:bidimap"]
+
+## Enables convenience implementations for `indexmap::IndexMap` and
+## `indexmap::IndexSet`.
+indexmap = ["dep:indexmap"]
 
 ## Enables convenience implementations for `rstar::RTree`.
 rstar = ["dep:rstar"]
@@ -47,19 +51,22 @@ stable-vec = ["dep:stable-vec"]
 ## Enables convenience implementations for `thunderdome::Arena`.
 thunderdome = ["dep:thunderdome"]
 
-## Enables convenience implementations for `tinyvec::ArrayVec`.
+## Enables convenience implementations for `tinyvec::ArrayVec` and
+## `tinyvec::TinyVec`.
 tinyvec = ["dep:tinyvec"]
 
 [dependencies]
 maplike_derive = { version = "0.11", optional = true, path = "maplike_derive" }
 bidimap = { version = "0.7", optional = true }
 document-features = { version = "0.2", optional = true }
+indexmap = { version = "2.14", optional = true }
 rstar = { version = "0.12", optional = true }
 stable-vec = { version = "0.4", optional = true }
 thunderdome = { version = "0.6", optional = true }
 tinyvec = { version = "1", features = ["alloc"], optional = true }
 
 [dev-dependencies]
+indexmap = "2.14"
 stable-vec = "0.4"
 thunderdome = "0.6"
 rstar = "0.12"

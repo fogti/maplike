@@ -316,6 +316,14 @@ mod bibtreemap;
 #[cfg_attr(docsrs, doc(cfg(all(feature = "bidimap", feature = "std"))))]
 mod bihashmap;
 
+#[cfg(feature = "indexmap")]
+#[cfg_attr(docsrs, doc(cfg(feature = "indexmap")))]
+mod indexmap;
+
+#[cfg(feature = "indexmap")]
+#[cfg_attr(docsrs, doc(cfg(feature = "indexmap")))]
+mod indexset;
+
 #[cfg(feature = "rstar")]
 #[cfg_attr(docsrs, doc(cfg(feature = "rstar")))]
 mod rstar;

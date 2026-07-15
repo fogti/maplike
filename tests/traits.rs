@@ -541,8 +541,40 @@ mod rstar_tests {
     }
 }
 
+#[cfg(feature = "indexmap")]
+mod indexmap_tests {
+    use super::*;
+    use indexmap::IndexMap;
+
+    #[test]
+    fn test_traits() {
+        check_keyed::<usize, i32, IndexMap<usize, i32>>(IndexMap::new());
+        check_modify::<usize, i32, IndexMap<usize, i32>>(IndexMap::new());
+        check_into_iter::<usize, i32, IndexMap<usize, i32>>(IndexMap::new());
+        check_borrow_str(IndexMap::<String, i32>::new());
+        check_assign(
+            IndexMap::from([(1usize, 1i32)]),
+            IndexMap::from([(2usize, 2i32), (3usize, 3i32)]),
+        );
+    }
+}
+
+#[cfg(feature = "indexmap")]
+mod indexset_tests {
+    use super::*;
+    use ::indexmap::IndexSet;
+
+    #[test]
+    fn test_traits() {
+        check_keyed::<usize, (), IndexSet<usize>>(IndexSet::new());
+        check_into_iter::<usize, (), IndexSet<usize>>(IndexSet::new());
+        check_with_one::<usize, (), IndexSet<usize>>(7, ());
+        check_assign(IndexSet::from([1usize]), IndexSet::from([2usize, 3usize]));
+    }
+}
+
 #[cfg(feature = "bidimap")]
-mod bibtreemap {
+mod bibtreemap_tests {
     use super::*;
     use bidimap::BiBTreeMap;
 
@@ -560,7 +592,7 @@ mod bibtreemap {
 }
 
 #[cfg(all(feature = "bidimap", feature = "std"))]
-mod bihashmap {
+mod bihashmap_tests {
     use super::*;
     use bidimap::BiHashMap;
 
