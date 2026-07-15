@@ -225,6 +225,42 @@ where
     assert_eq!(c.get(&2), Some(&35));
 }
 
+fn check_scalar<V>(initial: V, alt1: V, alt2: V, alt3: V)
+where
+    V: Clone + PartialEq + Debug,
+    V: Container<Key = usize, Value = V>
+        + Get<usize>
+        + Set<usize, Output = Option<V>>
+        + Modify<usize>
+        + Put<V>
+        + Len
+        + IntoIter<usize>
+        + WithOne<V>
+        + Assign,
+{
+    let mut v = initial.clone();
+    assert_eq!(v.get(&0), Some(&initial));
+    assert_eq!(v.get(&1), None);
+    assert_eq!(Len::len(&v), 1);
+
+    assert_eq!(v.set(0, alt1.clone()), Some(initial.clone()));
+    assert_eq!(v.get(&0), Some(&alt1));
+
+    v.modify(&0, |x| *x = alt2.clone());
+    assert_eq!(v.get(&0), Some(&alt2));
+
+    assert_eq!(v.put(alt3.clone()), Some(alt2.clone()));
+    assert_eq!(v.get(&0), Some(&alt3));
+
+    assert_eq!(
+        IntoIter::into_iter(v.clone()).collect::<Vec<_>>(),
+        [(0, alt3.clone())],
+    );
+
+    check_with_one::<V, V, V>(alt1.clone(), alt1.clone());
+    check_assign(v, alt1);
+}
+
 #[cfg(feature = "bidimap")]
 use bidimap::Overwritten;
 
@@ -263,7 +299,45 @@ where
     assert_eq!(c.get_by_left("b"), None);
 }
 
-mod one {
+mod scalars_tests {
+    use super::*;
+
+    macro_rules! test_scalar {
+        ($($t:ty: [$($v:expr),+]),* $(,)?) => {
+            $(
+                {
+                    let [a, b, c, d]: [$t; 4] = [$($v),+];
+                    check_scalar(a, b, c, d);
+                }
+            )*
+        };
+    }
+
+    #[test]
+    fn test_traits() {
+        test_scalar! {
+            i8: [10i8, 20, 30, 40],
+            i16: [10i16, 20, 30, 40],
+            i32: [10i32, 20, 30, 40],
+            i64: [10i64, 20, 30, 40],
+            i128: [10i128, 20, 30, 40],
+            isize: [10isize, 20, 30, 40],
+            u8: [10u8, 20, 30, 40],
+            u16: [10u16, 20, 30, 40],
+            u32: [10u32, 20, 30, 40],
+            u64: [10u64, 20, 30, 40],
+            u128: [10u128, 20, 30, 40],
+            usize: [10usize, 20, 30, 40],
+            f32: [1.0f32, 2.0, 3.0, 4.0],
+            f64: [1.0f64, 2.0, 3.0, 4.0],
+            char: ['a', 'b', 'c', 'd'],
+            bool: [false, true, false, true],
+            (): [(), (), (), ()],
+        };
+    }
+}
+
+mod one_tests {
     use super::*;
     use maplike::One;
 
@@ -286,7 +360,7 @@ mod one {
 }
 
 #[cfg(feature = "std")]
-mod hashmap {
+mod hashmap_tests {
     use super::*;
     use std::collections::HashMap;
 
@@ -304,7 +378,7 @@ mod hashmap {
 }
 
 #[cfg(feature = "std")]
-mod hashset {
+mod hashset_tests {
     use super::*;
     use std::collections::HashSet;
 
@@ -318,7 +392,7 @@ mod hashset {
 }
 
 #[cfg(feature = "alloc")]
-mod btreemap {
+mod btreemap_tests {
     use super::*;
     use std::collections::BTreeMap;
 
@@ -336,7 +410,7 @@ mod btreemap {
 }
 
 #[cfg(feature = "alloc")]
-mod btreeset {
+mod btreeset_tests {
     use super::*;
     use std::collections::BTreeSet;
 
@@ -350,7 +424,7 @@ mod btreeset {
 }
 
 #[cfg(feature = "alloc")]
-mod vec {
+mod vec_tests {
     use super::*;
 
     #[test]
@@ -369,7 +443,7 @@ mod vec {
     }
 }
 
-mod array {
+mod array_tests {
     use super::*;
 
     #[test]
@@ -379,7 +453,7 @@ mod array {
     }
 }
 
-mod slice {
+mod slice_tests {
     use super::*;
 
     #[test]
@@ -389,7 +463,7 @@ mod slice {
     }
 }
 
-mod tuple {
+mod tuple_tests {
     use super::*;
 
     #[test]

@@ -2,7 +2,7 @@
 //
 // SPDX-License-Identifier: MIT OR Apache-2.0
 
-use crate::{Assign, Container};
+use crate::{Assign, Container, Get, IntoIter, Len, Modify, Put, Set, WithOne};
 
 macro_rules! impl_traits_for_scalar {
     ($($t:ty),*) => {
@@ -12,10 +12,65 @@ macro_rules! impl_traits_for_scalar {
                 type Value = Self;
             }
 
+            impl WithOne<$t> for $t {
+                #[inline(always)]
+                fn with_one(value: Self) -> Self {
+                    value
+                }
+            }
+
             impl Assign for $t {
                 #[inline(always)]
                 fn assign(&mut self, value: Self) {
                     *self = value;
+                }
+            }
+
+            impl Get<usize> for $t {
+                #[inline(always)]
+                fn get(&self, index: &usize) -> Option<&Self> {
+                    if *index == 0 { Some(&self) } else { None }
+                }
+            }
+
+            impl Set<usize> for $t {
+                type Output = Option<Self>;
+
+                #[inline(always)]
+                fn set(&mut self, index: usize, value: Self) -> Option<Self> {
+                    assert_eq!(index, 0);
+                    Some(core::mem::replace(self, value))
+                }
+            }
+
+            impl Modify<usize> for $t {
+                #[inline(always)]
+                fn modify<F>(&mut self, index: &usize, f: F) where F: FnOnce(&mut Self) {
+                    assert_eq!(*index, 0);
+                    f(self)
+                }
+            }
+
+            impl Put<$t> for $t {
+                #[inline(always)]
+                fn put(&mut self, value: Self) -> Option<Self> {
+                    Some(core::mem::replace(self, value))
+                }
+            }
+
+            impl Len for $t {
+                #[inline(always)]
+                fn len(&self) -> usize {
+                    1
+                }
+            }
+
+            impl IntoIter<usize> for $t {
+                type IntoIter = core::iter::Enumerate<core::iter::Once<Self>>;
+
+                #[inline(always)]
+                fn into_iter(self) -> Self::IntoIter {
+                    core::iter::once(self).enumerate()
                 }
             }
         )*
