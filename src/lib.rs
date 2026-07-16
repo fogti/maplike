@@ -336,6 +336,14 @@ mod stable_vec;
 #[cfg_attr(docsrs, doc(cfg(feature = "thunderdome")))]
 mod thunderdome;
 
+#[cfg(feature = "arrayvec")]
+#[cfg_attr(docsrs, doc(cfg(feature = "arrayvec")))]
+mod arrayvec;
+
+#[cfg(feature = "arrayvec")]
+#[cfg_attr(docsrs, doc(cfg(feature = "arrayvec")))]
+mod arraystring;
+
 #[cfg(feature = "tinyvec")]
 #[cfg_attr(docsrs, doc(cfg(feature = "tinyvec")))]
 mod tinyvec;

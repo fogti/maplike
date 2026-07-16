@@ -120,12 +120,12 @@ together
 [`Index`](https://doc.rust-lang.org/std/ops/trait.Index.html)), thus allowing
 code that is generic over
 [`Vec`](https://doc.rust-lang.org/std/vec/struct.Vec.html),
+[`arrayvec::ArrayVec`](https://docs.rs/arrayvec/latest/arrayvec/struct.ArrayVec.html),
 [`tinyvec::ArrayVec`](https://docs.rs/tinyvec/latest/tinyvec/struct.ArrayVec.html),
 and [`tinyvec::TinyVec`](https://docs.rs/tinyvec/latest/tinyvec/enum.TinyVec.html).
 
 ```rust
-use maplike::{Clear, Push, Veclike};
-use tinyvec::{ArrayVec, TinyVec};
+use maplike::{Clear, Container, Push, Veclike};
 
 // This function is generic over any `Veclike` collection. The `Veclike` bound
 // provides `.clear()`, `.push()` and many other methods at once.
@@ -145,15 +145,23 @@ assert_eq!(vec, [1, 2, 3]);
 replace_all(&mut vec, &[4, 5, 6]);
 assert_eq!(vec, [4, 5, 6]);
 
-// Works on `tinyvec::ArrayVec`.
-let mut array_vec: ArrayVec<[i32; 8]> = ArrayVec::new();
-replace_all(&mut array_vec, &[7, 8, 9]);
-assert_eq!(array_vec.as_slice(), [7, 8, 9]);
+#[cfg(feature = "tinyvec")]
+{
+    use tinyvec::{ArrayVec, TinyVec};
 
-// Works on `tinyvec::TinyVec`.
-let mut tiny_vec: TinyVec<[i32; 8]> = TinyVec::new();
-replace_all(&mut tiny_vec, &[10, 11, 12]);
-assert_eq!(tiny_vec.as_slice(), [10, 11, 12]);
+    // Works on `tinyvec::ArrayVec`.
+    let mut tiny_array_vec: ArrayVec<[i32; 8]> = ArrayVec::new();
+    replace_all(&mut tiny_array_vec, &[7, 8, 9]);
+    assert_eq!(tiny_array_vec.as_slice(), [7, 8, 9]);
+
+    // Works on `tinyvec::TinyVec`.
+    let mut tiny_vec: TinyVec<[i32; 8]> = TinyVec::new();
+    replace_all(&mut tiny_vec, &[10, 11, 12]);
+    assert_eq!(tiny_vec.as_slice(), [10, 11, 12]);
+}
+
+// NOTE: `arrayvec::ArrayVec` and `arrayvec::ArrayString` are not `Veclike`
+// because they do not implement `Index`.
 ```
 
 ## Supported collections
@@ -201,6 +209,12 @@ trait implementations for data structures from certain external crates:
   gated by the `stable-vec` feature flag;
 - [`thunderdome::Arena`](https://docs.rs/thunderdome/latest/thunderdome/),
   gated by the `thunderdome` feature flag;
+- [`arrayvec::ArrayVec`](https://docs.rs/arrayvec/latest/arrayvec/struct.ArrayVec.html)
+  and [`arrayvec::ArrayString`](https://docs.rs/arrayvec/latest/arrayvec/struct.ArrayString.html),
+  gated by the `arrayvec` feature flag (individual vec-like traits, but not
+  [`Veclike`](https://docs.rs/maplike/latest/maplike/trait.Veclike.html), because
+  `arrayvec` types do not implement
+  [`Index`](https://doc.rust-lang.org/std/ops/trait.Index.html));
 - [`tinyvec::ArrayVec`](https://docs.rs/tinyvec/latest/tinyvec/struct.ArrayVec.html),
   and [`tinyvec::TinyVec`](https://docs.rs/tinyvec/latest/tinyvec/enum.TinyVec.html),
   gated by the `tinyvec` feature flag.
@@ -217,7 +231,7 @@ Among stable vector data structures,
 [`Slab`](https://docs.rs/slab/latest/slab/),
 [`SlotMap`](https://docs.rs/slotmap/latest/slotmap/),
 [`generational-arena`](https://docs.rs/generational-arena/latest/generational_arena/)
-cannot be supported because they lack interfaces for insertion at an arbitrary
+are not supported because they lack interfaces for insertion at an arbitrary
 key.
 
 ### Technical sidenotes

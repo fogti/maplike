@@ -563,6 +563,62 @@ mod thunderdome_tests {
     }
 }
 
+#[cfg(feature = "arrayvec")]
+mod arrayvec_tests {
+    use super::*;
+    use arrayvec::ArrayVec;
+
+    #[test]
+    fn test_traits() {
+        check_push_put::<usize, i32, ArrayVec<i32, 8>>(ArrayVec::new());
+        check_with_one::<i32, i32, ArrayVec<i32, 8>>(30, 30);
+        check_vec::<i32, ArrayVec<i32, 8>>(ArrayVec::new());
+        check_assign(
+            {
+                let mut a = ArrayVec::<i32, 8>::new();
+                a.push(1);
+                a
+            },
+            {
+                let mut b = ArrayVec::<i32, 8>::new();
+                b.push(2);
+                b.push(3);
+                b
+            },
+        );
+    }
+}
+
+#[cfg(feature = "arrayvec")]
+mod arraystring_tests {
+    use super::*;
+    use arrayvec::ArrayString;
+
+    #[test]
+    fn test_traits() {
+        let mut s: ArrayString<8> = ArrayString::new();
+        assert_eq!(Push::push(&mut s, 'a'), 0);
+        assert_eq!(Push::push(&mut s, 'b'), 1);
+        assert_eq!(Len::len(&s), 2);
+        assert_eq!(s.as_str(), "ab");
+        assert_eq!(Pop::pop(&mut s), Some('b'));
+        assert_eq!(Pop::pop(&mut s), Some('a'));
+        assert_eq!(Pop::pop(&mut s), None);
+
+        let one: ArrayString<8> = WithOne::with_one('x');
+        assert_eq!(one.as_str(), "x");
+        //let items: Vec<(usize, char)> = IntoIter::into_iter(one).collect();
+        //assert_eq!(items, [(0, 'x')]);
+
+        Clear::clear(&mut s);
+        assert_eq!(Len::len(&s), 0);
+
+        let a = ArrayString::<8>::from("hi").unwrap();
+        let b = ArrayString::<8>::from("bye").unwrap();
+        check_assign(a, b);
+    }
+}
+
 #[cfg(feature = "tinyvec")]
 mod tinyvec_tests {
     use super::*;

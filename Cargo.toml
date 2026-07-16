@@ -34,6 +34,10 @@ std = ["alloc"]
 ## `BTreeSet`, `Vec`).
 alloc = []
 
+## Enables convenience implementations for `arrayvec::ArrayVec` and
+## `arrayvec::ArrayString`.
+arrayvec = ["dep:arrayvec"]
+
 ## Enables convenience implementations for `bidimap::BiBTreeMap` and,
 ## additionally under the `std` feature, `bidimap::BiHashMap`.
 bidimap = ["dep:bidimap"]
@@ -57,6 +61,7 @@ tinyvec = ["dep:tinyvec"]
 
 [dependencies]
 maplike_derive = { version = "0.11", optional = true, path = "maplike_derive" }
+arrayvec = { version = "0.7", optional = true }
 bidimap = { version = "0.7", optional = true }
 document-features = { version = "0.2", optional = true }
 indexmap = { version = "2.14", optional = true }
@@ -70,6 +75,7 @@ indexmap = "2.14"
 stable-vec = "0.4"
 thunderdome = "0.6"
 rstar = "0.12"
+arrayvec = "0.7"
 tinyvec = { version = "1", features = ["alloc"] }
 
 # Version replacements apply only to this crate. We have to keep this here
