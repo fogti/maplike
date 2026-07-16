@@ -7,7 +7,8 @@ use core::hash::Hash;
 
 use indexmap::IndexMap;
 
-use crate::{Assign, Clear, Container, Get, Insert, IntoIter, Modify, Remove, Set};
+use crate::containers::Container;
+use crate::ops::{Assign, Clear, Get, Insert, IntoIter, Modify, Remove, Set};
 
 impl<K, V> Container for IndexMap<K, V> {
     type Key = K;

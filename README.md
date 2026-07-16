@@ -14,33 +14,33 @@ Traits for abstract containers and operations over them.
 
 This crate provides traits for common operations over map-like, set-like, and
 vec-like data structures:
-[`.get()`](https://docs.rs/maplike/latest/maplike/trait.Get.html#tymethod.get),
-[`.set()`](https://docs.rs/maplike/latest/maplike/trait.Set.html#tymethod.set),
-[`.modify()`](https://docs.rs/maplike/latest/maplike/trait.Modify.html#tymethod.modify),
-[`.insert()`](https://docs.rs/maplike/latest/maplike/trait.Insert.html#tymethod.insert),
-[`.remove()`](https://docs.rs/maplike/latest/maplike/trait.Remove.html#tymethod.remove),
-[`.push()`](https://docs.rs/maplike/latest/maplike/trait.Push.html#tymethod.push),
-[`.pop()`](https://docs.rs/maplike/latest/maplike/trait.Pop.html#tymethod.pop),
-[`.put()`](https://docs.rs/maplike/latest/maplike/trait.Put.html#tymethod.put),
-[`.clear()`](https://docs.rs/maplike/latest/maplike/trait.Clear.html#tymethod.clear),
-[`.len()`](https://docs.rs/maplike/latest/maplike/trait.Len.html#tymethod.len),
-[`.with_one()`](https://docs.rs/maplike/latest/maplike/trait.WithOne#tymethod.with_one),
-[`.assign()`](https://docs.rs/maplike/latest/maplike/trait.Assign.html#tymethod.assign), and
-[`.into_iter()`](https://docs.rs/maplike/latest/maplike/trait.IntoIter.html#tymethod.into_iter).
+[`.get()`](https://docs.rs/maplike/latest/maplike/ops/trait.Get.html#tymethod.get),
+[`.set()`](https://docs.rs/maplike/latest/maplike/ops/trait.Set.html#tymethod.set),
+[`.modify()`](https://docs.rs/maplike/latest/maplike/ops/trait.Modify.html#tymethod.modify),
+[`.insert()`](https://docs.rs/maplike/latest/maplike/ops/trait.Insert.html#tymethod.insert),
+[`.remove()`](https://docs.rs/maplike/latest/maplike/ops/trait.Remove.html#tymethod.remove),
+[`.push()`](https://docs.rs/maplike/latest/maplike/ops/trait.Push.html#tymethod.push),
+[`.pop()`](https://docs.rs/maplike/latest/maplike/ops/trait.Pop.html#tymethod.pop),
+[`.put()`](https://docs.rs/maplike/latest/maplike/ops/trait.Put.html#tymethod.put),
+[`.clear()`](https://docs.rs/maplike/latest/maplike/ops/trait.Clear.html#tymethod.clear),
+[`.len()`](https://docs.rs/maplike/latest/maplike/ops/trait.Len.html#tymethod.len),
+[`.with_one()`](https://docs.rs/maplike/latest/maplike/ops/trait.WithOne.html#tymethod.with_one),
+[`.assign()`](https://docs.rs/maplike/latest/maplike/ops/trait.Assign.html#tymethod.assign), and
+[`.into_iter()`](https://docs.rs/maplike/latest/maplike/ops/trait.IntoIter.html#tymethod.into_iter).
 
 For bidirectional maps, there are also variants of the get and remove operations
 by left and right key:
-[`.get_by_left()`](https://docs.rs/maplike/latest/maplike/trait.GetByLeft.html#tymethod.get_by_left),
-[`.get_by_right()`](https://docs.rs/maplike/latest/maplike/trait.GetByRight.html#tymethod.get_by_right),
-[`.remove_by_left()`](https://docs.rs/maplike/latest/maplike/trait.RemoveByLeft.html#tymethod.remove_by_left),
-[`.remove_by_right()`](https://docs.rs/maplike/latest/maplike/trait.RemoveByRight.html#tymethod.remove_by_right).
+[`.get_by_left()`](https://docs.rs/maplike/latest/maplike/ops/trait.GetByLeft.html#tymethod.get_by_left),
+[`.get_by_right()`](https://docs.rs/maplike/latest/maplike/ops/trait.GetByRight.html#tymethod.get_by_right),
+[`.remove_by_left()`](https://docs.rs/maplike/latest/maplike/ops/trait.RemoveByLeft.html#tymethod.remove_by_left),
+[`.remove_by_right()`](https://docs.rs/maplike/latest/maplike/ops/trait.RemoveByRight.html#tymethod.remove_by_right).
 
 For brevity and convenience, we also provide
-[`Scalarlike`](https://docs.rs/maplike/latest/maplike/trait.Scalarlike.html),
-[`Maplike`](https://docs.rs/maplike/latest/maplike/trait.Maplike.html),
-[`Setlike`](https://docs.rs/maplike/latest/maplike/trait.Setlike.html),
-[`Arraylike`](https://docs.rs/maplike/latest/maplike/trait.Arraylike.html), and
-[`Veclike`](https://docs.rs/maplike/latest/maplike/trait.Veclike.html) abstract
+[`Scalarlike`](https://docs.rs/maplike/latest/maplike/containers/trait.Scalarlike.html),
+[`Maplike`](https://docs.rs/maplike/latest/maplike/containers/trait.Maplike.html),
+[`Setlike`](https://docs.rs/maplike/latest/maplike/containers/trait.Setlike.html),
+[`Arraylike`](https://docs.rs/maplike/latest/maplike/containers/trait.Arraylike.html), and
+[`Veclike`](https://docs.rs/maplike/latest/maplike/containers/trait.Veclike.html) abstract
 container traits that join together traits of multiple operations.
 
 The traits are implemented for many containers from `std` and third-party
@@ -86,13 +86,13 @@ or
 
 `maplike`'s traits allow you to write functions that are generic over many
 different collection types. A single trait like
-[`Get`](https://docs.rs/maplike/latest/maplike/trait.Get.html) is enough to
+[`Get`](https://docs.rs/maplike/latest/maplike/ops/trait.Get.html) is enough to
 abstract over vectors, arrays, and maps alike.
 
 ```rust
 use std::collections::{BTreeMap, HashMap};
 
-use maplike::Get;
+use maplike::ops::Get;
 
 // Generic over any collection implementing the `Get` trait.
 fn get_second_element<C: Get<usize>>(collection: &C) -> Option<&C::Value> {
@@ -109,14 +109,14 @@ assert_eq!(get_second_element(&HashMap::from([(0, 10), (1, 20)])), Some(&20));
 
 An abstract container trait can bundle together several traits
 for container methods together in one short bound. For example,
-[`Veclike`](https://docs.rs/maplike/latest/maplike/trait.Veclike.html) joins
+[`Veclike`](https://docs.rs/maplike/latest/maplike/containers/trait.Veclike.html) joins
 together
-([`Get`](https://docs.rs/maplike/latest/maplike/trait.Get.html),
-[`Set`](https://docs.rs/maplike/latest/maplike/trait.Set.html),
-[`Push`](https://docs.rs/maplike/latest/maplike/trait.Push.html),
-[`Pop`](https://docs.rs/maplike/latest/maplike/trait.Pop.html),
-[`Clear`](https://docs.rs/maplike/latest/maplike/trait.Clear.html),
-[`Len`](https://docs.rs/maplike/latest/maplike/trait.Len.html), and
+([`Get`](https://docs.rs/maplike/latest/maplike/ops/trait.Get.html),
+[`Set`](https://docs.rs/maplike/latest/maplike/ops/trait.Set.html),
+[`Push`](https://docs.rs/maplike/latest/maplike/ops/trait.Push.html),
+[`Pop`](https://docs.rs/maplike/latest/maplike/ops/trait.Pop.html),
+[`Clear`](https://docs.rs/maplike/latest/maplike/ops/trait.Clear.html),
+[`Len`](https://docs.rs/maplike/latest/maplike/ops/trait.Len.html), and
 [`Index`](https://doc.rust-lang.org/std/ops/trait.Index.html)), thus allowing
 code that is generic over
 [`Vec`](https://doc.rust-lang.org/std/vec/struct.Vec.html),
@@ -126,7 +126,8 @@ l), and
 [`tinyvec::TinyVec`](https://docs.rs/tinyvec/latest/tinyvec/enum.TinyVec.html).
 
 ```rust
-use maplike::{Clear, Container, Push, Veclike};
+use maplike::containers::{Container, Veclike};
+use maplike::ops::{Clear, Push};
 
 // This function is generic over any `Veclike` collection. The `Veclike` bound
 // provides `.clear()`, `.push()` and many other methods at once.
@@ -217,7 +218,7 @@ trait implementations for data structures from certain external crates:
 - [`arrayvec::ArrayVec`](https://docs.rs/arrayvec/latest/arrayvec/struct.ArrayVec.html)
   and [`arrayvec::ArrayString`](https://docs.rs/arrayvec/latest/arrayvec/struct.ArrayString.html),
   gated by the `arrayvec` feature flag (individual vec-like traits, but not
-  [`Veclike`](https://docs.rs/maplike/latest/maplike/trait.Veclike.html), because
+  [`Veclike`](https://docs.rs/maplike/latest/maplike/ops/trait.Veclike.html), because
   `arrayvec` types do not implement
   [`Index`](https://doc.rust-lang.org/std/ops/trait.Index.html));
 - [`smallvec::SmallVec`], gated by the `smallvec` feature flag;

@@ -23,7 +23,7 @@ fn expand_assign(input: DeriveInput) -> syn::Result<TokenStream> {
     let name = &input.ident;
 
     let output = quote! {
-        impl #impl_generics ::maplike::Assign for #name #ty_generics
+        impl #impl_generics ::maplike::ops::Assign for #name #ty_generics
         #where_clause
         {
             fn assign(&mut self, value: Self) {
@@ -39,7 +39,7 @@ fn expand_container(input: DeriveInput) -> syn::Result<TokenStream> {
     let name = &input.ident;
 
     let output = quote! {
-        impl #impl_generics ::maplike::Container for #name #ty_generics
+        impl #impl_generics ::maplike::containers::Container for #name #ty_generics
         #where_clause
         {
             type Key = usize;

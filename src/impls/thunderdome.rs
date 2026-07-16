@@ -4,9 +4,8 @@
 
 use thunderdome::{Arena, Index};
 
-use crate::{
-    Assign, Clear, Container, Get, Insert, IntoIter, Modify, Push, Put, Remove, Set, WithOne,
-};
+use crate::containers::Container;
+use crate::ops::{Assign, Clear, Get, Insert, IntoIter, Modify, Push, Put, Remove, Set, WithOne};
 
 impl<V> Container for Arena<V> {
     type Key = Index;

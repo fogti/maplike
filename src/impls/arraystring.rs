@@ -4,7 +4,8 @@
 //
 use arrayvec::ArrayString;
 
-use crate::{Assign, Clear, Container, Len, Pop, Push, Put, WithOne};
+use crate::containers::Container;
+use crate::ops::{Assign, Clear, Len, Pop, Push, Put, WithOne};
 
 impl<const CAP: usize> Container for ArrayString<CAP> {
     type Key = usize;

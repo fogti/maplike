@@ -4,9 +4,8 @@
 
 use stable_vec::StableVecFacade;
 
-use crate::{
-    Assign, Clear, Container, Get, Insert, IntoIter, Modify, Push, Put, Remove, Set, WithOne,
-};
+use crate::containers::Container;
+use crate::ops::{Assign, Clear, Get, Insert, IntoIter, Modify, Push, Put, Remove, Set, WithOne};
 
 impl<V, C: stable_vec::core::Core<V>> Container for StableVecFacade<V, C> {
     type Key = usize;

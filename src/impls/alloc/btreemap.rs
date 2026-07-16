@@ -6,7 +6,8 @@ use core::borrow::Borrow;
 
 use alloc_::collections::BTreeMap;
 
-use crate::{Assign, Clear, Container, Get, Insert, IntoIter, Modify, Remove, Set};
+use crate::containers::Container;
+use crate::ops::{Assign, Clear, Get, Insert, IntoIter, Modify, Remove, Set};
 
 impl<K, V> Container for BTreeMap<K, V> {
     type Key = K;

@@ -7,9 +7,10 @@ use core::borrow::Borrow;
 use bidimap::{BiHashMap, Overwritten};
 use std_::hash::Hash;
 
-use crate::{
-    Assign, Clear, Container, Get, GetByLeft, GetByRight, Insert, IntoIter, RemoveByLeft,
-    RemoveByRight, Set,
+use crate::containers::Container;
+use crate::ops::{
+    Assign, Clear, Get, GetByLeft, GetByRight, Insert, IntoIter, RemoveByLeft, RemoveByRight,
+    Set,
 };
 
 impl<L, R> Container for BiHashMap<L, R> {

@@ -2,7 +2,8 @@
 //
 // SPDX-License-Identifier: MIT OR Apache-2.0
 
-use crate::{Assign, Clear, Container, Get, IntoIter, Len, Modify, Put, Remove, Set, WithOne};
+use crate::containers::Container;
+use crate::ops::{Assign, Clear, Get, IntoIter, Len, Modify, Put, Remove, Set, WithOne};
 
 impl<V> Container for Option<V> {
     type Key = usize;

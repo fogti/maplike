@@ -10,9 +10,10 @@
 
 use std::fmt::Debug;
 
-use maplike::{
-    Assign, Clear, Container, Get, GetByLeft, GetByRight, Insert, IntoIter, Len, Modify, Pop, Push,
-    Put, Remove, RemoveByLeft, RemoveByRight, Set, WithOne,
+use maplike::containers::Container;
+use maplike::ops::{
+    Assign, Clear, Get, GetByLeft, GetByRight, Insert, IntoIter, Len, Modify, Pop, Push, Put,
+    Remove, RemoveByLeft, RemoveByRight, Set, WithOne,
 };
 
 trait FromUsize {
@@ -301,7 +302,7 @@ mod scalars_tests {
 
 mod one_tests {
     use super::*;
-    use maplike::One;
+    use maplike::one::One;
 
     #[test]
     fn test_traits_on_one() {

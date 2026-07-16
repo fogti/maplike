@@ -2,7 +2,8 @@
 //
 // SPDX-License-Identifier: MIT OR Apache-2.0
 
-use crate::{Assign, Container, Get, IntoIter, Len, Modify, Put, Set, WithOne};
+use crate::containers::Container;
+use crate::ops::{Assign, Get, IntoIter, Len, Modify, Put, Set, WithOne};
 
 /// A collection that holds exactly one element.
 #[derive(Clone, Copy, Debug, Eq, Ord, PartialEq, PartialOrd)]

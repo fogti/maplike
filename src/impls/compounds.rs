@@ -2,7 +2,8 @@
 //
 // SPDX-License-Identifier: MIT OR Apache-2.0
 
-use crate::{Assign, Container, Get, Len, Modify, Set};
+use crate::containers::Container;
+use crate::ops::{Assign, Get, Len, Modify, Set};
 
 macro_rules! impl_assign_for_tuple {
     ($($idx:tt $typ:ident),+) => {

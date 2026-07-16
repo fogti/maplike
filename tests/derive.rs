@@ -4,15 +4,15 @@
 
 #![cfg(feature = "derive")]
 
-use maplike::{Assign, Container};
+use maplike::ops::Assign;
 
-#[derive(Container, Assign, Debug, PartialEq)]
+#[derive(maplike::Container, maplike::Assign, Debug, PartialEq)]
 struct TestStruct {
     integer: i64,
     string: String,
 }
 
-#[derive(Container, Assign, Debug, PartialEq)]
+#[derive(maplike::Container, maplike::Assign, Debug, PartialEq)]
 enum TestEnum {
     Usize(usize),
     Strings(String, String),
@@ -20,7 +20,7 @@ enum TestEnum {
 
 fn assert_derived_container<T>()
 where
-    T: maplike::Container<Key = usize, Value = T>,
+    T: maplike::containers::Container<Key = usize, Value = T>,
 {
 }
 

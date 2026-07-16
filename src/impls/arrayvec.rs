@@ -4,7 +4,8 @@
 
 use arrayvec::ArrayVec;
 
-use crate::{Assign, Clear, Container, Get, IntoIter, Len, Modify, Pop, Push, Put, Set, WithOne};
+use crate::containers::Container;
+use crate::ops::{Assign, Clear, Get, IntoIter, Len, Modify, Pop, Push, Put, Set, WithOne};
 
 impl<T, const CAP: usize> Container for ArrayVec<T, CAP> {
     type Key = usize;

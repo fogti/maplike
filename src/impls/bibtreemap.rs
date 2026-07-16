@@ -6,9 +6,10 @@ use core::borrow::Borrow;
 
 use bidimap::{BiBTreeMap, Overwritten};
 
-use crate::{
-    Assign, Clear, Container, Get, GetByLeft, GetByRight, Insert, IntoIter, RemoveByLeft,
-    RemoveByRight, Set,
+use crate::containers::Container;
+use crate::ops::{
+    Assign, Clear, Get, GetByLeft, GetByRight, Insert, IntoIter, RemoveByLeft, RemoveByRight,
+    Set,
 };
 
 impl<L, R> Container for BiBTreeMap<L, R> {
