@@ -44,7 +44,7 @@ For brevity and convenience, we also provide
 container traits that join together traits of multiple operations.
 
 The traits are implemented for many containers from `std` and third-party
-crates. See the [Supported collections](#supported-collections) section for a
+crates. See the [Supported containers](#supported-containers) section for a
 complete list.
 
 Basically, this very similar to Python's
@@ -165,7 +165,7 @@ assert_eq!(vec, [4, 5, 6]);
 // because they do not implement `Index`.
 ```
 
-## Supported collections
+## Supported containers
 
 ### Standard library
 
@@ -174,10 +174,11 @@ implementations:
 
 - [`HashMap`](https://doc.rust-lang.org/std/collections/struct.HashMap.html), gated by the `std` feature (enabled by default);
 - [`HashSet`](https://doc.rust-lang.org/stable/std/collections/struct.HashSet.html), gated by the `std` feature (enabled by default);
-- [`BTreeMap`](https://doc.rust-lang.org/std/collections/struct.BTreeMap.html), not feature-gated;
-- [`BTreeSet`](https://doc.rust-lang.org/stable/std/collections/struct.BTreeSet.html), not feature-gated;
-- [`Option`](https://doc.rust-lang.org/std/option/enum.Option.html), not feature-gated;
-- [`Vec`](https://doc.rust-lang.org/std/vec/struct.Vec.html), not feature-gated.
+- [`BTreeMap`](https://doc.rust-lang.org/std/collections/struct.BTreeMap.html), gated by the `alloc` feature (enabled by default);
+- [`BTreeSet`](https://doc.rust-lang.org/stable/std/collections/struct.BTreeSet.html), gated by the `alloc` feature (enabled by default);
+- [`Vec`](https://doc.rust-lang.org/std/vec/struct.Vec.html), gated by the `alloc` feature (enabled by default);
+- [`Box`](https://doc.rust-lang.org/std/boxed/struct.Box.html), gated by the `alloc` feature (enabled by default);
+- [`Option`](https://doc.rust-lang.org/std/option/enum.Option.html), not feature-gated.
 
 ### `maplike`'s types
 

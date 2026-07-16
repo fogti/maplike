@@ -2,6 +2,7 @@
 //
 // SPDX-License-Identifier: MIT OR Apache-2.0
 
+mod boxed;
 mod btreemap;
 mod btreeset;
 mod vec;

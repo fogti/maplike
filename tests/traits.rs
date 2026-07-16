@@ -321,6 +321,38 @@ mod one_tests {
     }
 }
 
+#[cfg(feature = "alloc")]
+mod box_tests {
+    use super::*;
+    use std::boxed::Box;
+
+    #[test]
+    fn test_traits_on_box() {
+        let mut c = Box::new(10);
+
+        assert_eq!(c.get(&0), Some(&10));
+        assert_eq!(c.get(&1), None);
+        assert_eq!(c.len(), 1);
+
+        assert_eq!(c.set(0, 20), Some(10));
+        assert_eq!(c.get(&0), Some(&20));
+
+        c.modify(&0, |v| *v = 21);
+        assert_eq!(c.get(&0), Some(&21));
+
+        assert_eq!(c.put(30), Some(21));
+        assert_eq!(c.get(&0), Some(&30));
+
+        check_with_one::<i32, i32, Box<i32>>(40, 40);
+        check_assign(Box::new(1), Box::new(2));
+
+        assert_eq!(
+            IntoIter::into_iter(Box::new(9)).collect::<Vec<_>>(),
+            [(0, 9)],
+        );
+    }
+}
+
 #[cfg(feature = "std")]
 mod std_tests {
     use super::*;
