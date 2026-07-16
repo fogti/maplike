@@ -261,44 +261,6 @@ where
     check_assign(v, alt1);
 }
 
-#[cfg(feature = "bidimap")]
-use bidimap::Overwritten;
-
-#[cfg(feature = "bidimap")]
-fn check_bidirectional_map<C>(mut c: C)
-where
-    C: Container<Key = String, Value = i32>
-        + Get<String>
-        + GetByLeft<String, str>
-        + GetByRight<String>
-        + Set<String, Output = Overwritten<String, i32>>
-        + Insert<String, Output = Overwritten<String, i32>>
-        + RemoveByLeft<String, str>
-        + RemoveByRight<String>
-        + Clear,
-{
-    assert_eq!(c.insert("a".to_string(), 1), Overwritten::Neither);
-    assert_eq!(c.insert("b".to_string(), 2), Overwritten::Neither);
-
-    assert_eq!(c.get(&"a".to_string()), Some(&1));
-    assert_eq!(c.get_by_left("a"), Some(&1));
-    assert_eq!(c.get_by_right(&2), Some(&"b".to_string()));
-
-    assert_eq!(
-        c.set("a".to_string(), 11),
-        Overwritten::Left("a".to_string(), 1)
-    );
-    assert_eq!(c.get_by_left("a"), Some(&11));
-    assert_eq!(c.get_by_right(&11), Some(&"a".to_string()));
-
-    assert_eq!(c.remove_by_left("a"), Some(11));
-    assert_eq!(c.get_by_left("a"), None);
-
-    assert_eq!(c.remove_by_right(&2), Some("b".to_string()));
-    c.clear();
-    assert_eq!(c.get_by_left("b"), None);
-}
-
 mod scalars_tests {
     use super::*;
 
@@ -342,7 +304,7 @@ mod one_tests {
     use maplike::One;
 
     #[test]
-    fn test_traits() {
+    fn test_traits_on_one() {
         let mut c = One::new(10);
 
         assert_eq!(c.get(&0), Some(&10));
@@ -360,12 +322,12 @@ mod one_tests {
 }
 
 #[cfg(feature = "std")]
-mod hashmap_tests {
+mod std_tests {
     use super::*;
-    use std::collections::HashMap;
+    use std::collections::{HashMap, HashSet};
 
     #[test]
-    fn test_traits() {
+    fn test_traits_on_hashmap() {
         check_keyed::<usize, i32, HashMap<usize, i32>>(HashMap::new());
         check_modify::<usize, i32, HashMap<usize, i32>>(HashMap::new());
         check_into_iter::<usize, i32, HashMap<usize, i32>>(HashMap::new());
@@ -375,15 +337,9 @@ mod hashmap_tests {
             HashMap::from([(2usize, 2i32), (3usize, 3i32)]),
         );
     }
-}
-
-#[cfg(feature = "std")]
-mod hashset_tests {
-    use super::*;
-    use std::collections::HashSet;
 
     #[test]
-    fn test_traits() {
+    fn test_traits_on_hashset() {
         check_keyed::<usize, (), HashSet<usize>>(HashSet::new());
         check_into_iter::<usize, (), HashSet<usize>>(HashSet::new());
         check_with_one::<usize, (), HashSet<usize>>(7, ());
@@ -392,12 +348,12 @@ mod hashset_tests {
 }
 
 #[cfg(feature = "alloc")]
-mod btreemap_tests {
+mod alloc_tests {
     use super::*;
-    use std::collections::BTreeMap;
+    use std::collections::{BTreeMap, BTreeSet};
 
     #[test]
-    fn test_traits() {
+    fn test_traits_on_btreemap() {
         check_keyed::<usize, i32, BTreeMap<usize, i32>>(BTreeMap::new());
         check_modify::<usize, i32, BTreeMap<usize, i32>>(BTreeMap::new());
         check_into_iter::<usize, i32, BTreeMap<usize, i32>>(BTreeMap::new());
@@ -407,28 +363,17 @@ mod btreemap_tests {
             BTreeMap::from([(2usize, 2i32), (3usize, 3i32)]),
         );
     }
-}
-
-#[cfg(feature = "alloc")]
-mod btreeset_tests {
-    use super::*;
-    use std::collections::BTreeSet;
 
     #[test]
-    fn test_traits() {
+    fn test_traits_on_btreeset() {
         check_keyed::<usize, (), BTreeSet<usize>>(BTreeSet::new());
         check_into_iter::<usize, (), BTreeSet<usize>>(BTreeSet::new());
         check_with_one::<usize, (), BTreeSet<usize>>(7, ());
         check_assign(BTreeSet::from([1usize]), BTreeSet::from([2usize, 3usize]));
     }
-}
-
-#[cfg(feature = "alloc")]
-mod vec_tests {
-    use super::*;
 
     #[test]
-    fn test_traits() {
+    fn test_traits_on_vec() {
         check_push_put::<usize, i32, Vec<i32>>(Vec::new());
         check_with_one::<i32, i32, Vec<i32>>(30, 30);
         check_vec::<i32, Vec<i32>>(Vec::new());
@@ -447,7 +392,7 @@ mod array_tests {
     use super::*;
 
     #[test]
-    fn test_traits() {
+    fn test_traits_on_array() {
         check_indexed(&mut [10i32, 20, 30]);
         check_assign([0i32, 0, 0], [1i32, 2, 3]);
     }
@@ -457,7 +402,7 @@ mod slice_tests {
     use super::*;
 
     #[test]
-    fn test_traits() {
+    fn test_traits_on_slice() {
         let mut backing = [10i32, 20, 30];
         check_indexed(&mut backing[..]);
     }
@@ -467,7 +412,7 @@ mod tuple_tests {
     use super::*;
 
     #[test]
-    fn test_traits() {
+    fn test_traits_on_tuple() {
         check_assign((0i32, 0i32), (1i32, 2i32));
     }
 }
@@ -476,7 +421,7 @@ mod option_tests {
     use super::*;
 
     #[test]
-    fn test_traits() {
+    fn test_traits_on_option() {
         let mut c = None;
         assert_eq!(c.get(&0), None);
         assert_eq!(c.get(&1), None);
@@ -519,7 +464,7 @@ mod stable_vec_tests {
     use stable_vec::StableVec;
 
     #[test]
-    fn test_traits() {
+    fn test_traits_on_stable_vec() {
         check_keyed::<usize, i32, StableVec<i32>>(StableVec::new());
         check_modify::<usize, i32, StableVec<i32>>(StableVec::new());
         check_into_iter::<usize, i32, StableVec<i32>>(StableVec::new());
@@ -542,7 +487,7 @@ mod thunderdome_tests {
     use thunderdome::Arena;
 
     #[test]
-    fn test_traits() {
+    fn test_traits_on_arena() {
         check_push_put::<thunderdome::Index, i32, Arena<i32>>(Arena::new());
         check_with_one::<i32, i32, Arena<i32>>(30, 30);
         check_pushed_insert_remove::<thunderdome::Index, i32, Arena<i32>>(Arena::new());
@@ -566,10 +511,10 @@ mod thunderdome_tests {
 #[cfg(feature = "arrayvec")]
 mod arrayvec_tests {
     use super::*;
-    use arrayvec::ArrayVec;
+    use arrayvec::{ArrayString, ArrayVec};
 
     #[test]
-    fn test_traits() {
+    fn test_traits_on_arrayvec() {
         check_push_put::<usize, i32, ArrayVec<i32, 8>>(ArrayVec::new());
         check_with_one::<i32, i32, ArrayVec<i32, 8>>(30, 30);
         check_vec::<i32, ArrayVec<i32, 8>>(ArrayVec::new());
@@ -587,15 +532,9 @@ mod arrayvec_tests {
             },
         );
     }
-}
-
-#[cfg(feature = "arrayvec")]
-mod arraystring_tests {
-    use super::*;
-    use arrayvec::ArrayString;
 
     #[test]
-    fn test_traits() {
+    fn test_traits_on_arraystring() {
         let mut s: ArrayString<8> = ArrayString::new();
         assert_eq!(Push::push(&mut s, 'a'), 0);
         assert_eq!(Push::push(&mut s, 'b'), 1);
@@ -616,6 +555,32 @@ mod arraystring_tests {
         let a = ArrayString::<8>::from("hi").unwrap();
         let b = ArrayString::<8>::from("bye").unwrap();
         check_assign(a, b);
+    }
+}
+
+#[cfg(feature = "smallvec")]
+mod smallvec_tests {
+    use super::*;
+    use smallvec::SmallVec;
+
+    #[test]
+    fn test_traits_on_smallvec() {
+        check_push_put::<usize, i32, SmallVec<[i32; 8]>>(SmallVec::new());
+        check_with_one::<i32, i32, SmallVec<[i32; 8]>>(30, 30);
+        check_vec::<i32, SmallVec<[i32; 8]>>(SmallVec::new());
+        check_assign(
+            {
+                let mut a = SmallVec::<[i32; 8]>::new();
+                a.push(1);
+                a
+            },
+            {
+                let mut b = SmallVec::<[i32; 8]>::new();
+                b.push(2);
+                b.push(3);
+                b
+            },
+        );
     }
 }
 
@@ -656,7 +621,7 @@ mod rstar_tests {
     use rstar::RTree;
 
     #[test]
-    fn test_traits() {
+    fn test_traits_on_rtree() {
         check_keyed::<(i32, i32), (), RTree<(i32, i32)>>(RTree::new());
         check_into_iter::<(i32, i32), (), RTree<(i32, i32)>>(RTree::new());
         check_with_one::<(i32, i32), (), RTree<(i32, i32)>>((3, 4), ());
@@ -674,10 +639,10 @@ mod rstar_tests {
 #[cfg(feature = "indexmap")]
 mod indexmap_tests {
     use super::*;
-    use indexmap::IndexMap;
+    use indexmap::{IndexMap, IndexSet};
 
     #[test]
-    fn test_traits() {
+    fn test_traits_on_indexmap() {
         check_keyed::<usize, i32, IndexMap<usize, i32>>(IndexMap::new());
         check_modify::<usize, i32, IndexMap<usize, i32>>(IndexMap::new());
         check_into_iter::<usize, i32, IndexMap<usize, i32>>(IndexMap::new());
@@ -687,15 +652,9 @@ mod indexmap_tests {
             IndexMap::from([(2usize, 2i32), (3usize, 3i32)]),
         );
     }
-}
-
-#[cfg(feature = "indexmap")]
-mod indexset_tests {
-    use super::*;
-    use ::indexmap::IndexSet;
 
     #[test]
-    fn test_traits() {
+    fn test_traits_on_indexset() {
         check_keyed::<usize, (), IndexSet<usize>>(IndexSet::new());
         check_into_iter::<usize, (), IndexSet<usize>>(IndexSet::new());
         check_with_one::<usize, (), IndexSet<usize>>(7, ());
@@ -704,12 +663,48 @@ mod indexset_tests {
 }
 
 #[cfg(feature = "bidimap")]
-mod bibtreemap_tests {
+mod bidimap_tests {
     use super::*;
-    use bidimap::BiBTreeMap;
+    #[cfg(feature = "std")]
+    use bidimap::BiHashMap;
+    use bidimap::{BiBTreeMap, Overwritten};
+
+    fn check_bidirectional_map<C>(mut c: C)
+    where
+        C: Container<Key = String, Value = i32>
+            + Get<String>
+            + GetByLeft<String, str>
+            + GetByRight<String>
+            + Set<String, Output = Overwritten<String, i32>>
+            + Insert<String, Output = Overwritten<String, i32>>
+            + RemoveByLeft<String, str>
+            + RemoveByRight<String>
+            + Clear,
+    {
+        assert_eq!(c.insert("a".to_string(), 1), Overwritten::Neither);
+        assert_eq!(c.insert("b".to_string(), 2), Overwritten::Neither);
+
+        assert_eq!(c.get(&"a".to_string()), Some(&1));
+        assert_eq!(c.get_by_left("a"), Some(&1));
+        assert_eq!(c.get_by_right(&2), Some(&"b".to_string()));
+
+        assert_eq!(
+            c.set("a".to_string(), 11),
+            Overwritten::Left("a".to_string(), 1)
+        );
+        assert_eq!(c.get_by_left("a"), Some(&11));
+        assert_eq!(c.get_by_right(&11), Some(&"a".to_string()));
+
+        assert_eq!(c.remove_by_left("a"), Some(11));
+        assert_eq!(c.get_by_left("a"), None);
+
+        assert_eq!(c.remove_by_right(&2), Some("b".to_string()));
+        c.clear();
+        assert_eq!(c.get_by_left("b"), None);
+    }
 
     #[test]
-    fn test_traits() {
+    fn test_traits_on_bibtreemap() {
         check_bidirectional_map(BiBTreeMap::<String, i32>::new());
         check_into_iter::<usize, i32, BiBTreeMap<usize, i32>>(BiBTreeMap::new());
 
@@ -719,15 +714,10 @@ mod bibtreemap_tests {
         b.insert("b".to_string(), 2i32);
         check_assign(a, b);
     }
-}
 
-#[cfg(all(feature = "bidimap", feature = "std"))]
-mod bihashmap_tests {
-    use super::*;
-    use bidimap::BiHashMap;
-
+    #[cfg(feature = "std")]
     #[test]
-    fn test_traits() {
+    fn test_traits_on_bihashmap() {
         check_bidirectional_map(BiHashMap::<String, i32>::new());
         check_into_iter::<usize, i32, BiHashMap<usize, i32>>(BiHashMap::new());
 

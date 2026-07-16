@@ -344,6 +344,10 @@ mod arrayvec;
 #[cfg_attr(docsrs, doc(cfg(feature = "arrayvec")))]
 mod arraystring;
 
+#[cfg(feature = "smallvec")]
+#[cfg_attr(docsrs, doc(cfg(feature = "smallvec")))]
+mod smallvec;
+
 #[cfg(feature = "tinyvec")]
 #[cfg_attr(docsrs, doc(cfg(feature = "tinyvec")))]
 mod tinyvec;

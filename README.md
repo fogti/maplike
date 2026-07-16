@@ -120,9 +120,10 @@ together
 [`Index`](https://doc.rust-lang.org/std/ops/trait.Index.html)), thus allowing
 code that is generic over
 [`Vec`](https://doc.rust-lang.org/std/vec/struct.Vec.html),
-[`arrayvec::ArrayVec`](https://docs.rs/arrayvec/latest/arrayvec/struct.ArrayVec.html),
-[`tinyvec::ArrayVec`](https://docs.rs/tinyvec/latest/tinyvec/struct.ArrayVec.html),
-and [`tinyvec::TinyVec`](https://docs.rs/tinyvec/latest/tinyvec/enum.TinyVec.html).
+[`smallvec::SmallVec`],
+[`tinyvec::ArrayVec`](https://docs.rs/tinyvec/latest/tinyvec/struct.ArrayVec.htm
+l), and
+[`tinyvec::TinyVec`](https://docs.rs/tinyvec/latest/tinyvec/enum.TinyVec.html).
 
 ```rust
 use maplike::{Clear, Container, Push, Veclike};
@@ -215,6 +216,7 @@ trait implementations for data structures from certain external crates:
   [`Veclike`](https://docs.rs/maplike/latest/maplike/trait.Veclike.html), because
   `arrayvec` types do not implement
   [`Index`](https://doc.rust-lang.org/std/ops/trait.Index.html));
+- [`smallvec::SmallVec`], gated by the `smallvec` feature flag;
 - [`tinyvec::ArrayVec`](https://docs.rs/tinyvec/latest/tinyvec/struct.ArrayVec.html),
   and [`tinyvec::TinyVec`](https://docs.rs/tinyvec/latest/tinyvec/enum.TinyVec.html),
   gated by the `tinyvec` feature flag.
