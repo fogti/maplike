@@ -178,7 +178,10 @@ implementations:
 - [`BTreeSet`](https://doc.rust-lang.org/stable/std/collections/struct.BTreeSet.html), gated by the `alloc` feature (enabled by default);
 - [`Vec`](https://doc.rust-lang.org/std/vec/struct.Vec.html), gated by the `alloc` feature (enabled by default);
 - [`Box`](https://doc.rust-lang.org/std/boxed/struct.Box.html), gated by the `alloc` feature (enabled by default);
-- [`Option`](https://doc.rust-lang.org/std/option/enum.Option.html), not feature-gated.
+- [`Rc`](https://doc.rust-lang.org/std/rc/struct.Rc.html), gated by the `alloc` feature (enabled by default);
+- [`Arc`](https://doc.rust-lang.org/std/sync/struct.Arc.html), gated by the `std` feature (enabled by default);
+- [`Option`](https://doc.rust-lang.org/std/option/enum.Option.html), not feature-gated;
+- [`Weak`](https://doc.rust-lang.org/std/rc/struct.Weak.html) and [`sync::Weak`](https://doc.rust-lang.org/std/sync/struct.Weak.html), gated by the `alloc` and `std` features respectively (both enabled by default).
 
 ### `maplike`'s types
 

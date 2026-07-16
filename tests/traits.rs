@@ -353,10 +353,77 @@ mod box_tests {
     }
 }
 
+#[cfg(feature = "alloc")]
+mod rc_tests {
+    use super::*;
+    use std::rc::{Rc, Weak};
+
+    #[test]
+    fn test_traits_on_rc() {
+        let mut c = Rc::new(10);
+
+        assert_eq!(c.get(&0), Some(&10));
+        assert_eq!(c.get(&1), None);
+        assert_eq!(c.len(), 1);
+
+        assert_eq!(c.set(0, 20), Some(10));
+        assert_eq!(c.get(&0), Some(&20));
+
+        c.modify(&0, |v| *v = 21);
+        assert_eq!(c.get(&0), Some(&21));
+
+        assert_eq!(c.put(30), Some(21));
+        assert_eq!(c.get(&0), Some(&30));
+
+        check_with_one::<i32, i32, Rc<i32>>(40, 40);
+        check_assign(Rc::new(1), Rc::new(2));
+
+        assert_eq!(
+            IntoIter::into_iter(Rc::new(9)).collect::<Vec<_>>(),
+            [(0, 9)],
+        );
+    }
+
+    #[test]
+    fn test_traits_on_rc_weak() {
+        let rc = Rc::new(42);
+        let mut weak = Rc::downgrade(&rc);
+        assert_eq!(weak.len(), 1);
+
+        assert_eq!(weak.remove(&0), None);
+        assert_eq!(weak.len(), 0);
+
+        let rc = Rc::new(42);
+        let weak = Rc::downgrade(&rc);
+        drop(rc);
+        assert_eq!(weak.len(), 0);
+
+        let rc = Rc::new(42);
+        let mut weak = Rc::downgrade(&rc);
+        weak.clear();
+        assert_eq!(weak.len(), 0);
+
+        /*let rc = Rc::new(9);
+        let weak = Rc::downgrade(&rc);
+        assert_eq!(IntoIter::into_iter(weak).collect::<Vec<_>>(), [(0, 9)],);
+
+        let rc = Rc::new(9);
+        let weak = Rc::downgrade(&rc);
+        drop(rc);
+        assert_eq!(IntoIter::into_iter(weak).collect::<Vec<_>>(), Vec::new());*/
+
+        let mut weak = Weak::<i32>::new();
+        let rc = Rc::new(1);
+        weak.assign(Rc::downgrade(&rc));
+        assert_eq!(weak.len(), 1);
+    }
+}
+
 #[cfg(feature = "std")]
 mod std_tests {
     use super::*;
     use std::collections::{HashMap, HashSet};
+    use std::sync::{Arc, Weak};
 
     #[test]
     fn test_traits_on_hashmap() {
@@ -376,6 +443,61 @@ mod std_tests {
         check_into_iter::<usize, (), HashSet<usize>>(HashSet::new());
         check_with_one::<usize, (), HashSet<usize>>(7, ());
         check_assign(HashSet::from([1usize]), HashSet::from([2usize, 3usize]));
+    }
+
+    #[test]
+    fn test_traits_on_arc() {
+        let mut c = Arc::new(10);
+
+        assert_eq!(c.get(&0), Some(&10));
+        assert_eq!(c.get(&1), None);
+        assert_eq!(c.len(), 1);
+
+        assert_eq!(c.set(0, 20), Some(10));
+        assert_eq!(c.get(&0), Some(&20));
+
+        c.modify(&0, |v| *v = 21);
+        assert_eq!(c.get(&0), Some(&21));
+
+        assert_eq!(c.put(30), Some(21));
+        assert_eq!(c.get(&0), Some(&30));
+
+        check_with_one::<i32, i32, Arc<i32>>(40, 40);
+        check_assign(Arc::new(1), Arc::new(2));
+
+        assert_eq!(
+            IntoIter::into_iter(Arc::new(9)).collect::<Vec<_>>(),
+            [(0, 9)],
+        );
+    }
+
+    #[test]
+    fn test_traits_on_arc_weak() {
+        let arc = Arc::new(42);
+        let mut weak = Arc::downgrade(&arc);
+        assert_eq!(weak.len(), 1);
+
+        assert_eq!(weak.remove(&0), None);
+        assert_eq!(weak.len(), 0);
+
+        let arc = Arc::new(42);
+        let weak = Arc::downgrade(&arc);
+        drop(arc);
+        assert_eq!(weak.len(), 0);
+
+        /*let arc = Arc::new(9);
+        let weak = Arc::downgrade(&arc);
+        assert_eq!(IntoIter::into_iter(weak).collect::<Vec<_>>(), [(0, 9)],);
+
+        let arc = Arc::new(9);
+        let weak = Arc::downgrade(&arc);
+        drop(arc);
+        assert_eq!(IntoIter::into_iter(weak).collect::<Vec<_>>(), Vec::new());*/
+
+        let mut weak = Weak::<i32>::new();
+        let arc = Arc::new(1);
+        weak.assign(Arc::downgrade(&arc));
+        assert_eq!(weak.len(), 1);
     }
 }
 
