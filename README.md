@@ -139,6 +139,7 @@ together
 [`Index`](https://doc.rust-lang.org/std/ops/trait.Index.html)), thus allowing
 code that is generic over
 [`Vec`](https://doc.rust-lang.org/std/vec/struct.Vec.html),
+[`VecDeque`](https://doc.rust-lang.org/alloc/collections/vec_deque/struct.VecDeque.html),
 [`smallvec::SmallVec`],
 [`tinyvec::ArrayVec`](https://docs.rs/tinyvec/latest/tinyvec/struct.ArrayVec.htm
 l), and
@@ -207,6 +208,7 @@ implementations:
 - [`BTreeMap`](https://doc.rust-lang.org/std/collections/struct.BTreeMap.html), gated by the `alloc` feature (enabled by default);
 - [`BTreeSet`](https://doc.rust-lang.org/stable/std/collections/struct.BTreeSet.html), gated by the `alloc` feature (enabled by default);
 - [`Vec`](https://doc.rust-lang.org/std/vec/struct.Vec.html), gated by the `alloc` feature (enabled by default);
+- [`VecDeque`](https://doc.rust-lang.org/alloc/collections/vec_deque/struct.VecDeque.html), gated by the `alloc` feature (enabled by default);
 - [`Box`](https://doc.rust-lang.org/std/boxed/struct.Box.html), gated by the `alloc` feature (enabled by default);
 - [`Rc`](https://doc.rust-lang.org/std/rc/struct.Rc.html), gated by the `alloc` feature (enabled by default);
 - [`Arc`](https://doc.rust-lang.org/std/sync/struct.Arc.html), gated by the `std` feature (enabled by default);
@@ -272,8 +274,6 @@ For some examples of practical use, see the
 directory of the [`undoredo`](https://github.com/mikwielgus/undoredo) crate.
 
 ## Unsupported collections
-
-Standard library's `VecDeque` is unsupported.
 
 Among stable vector data structures,
 [`Slab`](https://docs.rs/slab/latest/slab/),

@@ -722,6 +722,24 @@ mod alloc_tests {
         let items: Vec<(usize, i32)> = IntoIter::into_iter(c).collect();
         assert_eq!(items, vec![(0, 10), (1, 20), (2, 30)]);
     }
+
+    #[test]
+    fn test_traits_on_vecdeque() {
+        use std::collections::VecDeque;
+
+        check_push_put::<usize, i32, VecDeque<i32>>(VecDeque::new());
+        check_with_one::<i32, i32, VecDeque<i32>>(30, 30);
+        check_vec::<i32, VecDeque<i32>>(VecDeque::new());
+        check_pushed_insert_remove::<usize, i32, VecDeque<i32>>(VecDeque::new());
+        check_assign(VecDeque::from([1i32]), VecDeque::from([2i32, 3i32]));
+
+        let mut c: VecDeque<i32> = VecDeque::new();
+        c.push(10);
+        c.push(20);
+        c.push(30);
+        let items: Vec<(usize, i32)> = IntoIter::into_iter(c).collect();
+        assert_eq!(items, vec![(0, 10), (1, 20), (2, 30)]);
+    }
 }
 
 mod array_tests {
