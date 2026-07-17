@@ -165,6 +165,7 @@ vec-like data structures:
 [`.put()`](https://docs.rs/maplike/latest/maplike/ops/trait.Put.html#tymethod.put),
 [`.clear()`](https://docs.rs/maplike/latest/maplike/ops/trait.Clear.html#tymethod.clear),
 [`.len()`](https://docs.rs/maplike/latest/maplike/ops/trait.Len.html#tymethod.len),
+[`.resize()`](https://docs.rs/maplike/latest/maplike/ops/trait.Resize.html#tymethod.resize),
 [`.with_one()`](https://docs.rs/maplike/latest/maplike/ops/trait.WithOne.html#tymethod.with_one),
 [`.assign()`](https://docs.rs/maplike/latest/maplike/ops/trait.Assign.html#tymethod.assign), and
 [`.into_iter()`](https://docs.rs/maplike/latest/maplike/ops/trait.IntoIter.html#tymethod.into_iter).

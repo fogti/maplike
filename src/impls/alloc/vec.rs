@@ -5,7 +5,7 @@
 use alloc_::vec::Vec;
 
 use crate::containers::Container;
-use crate::ops::{Assign, Clear, Get, IntoIter, Len, Modify, Pop, Push, Put, Set, WithOne};
+use crate::ops::{Assign, Clear, Get, IntoIter, Len, Modify, Pop, Push, Put, Resize, Set, WithOne};
 
 impl<V> Container for Vec<V> {
     type Key = usize;
@@ -91,6 +91,16 @@ impl<V> Len for Vec<V> {
     #[inline(always)]
     fn len(&self) -> usize {
         Vec::len(self)
+    }
+}
+
+impl<V> Resize for Vec<V> {
+    #[inline(always)]
+    fn resize(&mut self, new_len: usize, value: V)
+    where
+        V: Clone,
+    {
+        Vec::resize(self, new_len, value);
     }
 }
 

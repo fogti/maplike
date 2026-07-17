@@ -40,6 +40,10 @@ where
     K: Borrow<Q>,
 {
     /// Returns a reference to the right value corresponding to the given left value.
+    ///
+    /// Should be only implemented only for bidirectional maps (not for
+    /// unidirectional maps) along with [`GetByRight::get_by_right()`], and
+    /// should behave identically to [`Get`].
     fn get_by_left(&self, key: &Q) -> Option<&Self::Value>;
 }
 
@@ -56,6 +60,12 @@ where
     Self::Value: Borrow<Q>,
 {
     /// Returns a reference to the right value corresponding to the given left value.
+    ///
+    /// Should be only implemented only for bidirectional maps (not for
+    /// unidirectional maps) along with [`GetByLeft::get_by_left()`].
+    ///
+    /// Note that key and value are unusually inverted here: `Self::Value` is
+    /// actually the key, while `K` is the value.
     fn get_by_right(&self, key: &Q) -> Option<&K>;
 }
 
@@ -83,6 +93,9 @@ where
     K: Borrow<Q>,
 {
     /// Modify the value under key with a closure.
+    ///
+    /// This is useful if something always has to be done before or after the
+    /// modification to maintain an invariant.
     fn modify<F>(&mut self, key: &Q, f: F)
     where
         F: FnOnce(&mut Self::Value);
@@ -123,6 +136,18 @@ where
     /// Remove an element under a key from the collection, returning the value
     /// at the key if the key was previously in the map. Other keys are not
     /// invalidated.
+    ///
+    /// [`Vec`](https://doc.rust-lang.org/alloc/vec/struct.Vec.html) obviously
+    /// does not implement this trait because its element removal methods,
+    /// [`Vec::remove()`](https://doc.rust-lang.org/alloc/vec/struct.Vec.html#method.remove)
+    /// and
+    /// [`Vec::swap_remove()`](https://doc.rust-lang.org/alloc/vec/struct.Vec.html#method.swap_remove),
+    /// invalidate existing indices.
+    ///
+    /// If you need this trait on a contiguous data type with constant-time
+    /// insertion, lookup, and removal, try
+    /// [`stable_vec::StableVec`](https://docs.rs/stable-vec/latest/stable_vec/type.StableVec.html)
+    /// or [`thunderdome::Arena`](https://docs.rs/thunderdome/latest/thunderdome/struct.Arena.html).
     fn remove(&mut self, key: &Q) -> Option<Self::Value>;
 }
 
@@ -138,6 +163,10 @@ where
 {
     /// Remove the left and right values from pair corresponding to the given
     /// left value in a bidirectional map.
+    ///
+    /// Should be only implemented only for bidirectional maps (not for
+    /// unidirectional maps) along with [`RemoveByRight::remove_by_right()`],
+    /// and should behave identically to [`Remove`].
     fn remove_by_left(&mut self, key: &Q) -> Option<Self::Value>;
 }
 
@@ -154,7 +183,13 @@ where
     Self::Value: Borrow<Q>,
 {
     /// Remove the left and right values from pair corresponding to the given
-    /// left value in a bidirectional map.
+    /// right value in a bidirectional map.
+    ///
+    /// Should be only implemented only for bidirectional maps (not for
+    /// unidirectional maps) along with [`RemoveByLeft::remove_by_left()`].
+    ///
+    /// Note that key and value are unusually inverted here: `Self::Value` is
+    /// actually the key, while `K` is the value.
     fn remove_by_right(&mut self, key: &Q) -> Option<K>;
 }
 
@@ -172,6 +207,9 @@ pub trait Push<K>: Container {
 /// pushes in their reversed order.
 pub trait Pop: Container {
     /// Remove the last element of the collection, returning it.
+    ///
+    /// If `Push` is also implemented, calling `Pop` should revert the previous
+    /// pushes in their reversed order.
     fn pop(&mut self) -> Option<Self::Value>;
 }
 
@@ -214,7 +252,31 @@ pub trait Clear: Container {
 /// satisfy this property.
 pub trait Len: Container {
     /// Returns the length of the collection.
+    ///
+    /// Should be only implemented for truly contiguous data structures, for which
+    /// it makes sense to have a `.pop()` operation. Currently
+    /// [`Vec`](https://doc.rust-lang.org/alloc/vec/struct.Vec.html) and
+    /// [`tinyvec::ArrayVec`](https://docs.rs/tinyvec/latest/tinyvec/struct.ArrayVec.html)
+    /// satisfy this property.
     fn len(&self) -> Self::Key;
+}
+
+/// Resize the collection to the given length.
+///
+/// If `new_len` is greater than the current length, the collection is extended
+/// by cloning `value` until its length equals `new_len`.
+///
+/// If `new_len` is less than the current length, the collection is truncated.
+pub trait Resize: Container {
+    /// Resize the collection to the given length.
+    ///
+    /// If `new_len` is greater than the current length, the collection is extended
+    /// by cloning `value` until its length equals `new_len`.
+    ///
+    /// If `new_len` is less than the current length, the collection is truncated.
+    fn resize(&mut self, new_len: usize, value: Self::Value)
+    where
+        Self::Value: Clone;
 }
 
 /// Consume the collection and yield owned key-value pairs.

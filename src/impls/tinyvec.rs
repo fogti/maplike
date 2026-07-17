@@ -5,7 +5,7 @@
 use tinyvec::{Array, ArrayVec, TinyVec};
 
 use crate::containers::Container;
-use crate::ops::{Assign, Clear, Get, IntoIter, Len, Modify, Pop, Push, Put, Set, WithOne};
+use crate::ops::{Assign, Clear, Get, IntoIter, Len, Modify, Pop, Push, Put, Resize, Set, WithOne};
 
 impl<A: Array> Container for ArrayVec<A> {
     type Key = usize;
@@ -91,6 +91,16 @@ impl<A: Array> Len for ArrayVec<A> {
     #[inline(always)]
     fn len(&self) -> usize {
         ArrayVec::len(self)
+    }
+}
+
+impl<A: Array> Resize for ArrayVec<A> {
+    #[inline(always)]
+    fn resize(&mut self, new_len: usize, value: A::Item)
+    where
+        A::Item: Clone,
+    {
+        ArrayVec::resize(self, new_len, value);
     }
 }
 
@@ -187,6 +197,16 @@ impl<A: Array> Len for TinyVec<A> {
     #[inline(always)]
     fn len(&self) -> usize {
         TinyVec::len(self)
+    }
+}
+
+impl<A: Array> Resize for TinyVec<A> {
+    #[inline(always)]
+    fn resize(&mut self, new_len: usize, value: A::Item)
+    where
+        A::Item: Clone,
+    {
+        TinyVec::resize(self, new_len, value);
     }
 }
 

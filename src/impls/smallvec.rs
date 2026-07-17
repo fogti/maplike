@@ -5,7 +5,7 @@
 use smallvec::{Array, SmallVec};
 
 use crate::containers::Container;
-use crate::ops::{Assign, Clear, Get, IntoIter, Len, Modify, Pop, Push, Put, Set, WithOne};
+use crate::ops::{Assign, Clear, Get, IntoIter, Len, Modify, Pop, Push, Put, Resize, Set, WithOne};
 
 impl<A: Array> Container for SmallVec<A> {
     type Key = usize;
@@ -91,6 +91,16 @@ impl<A: Array> Len for SmallVec<A> {
     #[inline(always)]
     fn len(&self) -> usize {
         SmallVec::len(self)
+    }
+}
+
+impl<A: Array> Resize for SmallVec<A> {
+    #[inline(always)]
+    fn resize(&mut self, new_len: usize, value: A::Item)
+    where
+        A::Item: Clone,
+    {
+        SmallVec::resize(self, new_len, value);
     }
 }
 

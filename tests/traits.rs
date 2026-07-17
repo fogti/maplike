@@ -14,7 +14,7 @@ use maplike::containers::Container;
 use maplike::entry::{CombinedEntry, Entry, OccupiedEntry, VacantEntry};
 use maplike::ops::{
     Assign, Clear, Get, GetByLeft, GetByRight, Insert, IntoIter, Len, Modify, Pop, Push, Put,
-    Remove, RemoveByLeft, RemoveByRight, Set, WithOne,
+    Remove, RemoveByLeft, RemoveByRight, Resize, Set, WithOne,
 };
 
 trait FromUsize {
@@ -296,17 +296,37 @@ where
     c.push(V::from_usize(10));
     c.push(V::from_usize(20));
     c.push(V::from_usize(30));
-    assert_eq!(Len::len(&c), 3usize);
+    assert_eq!(Len::len(&c), 3);
 
     c.clear();
-    assert_eq!(Len::len(&c), 0usize);
+    assert_eq!(Len::len(&c), 0);
+}
+
+fn check_resize<V, C>(mut c: C)
+where
+    V: FromUsize + Clone + PartialEq + Debug,
+    C: Container<Key = usize, Value = V> + Get<usize> + Len + Resize,
+{
+    c.resize(3, V::from_usize(1));
+    assert_eq!(Len::len(&c), 3);
+    assert_eq!(c.get(&0), Some(&V::from_usize(1)));
+    assert_eq!(c.get(&1), Some(&V::from_usize(1)));
+    assert_eq!(c.get(&2), Some(&V::from_usize(1)));
+
+    c.resize(5, V::from_usize(7));
+    assert_eq!(Len::len(&c), 5);
+    assert_eq!(c.get(&3), Some(&V::from_usize(7)));
+    assert_eq!(c.get(&4), Some(&V::from_usize(7)));
+
+    c.resize(2, V::from_usize(0));
+    assert_eq!(Len::len(&c), 2);
 }
 
 fn check_indexed<C>(c: &mut C)
 where
     C: ?Sized + Container<Key = usize, Value = i32> + Get<usize> + Set<usize> + Modify<usize> + Len,
 {
-    assert_eq!(Len::len(&*c), 3usize);
+    assert_eq!(Len::len(&*c), 3);
 
     assert_eq!(c.get(&0), Some(&10));
 
@@ -381,7 +401,7 @@ mod scalars_tests {
             u32: [10u32, 20, 30, 40],
             u64: [10u64, 20, 30, 40],
             u128: [10u128, 20, 30, 40],
-            usize: [10usize, 20, 30, 40],
+            usize: [10, 20, 30, 40],
             f32: [1.0f32, 2.0, 3.0, 4.0],
             f64: [1.0f64, 2.0, 3.0, 4.0],
             char: ['a', 'b', 'c', 'd'],
@@ -569,8 +589,8 @@ mod std_tests {
         check_entry::<usize, i32, HashMap<usize, i32>>(HashMap::new());
         check_hashmap_entry_variants();
         check_assign(
-            HashMap::from([(1usize, 1i32)]),
-            HashMap::from([(2usize, 2i32), (3usize, 3i32)]),
+            HashMap::from([(1, 1i32)]),
+            HashMap::from([(2, 2i32), (3, 3i32)]),
         );
     }
 
@@ -579,7 +599,7 @@ mod std_tests {
         check_keyed::<usize, (), HashSet<usize>>(HashSet::new());
         check_into_iter::<usize, (), HashSet<usize>>(HashSet::new());
         check_with_one::<usize, (), HashSet<usize>>(7, ());
-        check_assign(HashSet::from([1usize]), HashSet::from([2usize, 3usize]));
+        check_assign(HashSet::from([1]), HashSet::from([2, 3]));
     }
 
     #[test]
@@ -695,8 +715,8 @@ mod alloc_tests {
         check_entry::<usize, i32, BTreeMap<usize, i32>>(BTreeMap::new());
         check_btreemap_entry_variants();
         check_assign(
-            BTreeMap::from([(1usize, 1i32)]),
-            BTreeMap::from([(2usize, 2i32), (3usize, 3i32)]),
+            BTreeMap::from([(1, 1i32)]),
+            BTreeMap::from([(2, 2i32), (3, 3i32)]),
         );
     }
 
@@ -705,7 +725,7 @@ mod alloc_tests {
         check_keyed::<usize, (), BTreeSet<usize>>(BTreeSet::new());
         check_into_iter::<usize, (), BTreeSet<usize>>(BTreeSet::new());
         check_with_one::<usize, (), BTreeSet<usize>>(7, ());
-        check_assign(BTreeSet::from([1usize]), BTreeSet::from([2usize, 3usize]));
+        check_assign(BTreeSet::from([1]), BTreeSet::from([2, 3]));
     }
 
     #[test]
@@ -713,6 +733,7 @@ mod alloc_tests {
         check_push_put::<usize, i32, Vec<i32>>(Vec::new());
         check_with_one::<i32, i32, Vec<i32>>(30, 30);
         check_vec::<i32, Vec<i32>>(Vec::new());
+        check_resize::<i32, Vec<i32>>(Vec::new());
         check_assign(vec![1i32], vec![2i32, 3i32]);
 
         let mut c: Vec<i32> = Vec::new();
@@ -922,6 +943,7 @@ mod smallvec_tests {
         check_push_put::<usize, i32, SmallVec<[i32; 8]>>(SmallVec::new());
         check_with_one::<i32, i32, SmallVec<[i32; 8]>>(30, 30);
         check_vec::<i32, SmallVec<[i32; 8]>>(SmallVec::new());
+        check_resize::<i32, SmallVec<[i32; 8]>>(SmallVec::new());
         check_assign(
             {
                 let mut a = SmallVec::<[i32; 8]>::new();
@@ -948,6 +970,7 @@ mod tinyvec_tests {
         check_push_put::<usize, i32, ArrayVec<[i32; 8]>>(ArrayVec::new());
         check_with_one::<i32, i32, ArrayVec<[i32; 8]>>(30, 30);
         check_vec::<i32, ArrayVec<[i32; 8]>>(ArrayVec::new());
+        check_resize::<i32, ArrayVec<[i32; 8]>>(ArrayVec::new());
         check_assign(
             ArrayVec::from_array_len([1i32, 0, 0, 0, 0, 0, 0, 0], 1),
             ArrayVec::from_array_len([2i32, 3, 0, 0, 0, 0, 0, 0], 2),
@@ -959,6 +982,7 @@ mod tinyvec_tests {
         check_push_put::<usize, i32, TinyVec<[i32; 8]>>(TinyVec::new());
         check_with_one::<i32, i32, TinyVec<[i32; 8]>>(30, 30);
         check_vec::<i32, TinyVec<[i32; 8]>>(TinyVec::new());
+        check_resize::<i32, TinyVec<[i32; 8]>>(TinyVec::new());
 
         let mut a = TinyVec::<[i32; 8]>::new();
         a.push(1);
@@ -1042,8 +1066,8 @@ mod indexmap_tests {
         check_entry::<usize, i32, IndexMap<usize, i32>>(IndexMap::new());
         check_indexmap_entry_variants();
         check_assign(
-            IndexMap::from([(1usize, 1i32)]),
-            IndexMap::from([(2usize, 2i32), (3usize, 3i32)]),
+            IndexMap::from([(1, 1i32)]),
+            IndexMap::from([(2, 2i32), (3, 3i32)]),
         );
     }
 
@@ -1052,7 +1076,7 @@ mod indexmap_tests {
         check_keyed::<usize, (), IndexSet<usize>>(IndexSet::new());
         check_into_iter::<usize, (), IndexSet<usize>>(IndexSet::new());
         check_with_one::<usize, (), IndexSet<usize>>(7, ());
-        check_assign(IndexSet::from([1usize]), IndexSet::from([2usize, 3usize]));
+        check_assign(IndexSet::from([1]), IndexSet::from([2, 3]));
     }
 }
 
