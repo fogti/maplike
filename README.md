@@ -147,6 +147,16 @@ assert_eq!(vec, [1, 2, 3]);
 replace_all(&mut vec, &[4, 5, 6]);
 assert_eq!(vec, [4, 5, 6]);
 
+#[cfg(feature = "smallvec")]
+{
+    use smallvec::SmallVec;
+
+    // Works on `smallvec::SmallVec`.
+    let mut small_vec: SmallVec<[i32; 8]> = SmallVec::new();
+    replace_all(&mut small_vec, &[7, 8, 9]);
+    assert_eq!(small_vec.as_slice(), [7, 8, 9]);
+}
+
 #[cfg(feature = "tinyvec")]
 {
     use tinyvec::{ArrayVec, TinyVec};
@@ -184,13 +194,25 @@ implementations:
 - [`Option`](https://doc.rust-lang.org/std/option/enum.Option.html), not feature-gated;
 - [`Weak`](https://doc.rust-lang.org/std/rc/struct.Weak.html) and [`sync::Weak`](https://doc.rust-lang.org/std/sync/struct.Weak.html), gated by the `alloc` and `std` features respectively (both enabled by default).
 
+### Primitives
+
+All Rust's scalar types (`i8`, `i16`, `i32`, `i64`, `i128`, `isize`, `u8`,
+`u16`, `u32`, `u64`, `u128`, `usize`, `f32`, `f64`, `char`, `bool`, `()`) are
+supported and treated like single-element, `usize`-keyed maps.
+
+Rust's compound types (arrays and tuples) are supported and treated like
+`usize`-keyed maps.
+
 ### `maplike`'s types
 
 `maplike` provides and supports its own generic type,
 [`One`](https://docs.rs/maplike/latest/maplike/struct.One.html), for a
-collection that always has only one element (think `Option` but without `None`
+collection that always has only one element. Think `Option` but without `None`
 or `Box` but without pointer indirection, behaving like a collection despite
-holding a value not reference, allocated on the stack).
+holding a value not reference, allocated on the stack.
+
+Wrap your value in this type if you need to treat it as a single-element,
+`usize`-keyed map and your type does not happen to be a Rust primitive.
 
 ### Third-party types
 
