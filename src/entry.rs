@@ -2,8 +2,6 @@
 //
 // SPDX-License-Identifier: MIT OR Apache-2.0
 
-//! Entry API traits for map-like containers.
-
 use crate::containers::Container;
 
 /// Gets the given key's corresponding entry in the container for in-place

@@ -10,7 +10,36 @@ SPDX-License-Identifier: MIT OR Apache-2.0
 
 # maplike
 
-Traits for abstract containers and operations over them.
+Rust traits for abstract containers and operations over them.
+
+With this library, you can write code that is generic over various built-in,
+standard library, and third-party collections, containers, and primitives. See
+the [Traits](#traits) section for a list of all available traits.
+
+The traits are implemented for many containers from `std` and third-party
+crates. See the [Supported containers](#supported-containers) section for a
+complete list. The crate is `no_std`-compatible.
+
+Basically, this is Python's
+[collections.abc](https://docs.python.org/3/library/collections.abc.html), but
+is in Rust, and with traits not only for different kinds of containers, but also
+for each operation. And every container is treated as if it was a map. If it is
+not really a map, it is treated as if its key type was `usize`, even when there
+can be at most only one element. Hence the crate name, `maplike`.
+
+This library is maintained and champaigned (aka.
+[dogfooded](https://en.wikipedia.org/wiki/Eating_your_own_dog_food)) by the
+author, who uses has it as a dependency for
+- [`undoredo`](https://github.com/mikwielgus/undoredo), a versatile crate for
+implementing Undo/Redo and non-linear history tree using sparse deltas (diffs),
+snapshots, or commands on arbitrary data structures;
+- [`dcel`](https://github.com/mikwielgus/dcel), a crate that implements the
+half-edge data structure (aka. doubly connected edge list, DCEL) generically
+over its underlying containers.
+
+## Traits
+
+### Operations
 
 This crate provides traits for common operations over map-like, set-like, and
 vec-like data structures:
@@ -35,6 +64,17 @@ by left and right key:
 [`.remove_by_left()`](https://docs.rs/maplike/latest/maplike/ops/trait.RemoveByLeft.html#tymethod.remove_by_left),
 [`.remove_by_right()`](https://docs.rs/maplike/latest/maplike/ops/trait.RemoveByRight.html#tymethod.remove_by_right).
 
+### Entry API
+
+We provide generic
+[Entry](https://docs.rs/maplike/latest/maplike/entry/trait.Entry.html) API for
+types that have an Entry API:
+[`HashMap`](https://doc.rust-lang.org/std/collections/struct.HashMap.html),
+[`BTreeMap`](https://doc.rust-lang.org/std/collections/struct.BTreeMap.html), and
+[`indexmap::IndexMap`](https://docs.rs/indexmap/latest/indexmap/map/struct.IndexMap.html).
+
+### Containers
+
 For brevity and convenience, we also provide
 [`Scalarlike`](https://docs.rs/maplike/latest/maplike/containers/trait.Scalarlike.html),
 [`Maplike`](https://docs.rs/maplike/latest/maplike/containers/trait.Maplike.html),
@@ -42,27 +82,6 @@ For brevity and convenience, we also provide
 [`Arraylike`](https://docs.rs/maplike/latest/maplike/containers/trait.Arraylike.html), and
 [`Veclike`](https://docs.rs/maplike/latest/maplike/containers/trait.Veclike.html) abstract
 container traits that join together traits of multiple operations.
-
-The traits are implemented for many containers from `std` and third-party
-crates. See the [Supported containers](#supported-containers) section for a
-complete list.
-
-Basically, this very similar to Python's
-[collections.abc](https://docs.python.org/3/library/collections.abc.html), but
-is in Rust, and with traits not only for different kinds of containers, but also
-for each operation. And every container is treated as if it was a map. If it is
-not really a map, it is treated as if its key type was `usize`, even when there
-can be at most only one element. Hence the crate name, `maplike`.
-
-This library is maintained and champaigned (aka.
-[dogfooded](https://en.wikipedia.org/wiki/Eating_your_own_dog_food)) by the
-author, who uses has it as a dependency for
-- [`undoredo`](https://github.com/mikwielgus/undoredo), a versatile crate for
-implementing Undo/Redo and non-linear history tree using sparse deltas (diffs),
-snapshots, or commands on arbitrary data structures;
-- [`dcel`](https://github.com/mikwielgus/dcel), a crate that implements the
-half-edge data structure (aka. doubly connected edge list, DCEL) generically
-over its underlying containers.
 
 ## Usage
 
@@ -200,7 +219,7 @@ All Rust's scalar types (`i8`, `i16`, `i32`, `i64`, `i128`, `isize`, `u8`,
 `u16`, `u32`, `u64`, `u128`, `usize`, `f32`, `f64`, `char`, `bool`, `()`) are
 supported and treated like single-element, `usize`-keyed maps.
 
-Rust's compound types (arrays and tuples) are supported and treated like
+Rust's compound types (arrays, tuples, slices) are supported and treated like
 `usize`-keyed maps.
 
 ### `maplike`'s types
