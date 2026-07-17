@@ -975,7 +975,45 @@ mod rstar_tests {
 #[cfg(feature = "indexmap")]
 mod indexmap_tests {
     use super::*;
+    use indexmap::map::Entry as IndexMapStdEntry;
     use indexmap::{IndexMap, IndexSet};
+
+    fn check_indexmap_entry_variants() {
+        let mut map = IndexMap::<usize, i32>::new();
+        let IndexMapStdEntry::Vacant(v) = map.entry(1) else {
+            panic!("expected vacant entry");
+        };
+        assert_eq!(VacantEntry::key(&v), &1);
+
+        let mut map = IndexMap::<usize, i32>::new();
+        let IndexMapStdEntry::Vacant(v) = map.entry(1) else {
+            panic!("expected vacant entry");
+        };
+        assert_eq!(VacantEntry::into_key(v), 1);
+
+        let mut map = IndexMap::<usize, i32>::new();
+        let IndexMapStdEntry::Vacant(v) = map.entry(2) else {
+            panic!("expected vacant entry");
+        };
+        assert_eq!(*VacantEntry::insert(v, 20), 20);
+        assert_eq!(map.get(&2), Some(&20));
+
+        let mut map = IndexMap::<usize, i32>::new();
+        let IndexMapStdEntry::Vacant(v) = map.entry(3) else {
+            panic!("expected vacant entry");
+        };
+        let occupied = VacantEntry::insert_entry(v, 30);
+        assert_eq!(OccupiedEntry::get(&occupied), &30);
+        assert_eq!(map.get(&3), Some(&30));
+
+        let mut map = IndexMap::<usize, i32>::new();
+        map.entry(4).or_insert(40);
+        let IndexMapStdEntry::Occupied(o) = map.entry(4) else {
+            panic!("expected occupied entry");
+        };
+        assert_eq!(OccupiedEntry::key(&o), &4);
+        assert_eq!(OccupiedEntry::get(&o), &40);
+    }
 
     #[test]
     fn test_traits_on_indexmap() {
@@ -983,6 +1021,8 @@ mod indexmap_tests {
         check_modify::<usize, i32, IndexMap<usize, i32>>(IndexMap::new());
         check_into_iter::<usize, i32, IndexMap<usize, i32>>(IndexMap::new());
         check_borrow_str(IndexMap::<String, i32>::new());
+        check_entry::<usize, i32, IndexMap<usize, i32>>(IndexMap::new());
+        check_indexmap_entry_variants();
         check_assign(
             IndexMap::from([(1usize, 1i32)]),
             IndexMap::from([(2usize, 2i32), (3usize, 3i32)]),

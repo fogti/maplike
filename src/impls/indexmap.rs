@@ -6,8 +6,13 @@ use core::borrow::Borrow;
 use core::hash::Hash;
 
 use indexmap::IndexMap;
+use indexmap::map::{
+    Entry as IndexMapEntry, OccupiedEntry as IndexMapOccupiedEntry,
+    VacantEntry as IndexMapVacantEntry,
+};
 
 use crate::containers::Container;
+use crate::entry::{CombinedEntry, Entry, OccupiedEntry, VacantEntry};
 use crate::ops::{Assign, Clear, Get, Insert, IntoIter, Modify, Remove, Set};
 
 impl<K, V> Container for IndexMap<K, V> {
@@ -77,6 +82,131 @@ impl<K: Eq + Hash, V> Clear for IndexMap<K, V> {
     #[inline(always)]
     fn clear(&mut self) {
         IndexMap::clear(self);
+    }
+}
+
+impl<K: Eq + Hash, V> Entry<K> for IndexMap<K, V> {
+    type Entry<'a>
+        = IndexMapEntry<'a, K, V>
+    where
+        Self: 'a,
+        K: 'a;
+
+    #[inline(always)]
+    fn entry(&mut self, key: K) -> Self::Entry<'_> {
+        IndexMap::entry(self, key)
+    }
+}
+
+impl<'a, K: Eq + Hash, V> CombinedEntry<'a, K, V> for IndexMapEntry<'a, K, V> {
+    type OccupiedEntry = IndexMapOccupiedEntry<'a, K, V>;
+
+    #[inline(always)]
+    fn key(&self) -> &K {
+        IndexMapEntry::key(self)
+    }
+
+    #[inline(always)]
+    fn or_insert(self, default: V) -> &'a mut V {
+        IndexMapEntry::or_insert(self, default)
+    }
+
+    #[inline(always)]
+    fn or_insert_with<F>(self, default: F) -> &'a mut V
+    where
+        F: FnOnce() -> V,
+    {
+        IndexMapEntry::or_insert_with(self, default)
+    }
+
+    #[inline(always)]
+    fn or_insert_with_key<F>(self, default: F) -> &'a mut V
+    where
+        F: FnOnce(&K) -> V,
+    {
+        IndexMapEntry::or_insert_with_key(self, default)
+    }
+
+    #[inline(always)]
+    fn and_modify<F>(self, f: F) -> Self
+    where
+        F: FnOnce(&mut V),
+    {
+        IndexMapEntry::and_modify(self, f)
+    }
+
+    #[inline(always)]
+    fn insert_entry(self, value: V) -> Self::OccupiedEntry {
+        IndexMapEntry::insert_entry(self, value)
+    }
+
+    #[inline(always)]
+    fn or_default(self) -> &'a mut V
+    where
+        V: Default,
+    {
+        IndexMapEntry::or_default(self)
+    }
+}
+
+impl<'a, K: Eq + Hash, V> OccupiedEntry<'a, K, V> for IndexMapOccupiedEntry<'a, K, V> {
+    #[inline(always)]
+    fn key(&self) -> &K {
+        IndexMapOccupiedEntry::key(self)
+    }
+
+    #[inline(always)]
+    fn get(&self) -> &V {
+        IndexMapOccupiedEntry::get(self)
+    }
+
+    #[inline(always)]
+    fn get_mut(&mut self) -> &mut V {
+        IndexMapOccupiedEntry::get_mut(self)
+    }
+
+    #[inline(always)]
+    fn into_mut(self) -> &'a mut V {
+        IndexMapOccupiedEntry::into_mut(self)
+    }
+
+    #[inline(always)]
+    fn insert(&mut self, value: V) -> V {
+        IndexMapOccupiedEntry::insert(self, value)
+    }
+
+    #[inline(always)]
+    fn remove(self) -> V {
+        IndexMapOccupiedEntry::shift_remove(self)
+    }
+
+    #[inline(always)]
+    fn remove_entry(self) -> (K, V) {
+        IndexMapOccupiedEntry::shift_remove_entry(self)
+    }
+}
+
+impl<'a, K: Eq + Hash, V> VacantEntry<'a, K, V> for IndexMapVacantEntry<'a, K, V> {
+    type OccupiedEntry = IndexMapOccupiedEntry<'a, K, V>;
+
+    #[inline(always)]
+    fn key(&self) -> &K {
+        IndexMapVacantEntry::key(self)
+    }
+
+    #[inline(always)]
+    fn into_key(self) -> K {
+        IndexMapVacantEntry::into_key(self)
+    }
+
+    #[inline(always)]
+    fn insert(self, value: V) -> &'a mut V {
+        IndexMapVacantEntry::insert(self, value)
+    }
+
+    #[inline(always)]
+    fn insert_entry(self, value: V) -> Self::OccupiedEntry {
+        IndexMapVacantEntry::insert_entry(self, value)
     }
 }
 

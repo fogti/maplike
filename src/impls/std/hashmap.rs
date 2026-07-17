@@ -4,16 +4,13 @@
 
 use core::borrow::Borrow;
 
-use std_::{collections::HashMap, hash::Hash};
 use std_::collections::hash_map::{
-    Entry as HashMapEntry, OccupiedEntry as HashMapOccupiedEntry,
-    VacantEntry as HashMapVacantEntry,
+    Entry as HashMapEntry, OccupiedEntry as HashMapOccupiedEntry, VacantEntry as HashMapVacantEntry,
 };
+use std_::{collections::HashMap, hash::Hash};
 
 use crate::containers::Container;
-use crate::entry::{
-    CombinedEntry, Entry, OccupiedEntry, VacantEntry,
-};
+use crate::entry::{CombinedEntry, Entry, OccupiedEntry, VacantEntry};
 use crate::ops::{Assign, Clear, Get, Insert, IntoIter, Modify, Remove, Set};
 
 impl<K, V> Container for HashMap<K, V> {

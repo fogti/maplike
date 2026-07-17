@@ -9,8 +9,7 @@ use std_::hash::Hash;
 
 use crate::containers::Container;
 use crate::ops::{
-    Assign, Clear, Get, GetByLeft, GetByRight, Insert, IntoIter, RemoveByLeft, RemoveByRight,
-    Set,
+    Assign, Clear, Get, GetByLeft, GetByRight, Insert, IntoIter, RemoveByLeft, RemoveByRight, Set,
 };
 
 impl<L, R> Container for BiHashMap<L, R> {

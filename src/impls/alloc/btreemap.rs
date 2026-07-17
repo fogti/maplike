@@ -11,9 +11,7 @@ use alloc_::collections::btree_map::{
 };
 
 use crate::containers::Container;
-use crate::entry::{
-    CombinedEntry, Entry, OccupiedEntry, VacantEntry,
-};
+use crate::entry::{CombinedEntry, Entry, OccupiedEntry, VacantEntry};
 use crate::ops::{Assign, Clear, Get, Insert, IntoIter, Modify, Remove, Set};
 
 impl<K, V> Container for BTreeMap<K, V> {
