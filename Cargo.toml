@@ -7,7 +7,7 @@ members = [".", "maplike_derive"]
 
 [package]
 name = "maplike"
-version = "0.11.2"
+version = "0.12.0"
 authors = ["Mikolaj Wielgus <wielgusmikolaj@gmail.com>"]
 description = "Derive macros for maplike."
 repository = "https://github.com/mikwielgus/maplike"
@@ -63,7 +63,7 @@ smallvec = ["dep:smallvec"]
 tinyvec = ["dep:tinyvec"]
 
 [dependencies]
-maplike_derive = { version = "0.11", optional = true, path = "maplike_derive" }
+maplike_derive = { version = "0.12", optional = true, path = "maplike_derive" }
 arrayvec = { version = "0.7", optional = true }
 bidimap = { version = "0.7", optional = true }
 document-features = { version = "0.2", optional = true }
