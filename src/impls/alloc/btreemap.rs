@@ -5,8 +5,15 @@
 use core::borrow::Borrow;
 
 use alloc_::collections::BTreeMap;
+use alloc_::collections::btree_map::{
+    Entry as BTreeMapEntry, OccupiedEntry as BTreeMapOccupiedEntry,
+    VacantEntry as BTreeMapVacantEntry,
+};
 
 use crate::containers::Container;
+use crate::entry::{
+    CombinedEntry, Entry, OccupiedEntry, VacantEntry,
+};
 use crate::ops::{Assign, Clear, Get, Insert, IntoIter, Modify, Remove, Set};
 
 impl<K, V> Container for BTreeMap<K, V> {
@@ -76,6 +83,131 @@ impl<K: Ord, V> Clear for BTreeMap<K, V> {
     #[inline(always)]
     fn clear(&mut self) {
         BTreeMap::clear(self);
+    }
+}
+
+impl<K: Ord, V> Entry<K> for BTreeMap<K, V> {
+    type Entry<'a>
+        = BTreeMapEntry<'a, K, V>
+    where
+        Self: 'a,
+        K: 'a;
+
+    #[inline(always)]
+    fn entry(&mut self, key: K) -> Self::Entry<'_> {
+        BTreeMap::entry(self, key)
+    }
+}
+
+impl<'a, K: Ord, V> CombinedEntry<'a, K, V> for BTreeMapEntry<'a, K, V> {
+    type OccupiedEntry = BTreeMapOccupiedEntry<'a, K, V>;
+
+    #[inline(always)]
+    fn key(&self) -> &K {
+        BTreeMapEntry::key(self)
+    }
+
+    #[inline(always)]
+    fn or_insert(self, default: V) -> &'a mut V {
+        BTreeMapEntry::or_insert(self, default)
+    }
+
+    #[inline(always)]
+    fn or_insert_with<F>(self, default: F) -> &'a mut V
+    where
+        F: FnOnce() -> V,
+    {
+        BTreeMapEntry::or_insert_with(self, default)
+    }
+
+    #[inline(always)]
+    fn or_insert_with_key<F>(self, default: F) -> &'a mut V
+    where
+        F: FnOnce(&K) -> V,
+    {
+        BTreeMapEntry::or_insert_with_key(self, default)
+    }
+
+    #[inline(always)]
+    fn and_modify<F>(self, f: F) -> Self
+    where
+        F: FnOnce(&mut V),
+    {
+        BTreeMapEntry::and_modify(self, f)
+    }
+
+    #[inline(always)]
+    fn insert_entry(self, value: V) -> Self::OccupiedEntry {
+        BTreeMapEntry::insert_entry(self, value)
+    }
+
+    #[inline(always)]
+    fn or_default(self) -> &'a mut V
+    where
+        V: Default,
+    {
+        BTreeMapEntry::or_default(self)
+    }
+}
+
+impl<'a, K: Ord, V> OccupiedEntry<'a, K, V> for BTreeMapOccupiedEntry<'a, K, V> {
+    #[inline(always)]
+    fn key(&self) -> &K {
+        BTreeMapOccupiedEntry::key(self)
+    }
+
+    #[inline(always)]
+    fn get(&self) -> &V {
+        BTreeMapOccupiedEntry::get(self)
+    }
+
+    #[inline(always)]
+    fn get_mut(&mut self) -> &mut V {
+        BTreeMapOccupiedEntry::get_mut(self)
+    }
+
+    #[inline(always)]
+    fn into_mut(self) -> &'a mut V {
+        BTreeMapOccupiedEntry::into_mut(self)
+    }
+
+    #[inline(always)]
+    fn insert(&mut self, value: V) -> V {
+        BTreeMapOccupiedEntry::insert(self, value)
+    }
+
+    #[inline(always)]
+    fn remove(self) -> V {
+        BTreeMapOccupiedEntry::remove(self)
+    }
+
+    #[inline(always)]
+    fn remove_entry(self) -> (K, V) {
+        BTreeMapOccupiedEntry::remove_entry(self)
+    }
+}
+
+impl<'a, K: Ord, V> VacantEntry<'a, K, V> for BTreeMapVacantEntry<'a, K, V> {
+    type OccupiedEntry = BTreeMapOccupiedEntry<'a, K, V>;
+
+    #[inline(always)]
+    fn key(&self) -> &K {
+        BTreeMapVacantEntry::key(self)
+    }
+
+    #[inline(always)]
+    fn into_key(self) -> K {
+        BTreeMapVacantEntry::into_key(self)
+    }
+
+    #[inline(always)]
+    fn insert(self, value: V) -> &'a mut V {
+        BTreeMapVacantEntry::insert(self, value)
+    }
+
+    #[inline(always)]
+    fn insert_entry(self, value: V) -> Self::OccupiedEntry {
+        BTreeMapVacantEntry::insert_entry(self, value)
     }
 }
 

@@ -5,8 +5,15 @@
 use core::borrow::Borrow;
 
 use std_::{collections::HashMap, hash::Hash};
+use std_::collections::hash_map::{
+    Entry as HashMapEntry, OccupiedEntry as HashMapOccupiedEntry,
+    VacantEntry as HashMapVacantEntry,
+};
 
 use crate::containers::Container;
+use crate::entry::{
+    CombinedEntry, Entry, OccupiedEntry, VacantEntry,
+};
 use crate::ops::{Assign, Clear, Get, Insert, IntoIter, Modify, Remove, Set};
 
 impl<K, V> Container for HashMap<K, V> {
@@ -76,6 +83,131 @@ impl<K: Eq + Hash, V> Clear for HashMap<K, V> {
     #[inline(always)]
     fn clear(&mut self) {
         HashMap::clear(self);
+    }
+}
+
+impl<K: Eq + Hash, V> Entry<K> for HashMap<K, V> {
+    type Entry<'a>
+        = HashMapEntry<'a, K, V>
+    where
+        Self: 'a,
+        K: 'a;
+
+    #[inline(always)]
+    fn entry(&mut self, key: K) -> Self::Entry<'_> {
+        HashMap::entry(self, key)
+    }
+}
+
+impl<'a, K: Eq + Hash, V> CombinedEntry<'a, K, V> for HashMapEntry<'a, K, V> {
+    type OccupiedEntry = HashMapOccupiedEntry<'a, K, V>;
+
+    #[inline(always)]
+    fn key(&self) -> &K {
+        HashMapEntry::key(self)
+    }
+
+    #[inline(always)]
+    fn or_insert(self, default: V) -> &'a mut V {
+        HashMapEntry::or_insert(self, default)
+    }
+
+    #[inline(always)]
+    fn or_insert_with<F>(self, default: F) -> &'a mut V
+    where
+        F: FnOnce() -> V,
+    {
+        HashMapEntry::or_insert_with(self, default)
+    }
+
+    #[inline(always)]
+    fn or_insert_with_key<F>(self, default: F) -> &'a mut V
+    where
+        F: FnOnce(&K) -> V,
+    {
+        HashMapEntry::or_insert_with_key(self, default)
+    }
+
+    #[inline(always)]
+    fn and_modify<F>(self, f: F) -> Self
+    where
+        F: FnOnce(&mut V),
+    {
+        HashMapEntry::and_modify(self, f)
+    }
+
+    #[inline(always)]
+    fn insert_entry(self, value: V) -> Self::OccupiedEntry {
+        HashMapEntry::insert_entry(self, value)
+    }
+
+    #[inline(always)]
+    fn or_default(self) -> &'a mut V
+    where
+        V: Default,
+    {
+        HashMapEntry::or_default(self)
+    }
+}
+
+impl<'a, K: Eq + Hash, V> OccupiedEntry<'a, K, V> for HashMapOccupiedEntry<'a, K, V> {
+    #[inline(always)]
+    fn key(&self) -> &K {
+        HashMapOccupiedEntry::key(self)
+    }
+
+    #[inline(always)]
+    fn get(&self) -> &V {
+        HashMapOccupiedEntry::get(self)
+    }
+
+    #[inline(always)]
+    fn get_mut(&mut self) -> &mut V {
+        HashMapOccupiedEntry::get_mut(self)
+    }
+
+    #[inline(always)]
+    fn into_mut(self) -> &'a mut V {
+        HashMapOccupiedEntry::into_mut(self)
+    }
+
+    #[inline(always)]
+    fn insert(&mut self, value: V) -> V {
+        HashMapOccupiedEntry::insert(self, value)
+    }
+
+    #[inline(always)]
+    fn remove(self) -> V {
+        HashMapOccupiedEntry::remove(self)
+    }
+
+    #[inline(always)]
+    fn remove_entry(self) -> (K, V) {
+        HashMapOccupiedEntry::remove_entry(self)
+    }
+}
+
+impl<'a, K: Eq + Hash, V> VacantEntry<'a, K, V> for HashMapVacantEntry<'a, K, V> {
+    type OccupiedEntry = HashMapOccupiedEntry<'a, K, V>;
+
+    #[inline(always)]
+    fn key(&self) -> &K {
+        HashMapVacantEntry::key(self)
+    }
+
+    #[inline(always)]
+    fn into_key(self) -> K {
+        HashMapVacantEntry::into_key(self)
+    }
+
+    #[inline(always)]
+    fn insert(self, value: V) -> &'a mut V {
+        HashMapVacantEntry::insert(self, value)
+    }
+
+    #[inline(always)]
+    fn insert_entry(self, value: V) -> Self::OccupiedEntry {
+        HashMapVacantEntry::insert_entry(self, value)
     }
 }
 

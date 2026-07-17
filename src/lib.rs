@@ -25,9 +25,11 @@ pub mod containers;
 /// Individual container operation traits.
 pub mod ops;
 
+/// Entry API traits for map-like containers.
+pub mod entry;
+
 /// `One`, a collection that holds always exactly one element.
 pub mod one;
-///
 
 #[cfg(feature = "derive")]
 #[cfg_attr(docsrs, doc(cfg(feature = "derive")))]

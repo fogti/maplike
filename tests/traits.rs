@@ -2,8 +2,8 @@
 //
 // SPDX-License-Identifier: MIT OR Apache-2.0
 
-// This file was generated using Claude Opus 4.8 Medium with many manual
-// modifications.
+// This file was generated using Claude Opus 4.8 Medium with many manual and
+// automated modifications.
 
 #![allow(dead_code)]
 #![allow(unused_imports)]
@@ -11,6 +11,7 @@
 use std::fmt::Debug;
 
 use maplike::containers::Container;
+use maplike::entry::{CombinedEntry, Entry, OccupiedEntry, VacantEntry};
 use maplike::ops::{
     Assign, Clear, Get, GetByLeft, GetByRight, Insert, IntoIter, Len, Modify, Pop, Push, Put,
     Remove, RemoveByLeft, RemoveByRight, Set, WithOne,
@@ -74,6 +75,96 @@ where
 
     c.clear();
     assert_eq!(c.get(&k2), None);
+}
+
+fn check_entry<K, V, C>(mut c: C)
+where
+    K: FromUsize + Clone + PartialEq + Debug,
+    V: FromUsize + Clone + PartialEq + Debug + Default,
+    C: Container<Key = K, Value = V> + Entry<K> + Get<K> + Clear,
+    for<'a> <C as Entry<K>>::Entry<'a>: CombinedEntry<'a, K, V>,
+{
+    let k = K::from_usize(1);
+    let k2 = K::from_usize(2);
+
+    assert_eq!(c.entry(k.clone()).key(), &k);
+
+    *c.entry(k.clone()).or_insert(V::from_usize(10)) = V::from_usize(11);
+    assert_eq!(c.get(&k), Some(&V::from_usize(11)));
+
+    *c.entry(k.clone()).or_insert(V::from_usize(99)) = V::from_usize(12);
+    assert_eq!(c.get(&k), Some(&V::from_usize(12)));
+
+    *c.entry(k.clone()).or_insert_with(|| V::from_usize(13)) = V::from_usize(14);
+    assert_eq!(c.get(&k), Some(&V::from_usize(14)));
+
+    *c.entry(k2.clone()).or_insert_with_key(|key| {
+        assert_eq!(key, &k2);
+        V::from_usize(20)
+    }) = V::from_usize(21);
+    assert_eq!(c.get(&k2), Some(&V::from_usize(21)));
+
+    c.entry(k.clone())
+        .and_modify(|v| *v = V::from_usize(30))
+        .or_insert(V::from_usize(31));
+    assert_eq!(c.get(&k), Some(&V::from_usize(30)));
+
+    c.clear();
+    c.entry(k.clone())
+        .and_modify(|v| *v = V::from_usize(40))
+        .or_insert(V::from_usize(41));
+    assert_eq!(c.get(&k), Some(&V::from_usize(41)));
+
+    {
+        let occupied = c.entry(k.clone()).insert_entry(V::from_usize(50));
+        assert_eq!(OccupiedEntry::key(&occupied), &k);
+        assert_eq!(OccupiedEntry::get(&occupied), &V::from_usize(50));
+    }
+
+    {
+        let occupied = c.entry(k.clone()).insert_entry(V::from_usize(51));
+        assert_eq!(OccupiedEntry::get(&occupied), &V::from_usize(51));
+    }
+
+    c.clear();
+    assert_eq!(*c.entry(k.clone()).or_default(), V::default());
+    assert_eq!(c.get(&k), Some(&V::default()));
+
+    {
+        let mut occupied = c.entry(k.clone()).insert_entry(V::from_usize(60));
+        assert_eq!(
+            OccupiedEntry::insert(&mut occupied, V::from_usize(61)),
+            V::from_usize(60),
+        );
+        assert_eq!(OccupiedEntry::get(&occupied), &V::from_usize(61));
+
+        *OccupiedEntry::get_mut(&mut occupied) = V::from_usize(62);
+        assert_eq!(OccupiedEntry::get(&occupied), &V::from_usize(62));
+    }
+
+    c.clear();
+    {
+        let occupied = c.entry(k.clone()).insert_entry(V::from_usize(70));
+        *OccupiedEntry::into_mut(occupied) = V::from_usize(71);
+    }
+    assert_eq!(c.get(&k), Some(&V::from_usize(71)));
+
+    c.clear();
+    {
+        let occupied = c.entry(k.clone()).insert_entry(V::from_usize(80));
+        assert_eq!(OccupiedEntry::remove(occupied), V::from_usize(80));
+    }
+    assert_eq!(c.get(&k), None);
+
+    c.clear();
+    {
+        let occupied = c.entry(k.clone()).insert_entry(V::from_usize(90));
+        assert_eq!(
+            OccupiedEntry::remove_entry(occupied),
+            (k.clone(), V::from_usize(90)),
+        );
+    }
+    assert_eq!(c.get(&k), None);
 }
 
 fn check_modify<K, V, C>(mut c: C)
@@ -423,8 +514,51 @@ mod rc_tests {
 #[cfg(feature = "std")]
 mod std_tests {
     use super::*;
+    use std::collections::hash_map::Entry as HashMapStdEntry;
     use std::collections::{HashMap, HashSet};
     use std::sync::{Arc, Weak};
+
+    fn check_hashmap_entry_variants() {
+        let mut map = HashMap::<usize, i32>::new();
+        if let HashMapStdEntry::Vacant(v) = map.entry(1) {
+            assert_eq!(VacantEntry::key(&v), &1);
+        } else {
+            panic!("expected vacant entry");
+        }
+
+        let mut map = HashMap::<usize, i32>::new();
+        if let HashMapStdEntry::Vacant(v) = map.entry(1) {
+            assert_eq!(VacantEntry::into_key(v), 1);
+        } else {
+            panic!("expected vacant entry");
+        }
+
+        let mut map = HashMap::<usize, i32>::new();
+        if let HashMapStdEntry::Vacant(v) = map.entry(2) {
+            assert_eq!(*VacantEntry::insert(v, 20), 20);
+        } else {
+            panic!("expected vacant entry");
+        }
+        assert_eq!(map.get(&2), Some(&20));
+
+        let mut map = HashMap::<usize, i32>::new();
+        if let HashMapStdEntry::Vacant(v) = map.entry(3) {
+            let occupied = VacantEntry::insert_entry(v, 30);
+            assert_eq!(OccupiedEntry::get(&occupied), &30);
+        } else {
+            panic!("expected vacant entry");
+        }
+        assert_eq!(map.get(&3), Some(&30));
+
+        let mut map = HashMap::<usize, i32>::new();
+        map.entry(4).or_insert(40);
+        if let HashMapStdEntry::Occupied(o) = map.entry(4) {
+            assert_eq!(OccupiedEntry::key(&o), &4);
+            assert_eq!(OccupiedEntry::get(&o), &40);
+        } else {
+            panic!("expected occupied entry");
+        }
+    }
 
     #[test]
     fn test_traits_on_hashmap() {
@@ -432,6 +566,8 @@ mod std_tests {
         check_modify::<usize, i32, HashMap<usize, i32>>(HashMap::new());
         check_into_iter::<usize, i32, HashMap<usize, i32>>(HashMap::new());
         check_borrow_str(HashMap::<String, i32>::new());
+        check_entry::<usize, i32, HashMap<usize, i32>>(HashMap::new());
+        check_hashmap_entry_variants();
         check_assign(
             HashMap::from([(1usize, 1i32)]),
             HashMap::from([(2usize, 2i32), (3usize, 3i32)]),
@@ -505,7 +641,50 @@ mod std_tests {
 #[cfg(feature = "alloc")]
 mod alloc_tests {
     use super::*;
+    use std::collections::btree_map::Entry as BTreeMapStdEntry;
     use std::collections::{BTreeMap, BTreeSet};
+
+    fn check_btreemap_entry_variants() {
+        let mut map = BTreeMap::<usize, i32>::new();
+        if let BTreeMapStdEntry::Vacant(v) = map.entry(1) {
+            assert_eq!(VacantEntry::key(&v), &1);
+        } else {
+            panic!("expected vacant entry");
+        }
+
+        let mut map = BTreeMap::<usize, i32>::new();
+        if let BTreeMapStdEntry::Vacant(v) = map.entry(1) {
+            assert_eq!(VacantEntry::into_key(v), 1);
+        } else {
+            panic!("expected vacant entry");
+        }
+
+        let mut map = BTreeMap::<usize, i32>::new();
+        if let BTreeMapStdEntry::Vacant(v) = map.entry(2) {
+            assert_eq!(*VacantEntry::insert(v, 20), 20);
+        } else {
+            panic!("expected vacant entry");
+        }
+        assert_eq!(map.get(&2), Some(&20));
+
+        let mut map = BTreeMap::<usize, i32>::new();
+        if let BTreeMapStdEntry::Vacant(v) = map.entry(3) {
+            let occupied = VacantEntry::insert_entry(v, 30);
+            assert_eq!(OccupiedEntry::get(&occupied), &30);
+        } else {
+            panic!("expected vacant entry");
+        }
+        assert_eq!(map.get(&3), Some(&30));
+
+        let mut map = BTreeMap::<usize, i32>::new();
+        map.entry(4).or_insert(40);
+        if let BTreeMapStdEntry::Occupied(o) = map.entry(4) {
+            assert_eq!(OccupiedEntry::key(&o), &4);
+            assert_eq!(OccupiedEntry::get(&o), &40);
+        } else {
+            panic!("expected occupied entry");
+        }
+    }
 
     #[test]
     fn test_traits_on_btreemap() {
@@ -513,6 +692,8 @@ mod alloc_tests {
         check_modify::<usize, i32, BTreeMap<usize, i32>>(BTreeMap::new());
         check_into_iter::<usize, i32, BTreeMap<usize, i32>>(BTreeMap::new());
         check_borrow_str(BTreeMap::<String, i32>::new());
+        check_entry::<usize, i32, BTreeMap<usize, i32>>(BTreeMap::new());
+        check_btreemap_entry_variants();
         check_assign(
             BTreeMap::from([(1usize, 1i32)]),
             BTreeMap::from([(2usize, 2i32), (3usize, 3i32)]),
