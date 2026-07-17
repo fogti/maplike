@@ -37,52 +37,6 @@ snapshots, or commands on arbitrary data structures;
 half-edge data structure (aka. doubly connected edge list, DCEL) generically
 over its underlying containers.
 
-## Traits
-
-### Operations
-
-This crate provides traits for common operations over map-like, set-like, and
-vec-like data structures:
-[`.get()`](https://docs.rs/maplike/latest/maplike/ops/trait.Get.html#tymethod.get),
-[`.set()`](https://docs.rs/maplike/latest/maplike/ops/trait.Set.html#tymethod.set),
-[`.modify()`](https://docs.rs/maplike/latest/maplike/ops/trait.Modify.html#tymethod.modify),
-[`.insert()`](https://docs.rs/maplike/latest/maplike/ops/trait.Insert.html#tymethod.insert),
-[`.remove()`](https://docs.rs/maplike/latest/maplike/ops/trait.Remove.html#tymethod.remove),
-[`.push()`](https://docs.rs/maplike/latest/maplike/ops/trait.Push.html#tymethod.push),
-[`.pop()`](https://docs.rs/maplike/latest/maplike/ops/trait.Pop.html#tymethod.pop),
-[`.put()`](https://docs.rs/maplike/latest/maplike/ops/trait.Put.html#tymethod.put),
-[`.clear()`](https://docs.rs/maplike/latest/maplike/ops/trait.Clear.html#tymethod.clear),
-[`.len()`](https://docs.rs/maplike/latest/maplike/ops/trait.Len.html#tymethod.len),
-[`.with_one()`](https://docs.rs/maplike/latest/maplike/ops/trait.WithOne.html#tymethod.with_one),
-[`.assign()`](https://docs.rs/maplike/latest/maplike/ops/trait.Assign.html#tymethod.assign), and
-[`.into_iter()`](https://docs.rs/maplike/latest/maplike/ops/trait.IntoIter.html#tymethod.into_iter).
-
-For bidirectional maps, there are also variants of the get and remove operations
-by left and right key:
-[`.get_by_left()`](https://docs.rs/maplike/latest/maplike/ops/trait.GetByLeft.html#tymethod.get_by_left),
-[`.get_by_right()`](https://docs.rs/maplike/latest/maplike/ops/trait.GetByRight.html#tymethod.get_by_right),
-[`.remove_by_left()`](https://docs.rs/maplike/latest/maplike/ops/trait.RemoveByLeft.html#tymethod.remove_by_left),
-[`.remove_by_right()`](https://docs.rs/maplike/latest/maplike/ops/trait.RemoveByRight.html#tymethod.remove_by_right).
-
-### Entry API
-
-We provide generic
-[Entry](https://docs.rs/maplike/latest/maplike/entry/trait.Entry.html) API for
-types that have an Entry API:
-[`HashMap`](https://doc.rust-lang.org/std/collections/struct.HashMap.html),
-[`BTreeMap`](https://doc.rust-lang.org/std/collections/struct.BTreeMap.html), and
-[`indexmap::IndexMap`](https://docs.rs/indexmap/latest/indexmap/map/struct.IndexMap.html).
-
-### Containers
-
-For brevity and convenience, we also provide
-[`Scalarlike`](https://docs.rs/maplike/latest/maplike/containers/trait.Scalarlike.html),
-[`Maplike`](https://docs.rs/maplike/latest/maplike/containers/trait.Maplike.html),
-[`Setlike`](https://docs.rs/maplike/latest/maplike/containers/trait.Setlike.html),
-[`Arraylike`](https://docs.rs/maplike/latest/maplike/containers/trait.Arraylike.html), and
-[`Veclike`](https://docs.rs/maplike/latest/maplike/containers/trait.Veclike.html) abstract
-container traits that join together traits of multiple operations.
-
 ## Usage
 
 ### Adding dependency
@@ -98,8 +52,7 @@ The `derive` feature flag is only needed if you want to
 derive `Assign` or `Container` traits using derive macros:
 [`#[derive(Assign)]`](https://docs.rs/maplike/latest/maplike/derive.Assign.html)
 or
-[`#[derive(Container)]`](https://docs.rs/maplike/latest/maplike/derive.Container
-.html).
+[`#[derive(Container)]`](https://docs.rs/maplike/latest/maplike/derive.Container.html).
 
 ### Usage examples
 
@@ -196,6 +149,52 @@ assert_eq!(vec, [4, 5, 6]);
 // because they do not implement `Index`.
 ```
 
+## Traits
+
+### Operations
+
+This crate provides traits for common operations over map-like, set-like, and
+vec-like data structures:
+[`.get()`](https://docs.rs/maplike/latest/maplike/ops/trait.Get.html#tymethod.get),
+[`.set()`](https://docs.rs/maplike/latest/maplike/ops/trait.Set.html#tymethod.set),
+[`.modify()`](https://docs.rs/maplike/latest/maplike/ops/trait.Modify.html#tymethod.modify),
+[`.insert()`](https://docs.rs/maplike/latest/maplike/ops/trait.Insert.html#tymethod.insert),
+[`.remove()`](https://docs.rs/maplike/latest/maplike/ops/trait.Remove.html#tymethod.remove),
+[`.push()`](https://docs.rs/maplike/latest/maplike/ops/trait.Push.html#tymethod.push),
+[`.pop()`](https://docs.rs/maplike/latest/maplike/ops/trait.Pop.html#tymethod.pop),
+[`.put()`](https://docs.rs/maplike/latest/maplike/ops/trait.Put.html#tymethod.put),
+[`.clear()`](https://docs.rs/maplike/latest/maplike/ops/trait.Clear.html#tymethod.clear),
+[`.len()`](https://docs.rs/maplike/latest/maplike/ops/trait.Len.html#tymethod.len),
+[`.with_one()`](https://docs.rs/maplike/latest/maplike/ops/trait.WithOne.html#tymethod.with_one),
+[`.assign()`](https://docs.rs/maplike/latest/maplike/ops/trait.Assign.html#tymethod.assign), and
+[`.into_iter()`](https://docs.rs/maplike/latest/maplike/ops/trait.IntoIter.html#tymethod.into_iter).
+
+For bidirectional maps, there are also variants of the get and remove operations
+by left and right key:
+[`.get_by_left()`](https://docs.rs/maplike/latest/maplike/ops/trait.GetByLeft.html#tymethod.get_by_left),
+[`.get_by_right()`](https://docs.rs/maplike/latest/maplike/ops/trait.GetByRight.html#tymethod.get_by_right),
+[`.remove_by_left()`](https://docs.rs/maplike/latest/maplike/ops/trait.RemoveByLeft.html#tymethod.remove_by_left),
+[`.remove_by_right()`](https://docs.rs/maplike/latest/maplike/ops/trait.RemoveByRight.html#tymethod.remove_by_right).
+
+### Entry API
+
+We provide generic
+[Entry](https://docs.rs/maplike/latest/maplike/entry/trait.Entry.html) API for
+types that have an Entry API:
+[`HashMap`](https://doc.rust-lang.org/std/collections/struct.HashMap.html),
+[`BTreeMap`](https://doc.rust-lang.org/std/collections/struct.BTreeMap.html), and
+[`indexmap::IndexMap`](https://docs.rs/indexmap/latest/indexmap/map/struct.IndexMap.html).
+
+### Containers
+
+For brevity and convenience, we also provide
+[`Scalarlike`](https://docs.rs/maplike/latest/maplike/containers/trait.Scalarlike.html),
+[`Maplike`](https://docs.rs/maplike/latest/maplike/containers/trait.Maplike.html),
+[`Setlike`](https://docs.rs/maplike/latest/maplike/containers/trait.Setlike.html),
+[`Arraylike`](https://docs.rs/maplike/latest/maplike/containers/trait.Arraylike.html), and
+[`Veclike`](https://docs.rs/maplike/latest/maplike/containers/trait.Veclike.html) abstract
+container traits that join together traits of multiple operations.
+
 ## Supported containers
 
 ### Standard library
@@ -210,10 +209,14 @@ implementations:
 - [`Vec`](https://doc.rust-lang.org/std/vec/struct.Vec.html), gated by the `alloc` feature (enabled by default);
 - [`VecDeque`](https://doc.rust-lang.org/alloc/collections/vec_deque/struct.VecDeque.html), gated by the `alloc` feature (enabled by default);
 - [`Box`](https://doc.rust-lang.org/std/boxed/struct.Box.html), gated by the `alloc` feature (enabled by default);
-- [`Rc`](https://doc.rust-lang.org/std/rc/struct.Rc.html), gated by the `alloc` feature (enabled by default);
-- [`Arc`](https://doc.rust-lang.org/std/sync/struct.Arc.html), gated by the `std` feature (enabled by default);
+- [`Rc`](https://doc.rust-lang.org/std/rc/struct.Rc.html) and its weak pointer,
+  [`std::rc::Weak`](https://doc.rust-lang.org/std/rc/struct.Weak.html), both
+  gated by the `alloc` feature (enabled by default);
+- [`Arc`](https://doc.rust-lang.org/std/sync/struct.Arc.html),
+  and its weak pointer,
+  [`std::sync::Weak`](https://doc.rust-lang.org/std/sync/struct.Weak.html) both
+  gated by the `std` feature (enabled by default);
 - [`Option`](https://doc.rust-lang.org/std/option/enum.Option.html), not feature-gated;
-- [`Weak`](https://doc.rust-lang.org/std/rc/struct.Weak.html) and [`sync::Weak`](https://doc.rust-lang.org/std/sync/struct.Weak.html), gated by the `alloc` and `std` features respectively (both enabled by default).
 
 ### Primitives
 
@@ -264,10 +267,10 @@ trait implementations for data structures from certain external crates:
   [`Veclike`](https://docs.rs/maplike/latest/maplike/ops/trait.Veclike.html), because
   `arrayvec` types do not implement
   [`Index`](https://doc.rust-lang.org/std/ops/trait.Index.html));
-- [`smallvec::SmallVec`], gated by the `smallvec` feature flag;
+- `smallvec::SmallVec`, gated by the `smallvec` feature flag;
 - [`tinyvec::ArrayVec`](https://docs.rs/tinyvec/latest/tinyvec/struct.ArrayVec.html),
   and [`tinyvec::TinyVec`](https://docs.rs/tinyvec/latest/tinyvec/enum.TinyVec.html),
-  gated by the `tinyvec` feature flag.
+  gated by the `tinyvec` feature flag;
 
 For some examples of practical use, see the
 [examples](https://github.com/mikwielgus/undoredo/tree/develop/examples)
@@ -302,5 +305,5 @@ track of its vacant indexes is only singly-linked, not doubly-linked. Inserting
 an element at an arbitrary vacant index would require removing that index from
 the freelist. But since there is no backwards link available at a given key,
 doing so would require traversing the freelist from the beginning to find the
-position of the previous node, which would incur an overly slow `O(n)` time
-cost.
+position of the previous node, which would incur a slow `O(n)` time cost.
+Because of that, we have chosen to not support for it for now.
