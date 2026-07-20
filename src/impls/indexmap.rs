@@ -72,6 +72,8 @@ impl<K: Eq + Hash, Q: Eq + Hash + ?Sized, V> Remove<K, Q> for IndexMap<K, V>
 where
     K: Borrow<Q>,
 {
+    type Output = Option<V>;
+
     #[inline(always)]
     fn remove(&mut self, key: &Q) -> Option<V> {
         IndexMap::shift_remove(self, key)

@@ -133,6 +133,9 @@ pub trait Remove<K, Q: ?Sized = K>: Container
 where
     K: Borrow<Q>,
 {
+    /// Return type of [`remove`](Remove::remove).
+    type Output;
+
     /// Remove an element under a key from the collection, returning the value
     /// at the key if the key was previously in the map. Other keys are not
     /// invalidated.
@@ -148,7 +151,7 @@ where
     /// insertion, lookup, and removal, try
     /// [`stable_vec::StableVec`](https://docs.rs/stable-vec/latest/stable_vec/type.StableVec.html)
     /// or [`thunderdome::Arena`](https://docs.rs/thunderdome/latest/thunderdome/struct.Arena.html).
-    fn remove(&mut self, key: &Q) -> Option<Self::Value>;
+    fn remove(&mut self, key: &Q) -> Self::Output;
 }
 
 /// Remove the left and right values from pair corresponding to the given left

@@ -67,6 +67,8 @@ impl<V> Insert<usize> for VecDeque<V> {
 }
 
 impl<V> Remove<usize> for VecDeque<V> {
+    type Output = Option<V>;
+
     #[inline(always)]
     fn remove(&mut self, index: &usize) -> Option<V> {
         alloc_::collections::VecDeque::remove(self, *index)

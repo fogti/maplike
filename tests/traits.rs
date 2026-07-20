@@ -49,11 +49,12 @@ impl FromUsize for (i32, i32) {
     }
 }
 
-fn check_keyed<K, V, C>(mut c: C)
+fn check_keyed<K, V, O, C>(mut c: C, expected_removed: O)
 where
     K: FromUsize + Clone,
     V: FromUsize + Clone + PartialEq + Debug,
-    C: Container<Key = K, Value = V> + Get<K> + Set<K> + Insert<K> + Remove<K> + Clear,
+    O: PartialEq + Debug,
+    C: Container<Key = K, Value = V> + Get<K> + Set<K> + Insert<K> + Remove<K, Output = O> + Clear,
 {
     let k1 = K::from_usize(1);
     let k2 = K::from_usize(2);
@@ -70,7 +71,7 @@ where
     c.set(k1.clone(), v2.clone());
     assert_eq!(c.get(&k1), Some(&v2));
 
-    assert_eq!(c.remove(&k1), Some(v2.clone()));
+    assert_eq!(c.remove(&k1), expected_removed);
     assert_eq!(c.get(&k1), None);
 
     c.clear();
@@ -216,7 +217,7 @@ where
         + Insert<String>
         + Get<String, str>
         + Modify<String, str>
-        + Remove<String, str>,
+        + Remove<String, str, Output = Option<i32>>,
 {
     c.insert("one".to_string(), 1);
     c.insert("two".to_string(), 2);
@@ -274,7 +275,12 @@ fn check_pushed_insert_remove<K, V, C>(mut c: C)
 where
     K: Clone,
     V: FromUsize + Clone + PartialEq + Debug,
-    C: Container<Key = K, Value = V> + Push<K> + Get<K> + Insert<K> + Remove<K> + Clear,
+    C: Container<Key = K, Value = V>
+        + Push<K>
+        + Get<K>
+        + Insert<K>
+        + Remove<K, Output = Option<V>>
+        + Clear,
 {
     let k0 = c.push(V::from_usize(10));
 
@@ -582,7 +588,7 @@ mod std_tests {
 
     #[test]
     fn test_traits_on_hashmap() {
-        check_keyed::<usize, i32, HashMap<usize, i32>>(HashMap::new());
+        check_keyed(HashMap::<usize, i32>::new(), Some(20));
         check_modify::<usize, i32, HashMap<usize, i32>>(HashMap::new());
         check_into_iter::<usize, i32, HashMap<usize, i32>>(HashMap::new());
         check_borrow_str(HashMap::<String, i32>::new());
@@ -596,7 +602,7 @@ mod std_tests {
 
     #[test]
     fn test_traits_on_hashset() {
-        check_keyed::<usize, (), HashSet<usize>>(HashSet::new());
+        check_keyed(HashSet::<usize>::new(), true);
         check_into_iter::<usize, (), HashSet<usize>>(HashSet::new());
         check_with_one::<usize, (), HashSet<usize>>(7, ());
         check_assign(HashSet::from([1]), HashSet::from([2, 3]));
@@ -708,7 +714,7 @@ mod alloc_tests {
 
     #[test]
     fn test_traits_on_btreemap() {
-        check_keyed::<usize, i32, BTreeMap<usize, i32>>(BTreeMap::new());
+        check_keyed(BTreeMap::<usize, i32>::new(), Some(20));
         check_modify::<usize, i32, BTreeMap<usize, i32>>(BTreeMap::new());
         check_into_iter::<usize, i32, BTreeMap<usize, i32>>(BTreeMap::new());
         check_borrow_str(BTreeMap::<String, i32>::new());
@@ -722,7 +728,7 @@ mod alloc_tests {
 
     #[test]
     fn test_traits_on_btreeset() {
-        check_keyed::<usize, (), BTreeSet<usize>>(BTreeSet::new());
+        check_keyed(BTreeSet::<usize>::new(), true);
         check_into_iter::<usize, (), BTreeSet<usize>>(BTreeSet::new());
         check_with_one::<usize, (), BTreeSet<usize>>(7, ());
         check_assign(BTreeSet::from([1]), BTreeSet::from([2, 3]));
@@ -840,7 +846,7 @@ mod stable_vec_tests {
 
     #[test]
     fn test_traits_on_stable_vec() {
-        check_keyed::<usize, i32, StableVec<i32>>(StableVec::new());
+        check_keyed(StableVec::<i32>::new(), Some(20));
         check_modify::<usize, i32, StableVec<i32>>(StableVec::new());
         check_into_iter::<usize, i32, StableVec<i32>>(StableVec::new());
         check_push_put::<usize, i32, StableVec<i32>>(StableVec::new());
@@ -1000,7 +1006,7 @@ mod rstar_tests {
 
     #[test]
     fn test_traits_on_rtree() {
-        check_keyed::<(i32, i32), (), RTree<(i32, i32)>>(RTree::new());
+        check_keyed(RTree::<(i32, i32)>::new(), true);
         check_into_iter::<(i32, i32), (), RTree<(i32, i32)>>(RTree::new());
         check_with_one::<(i32, i32), (), RTree<(i32, i32)>>((3, 4), ());
 
@@ -1059,7 +1065,7 @@ mod indexmap_tests {
 
     #[test]
     fn test_traits_on_indexmap() {
-        check_keyed::<usize, i32, IndexMap<usize, i32>>(IndexMap::new());
+        check_keyed(IndexMap::<usize, i32>::new(), Some(20));
         check_modify::<usize, i32, IndexMap<usize, i32>>(IndexMap::new());
         check_into_iter::<usize, i32, IndexMap<usize, i32>>(IndexMap::new());
         check_borrow_str(IndexMap::<String, i32>::new());
@@ -1073,7 +1079,7 @@ mod indexmap_tests {
 
     #[test]
     fn test_traits_on_indexset() {
-        check_keyed::<usize, (), IndexSet<usize>>(IndexSet::new());
+        check_keyed(IndexSet::<usize>::new(), true);
         check_into_iter::<usize, (), IndexSet<usize>>(IndexSet::new());
         check_with_one::<usize, (), IndexSet<usize>>(7, ());
         check_assign(IndexSet::from([1]), IndexSet::from([2, 3]));

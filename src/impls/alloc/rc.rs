@@ -100,6 +100,8 @@ impl<V> Assign for Weak<V> {
 }
 
 impl<V> Remove<usize> for Weak<V> {
+    type Output = Option<V>;
+
     #[inline(always)]
     fn remove(&mut self, index: &usize) -> Option<V> {
         if *index == 0 {

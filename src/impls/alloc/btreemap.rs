@@ -71,6 +71,8 @@ impl<K: Ord, Q: Ord + ?Sized, V> Remove<K, Q> for BTreeMap<K, V>
 where
     K: Borrow<Q>,
 {
+    type Output = Option<V>;
+
     #[inline(always)]
     fn remove(&mut self, key: &Q) -> Option<V> {
         BTreeMap::remove(self, key)

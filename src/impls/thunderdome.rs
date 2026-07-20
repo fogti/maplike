@@ -65,6 +65,8 @@ impl<V> Insert<Index> for Arena<V> {
 }
 
 impl<V> Remove<Index> for Arena<V> {
+    type Output = Option<V>;
+
     #[inline(always)]
     fn remove(&mut self, key: &Index) -> Option<V> {
         Arena::remove(self, *key)

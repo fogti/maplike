@@ -53,6 +53,8 @@ impl<V> Modify<usize> for Option<V> {
 }
 
 impl<V> Remove<usize> for Option<V> {
+    type Output = Option<V>;
+
     #[inline(always)]
     fn remove(&mut self, index: &usize) -> Option<V> {
         if *index == 0 { self.take() } else { None }

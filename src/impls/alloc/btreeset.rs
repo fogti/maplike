@@ -63,9 +63,11 @@ impl<K: Ord, Q: Ord + ?Sized> Remove<K, Q> for BTreeSet<K>
 where
     K: Borrow<Q>,
 {
+    type Output = bool;
+
     #[inline(always)]
-    fn remove(&mut self, key: &Q) -> Option<()> {
-        BTreeSet::remove(self, key).then_some(())
+    fn remove(&mut self, key: &Q) -> bool {
+        BTreeSet::remove(self, key)
     }
 }
 
