@@ -13,19 +13,22 @@ SPDX-License-Identifier: MIT OR Apache-2.0
 Rust traits for abstract containers and operations over them.
 
 With this library, you can write code that is generic over various built-in,
-standard library, and third-party collections, containers, and primitives. See
-the [Traits](#traits) section for a list of all available traits.
+standard library, and third-party collections, containers, and primitives. For
+example, you can have the same code work on both on `BTreeMap` and `HashMap`,
+and in many cases also on `Vec` and more.
 
-The traits are implemented for many containers from `std` and third-party
-crates. See the [Supported containers](#supported-containers) section for a
-complete list. The crate is `no_std`-compatible.
+See the [Supported containers](#supported-containers) section for a complete
+list of supported containers.
 
 Basically, this is Python's
 [collections.abc](https://docs.python.org/3/library/collections.abc.html), but
-is in Rust, and with traits not only for different kinds of containers, but also
+in Rust, and with traits not only for different kinds of containers, but also
 for each operation. And every container is treated as if it was a map. If it is
 not really a map, it is treated as if its key type was `usize`, even when there
 can be at most only one element. Hence the crate name, `maplike`.
+
+The traits are implemented for many containers from `std` and third-party
+crates. See the [Traits](#traits) section for a list of all available traits.
 
 This library is maintained and champaigned (aka.
 [dogfooded](https://en.wikipedia.org/wiki/Eating_your_own_dog_food)) by the
@@ -36,6 +39,8 @@ snapshots, or commands on arbitrary data structures;
 - [`dcel`](https://github.com/mikwielgus/dcel), a crate that implements the
 half-edge data structure (aka. doubly connected edge list, DCEL) generically
 over its underlying containers.
+
+This crate is `no_std`-compatible.
 
 ## Usage
 
