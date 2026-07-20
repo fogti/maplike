@@ -5,7 +5,8 @@
 use smallvec::{Array, SmallVec};
 
 use crate::containers::Container;
-use crate::ops::{Assign, Clear, Get, IntoIter, Len, Modify, Pop, Push, Put, Resize, Set, WithOne};
+use crate::iter::IntoIter;
+use crate::ops::{Assign, Clear, Get, Len, Modify, Pop, Push, Put, Resize, Set, WithOne};
 
 impl<A: Array> Container for SmallVec<A> {
     type Key = usize;

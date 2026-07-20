@@ -5,9 +5,8 @@
 use alloc_::collections::VecDeque;
 
 use crate::containers::Container;
-use crate::ops::{
-    Assign, Clear, Get, Insert, IntoIter, Len, Modify, Pop, Push, Put, Remove, Set, WithOne,
-};
+use crate::iter::IntoIter;
+use crate::ops::{Assign, Clear, Get, Insert, Len, Modify, Pop, Push, Put, Remove, Set, WithOne};
 
 impl<V> Container for VecDeque<V> {
     type Key = usize;

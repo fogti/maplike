@@ -19,17 +19,11 @@ extern crate std as std_;
 #[cfg_attr(docsrs, doc(cfg(feature = "alloc")))]
 extern crate alloc as alloc_;
 
-/// Abstract container traits that join together multiple operations.
 pub mod containers;
-
-/// Individual container operation traits.
-pub mod ops;
-
-/// Entry API traits for map-like containers.
 pub mod entry;
-
-/// `One`, a collection that holds always exactly one element.
+pub mod iter;
 pub mod one;
+pub mod ops;
 
 #[cfg(feature = "derive")]
 #[cfg_attr(docsrs, doc(cfg(feature = "derive")))]

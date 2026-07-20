@@ -281,12 +281,3 @@ pub trait Resize: Container {
     where
         Self::Value: Clone;
 }
-
-/// Consume the collection and yield owned key-value pairs.
-pub trait IntoIter<K>: Container {
-    /// Iterator that consumes the collection.
-    type IntoIter: Iterator<Item = (K, Self::Value)>;
-
-    /// Consume the collection and yield owned key-value pairs.
-    fn into_iter(self) -> Self::IntoIter;
-}

@@ -11,7 +11,8 @@ use std_::{collections::HashMap, hash::Hash};
 
 use crate::containers::Container;
 use crate::entry::{CombinedEntry, Entry, OccupiedEntry, VacantEntry};
-use crate::ops::{Assign, Clear, Get, Insert, IntoIter, Modify, Remove, Set};
+use crate::iter::IntoIter;
+use crate::ops::{Assign, Clear, Get, Insert, Modify, Remove, Set};
 
 impl<K, V> Container for HashMap<K, V> {
     type Key = K;

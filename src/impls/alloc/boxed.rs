@@ -5,7 +5,8 @@
 use alloc_::boxed::Box;
 
 use crate::containers::Container;
-use crate::ops::{Assign, Get, IntoIter, Len, Modify, Put, Set, WithOne};
+use crate::iter::IntoIter;
+use crate::ops::{Assign, Get, Len, Modify, Put, Set, WithOne};
 
 impl<V> Container for Box<V> {
     type Key = usize;

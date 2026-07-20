@@ -5,7 +5,8 @@
 use alloc_::vec::Vec;
 
 use crate::containers::Container;
-use crate::ops::{Assign, Clear, Get, IntoIter, Len, Modify, Pop, Push, Put, Resize, Set, WithOne};
+use crate::iter::IntoIter;
+use crate::ops::{Assign, Clear, Get, Len, Modify, Pop, Push, Put, Resize, Set, WithOne};
 
 impl<V> Container for Vec<V> {
     type Key = usize;

@@ -2,7 +2,7 @@
 //
 // SPDX-License-Identifier: MIT OR Apache-2.0
 
-//! Abstract container traits that join together multiple operations.
+//! Abstract container traits that bundle together multiple operations.
 
 use core::ops::Index;
 

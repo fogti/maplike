@@ -5,7 +5,8 @@
 use std_::sync::{Arc, Weak};
 
 use crate::containers::Container;
-use crate::ops::{Assign, Clear, Get, IntoIter, Len, Modify, Put, Remove, Set, WithOne};
+use crate::iter::IntoIter;
+use crate::ops::{Assign, Clear, Get, Len, Modify, Put, Remove, Set, WithOne};
 
 impl<V> Container for Arc<V> {
     type Key = usize;

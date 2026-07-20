@@ -12,9 +12,10 @@ use std::fmt::Debug;
 
 use maplike::containers::Container;
 use maplike::entry::{CombinedEntry, Entry, OccupiedEntry, VacantEntry};
+use maplike::iter::IntoIter;
 use maplike::ops::{
-    Assign, Clear, Get, GetByLeft, GetByRight, Insert, IntoIter, Len, Modify, Pop, Push, Put,
-    Remove, RemoveByLeft, RemoveByRight, Resize, Set, WithOne,
+    Assign, Clear, Get, GetByLeft, GetByRight, Insert, Len, Modify, Pop, Push, Put, Remove,
+    RemoveByLeft, RemoveByRight, Resize, Set, WithOne,
 };
 
 trait FromUsize {

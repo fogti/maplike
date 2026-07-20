@@ -7,7 +7,8 @@ use core::borrow::Borrow;
 use alloc_::collections::BTreeSet;
 
 use crate::containers::Container;
-use crate::ops::{Assign, Clear, Get, Insert, IntoIter, Put, Remove, Set, WithOne};
+use crate::iter::IntoIter;
+use crate::ops::{Assign, Clear, Get, Insert, Put, Remove, Set, WithOne};
 
 impl<K> Container for BTreeSet<K> {
     type Key = K;
