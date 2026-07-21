@@ -46,7 +46,7 @@ This crate is `no_std`-compatible.
 
 ### Adding dependency
 
-First, add `maplike` as a dependency to your Cargo.toml:
+First, add `maplike` as a dependency to your `Cargo.toml`:
 
 ```toml
 [dependencies]
