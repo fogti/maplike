@@ -7,7 +7,7 @@ members = [".", "maplike_derive"]
 
 [package]
 name = "maplike"
-version = "0.13.0"
+version = "0.13.1"
 authors = ["Mikolaj Wielgus <wielgusmikolaj@gmail.com>"]
 description = "Rust traits for abstract containers and operations over them."
 repository = "https://github.com/mikwielgus/maplike"
