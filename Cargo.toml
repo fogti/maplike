@@ -83,16 +83,6 @@ smallvec = "1"
 arrayvec = "0.7"
 tinyvec = { version = "1", features = ["alloc"] }
 
-# Version replacements apply only to this crate. We have to keep this here
-# and not in `release.toml` because the replacements are applied to each
-# workspace member crate separately, and since there is nothing to replace in
-# `undoredo_derive`, there will be an error due to no replacement. This solution
-# is recommended by `cargo-release`'s FAQ.
-[package.metadata.release]
-pre-release-replacements = [
-  { file = "README.md", search = 'maplike = \{ version = "[^"]+"([^}]*)\}', replace = '{{crate_name}} = { version = "{{version}}"$1}' },
-]
-
 [package.metadata.docs.rs]
 cargo-args = ["--all-features", "-Zunstable-options", "-Zrustdoc-scrape-examples"]
 rustdoc-args = ["--cfg", "docsrs"]
