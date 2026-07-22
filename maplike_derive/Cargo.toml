@@ -6,9 +6,9 @@
 name = "maplike_derive"
 version = "0.13.1"
 authors = ["Mikolaj Wielgus <wielgusmikolaj@gmail.com>"]
-description = "Derive macros for undoredo."
-repository = "https://github.com/mikwielgus/undoredo"
-documentation = "https://docs.rs/undoredo"
+description = "Derive macros for maplike."
+repository = "https://github.com/mikwielgus/maplike"
+documentation = "https://docs.rs/maplike_derive"
 readme = "README.md"
 license = "MIT OR Apache-2.0"
 keywords = ["undo", "redo", "rtree", "no_std"]
