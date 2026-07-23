@@ -65,11 +65,11 @@ impl<K: Eq + Hash, Q: Eq + Hash + ?Sized> Remove<K, Q> for IndexSet<K>
 where
     K: Borrow<Q>,
 {
-    type Output = bool;
+    type Output = Option<()>;
 
     #[inline(always)]
-    fn remove(&mut self, key: &Q) -> bool {
-        IndexSet::shift_remove(self, key)
+    fn remove(&mut self, key: &Q) -> Option<()> {
+        IndexSet::shift_remove(self, key).then_some(())
     }
 }
 

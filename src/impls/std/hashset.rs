@@ -64,11 +64,11 @@ impl<K: Eq + Hash, Q: Eq + Hash + ?Sized> Remove<K, Q> for HashSet<K>
 where
     K: Borrow<Q>,
 {
-    type Output = bool;
+    type Output = Option<()>;
 
     #[inline(always)]
-    fn remove(&mut self, key: &Q) -> bool {
-        HashSet::remove(self, key)
+    fn remove(&mut self, key: &Q) -> Option<()> {
+        HashSet::remove(self, key).then_some(())
     }
 }
 

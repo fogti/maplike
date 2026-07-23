@@ -603,7 +603,7 @@ mod std_tests {
 
     #[test]
     fn test_traits_on_hashset() {
-        check_keyed(HashSet::<usize>::new(), true);
+        check_keyed(HashSet::<usize>::new(), Some(()));
         check_into_iter::<usize, (), HashSet<usize>>(HashSet::new());
         check_with_one::<usize, (), HashSet<usize>>(7, ());
         check_assign(HashSet::from([1]), HashSet::from([2, 3]));
@@ -729,7 +729,7 @@ mod alloc_tests {
 
     #[test]
     fn test_traits_on_btreeset() {
-        check_keyed(BTreeSet::<usize>::new(), true);
+        check_keyed(BTreeSet::<usize>::new(), Some(()));
         check_into_iter::<usize, (), BTreeSet<usize>>(BTreeSet::new());
         check_with_one::<usize, (), BTreeSet<usize>>(7, ());
         check_assign(BTreeSet::from([1]), BTreeSet::from([2, 3]));
@@ -1006,7 +1006,7 @@ mod rstar_tests {
 
     #[test]
     fn test_traits_on_rtree() {
-        check_keyed(RTree::<(i32, i32)>::new(), true);
+        check_keyed(RTree::<(i32, i32)>::new(), Some(()));
         check_into_iter::<(i32, i32), (), RTree<(i32, i32)>>(RTree::new());
         check_with_one::<(i32, i32), (), RTree<(i32, i32)>>((3, 4), ());
 
@@ -1079,7 +1079,7 @@ mod indexmap_tests {
 
     #[test]
     fn test_traits_on_indexset() {
-        check_keyed(IndexSet::<usize>::new(), true);
+        check_keyed(IndexSet::<usize>::new(), Some(()));
         check_into_iter::<usize, (), IndexSet<usize>>(IndexSet::new());
         check_with_one::<usize, (), IndexSet<usize>>(7, ());
         check_assign(IndexSet::from([1]), IndexSet::from([2, 3]));

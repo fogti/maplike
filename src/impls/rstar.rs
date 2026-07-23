@@ -57,11 +57,11 @@ impl<K: RTreeObject> Insert<K> for RTree<K> {
 }
 
 impl<K: RTreeObject + PartialEq> Remove<K> for RTree<K> {
-    type Output = bool;
+    type Output = Option<()>;
 
     #[inline(always)]
-    fn remove(&mut self, key: &K) -> bool {
-        RTree::remove(self, key).is_some()
+    fn remove(&mut self, key: &K) -> Option<()> {
+        RTree::remove(self, key).map(|_| ())
     }
 }
 
