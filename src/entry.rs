@@ -8,6 +8,24 @@ use crate::containers::Container;
 
 /// Gets the given key's corresponding entry in the container for in-place
 /// manipulation.
+///
+/// # Examples
+///
+/// ```
+/// use maplike::entry::{CombinedEntry, Entry};
+/// use maplike::ops::Get;
+/// use std::collections::{BTreeMap, HashMap};
+///
+/// // Works for `HashMap`.
+/// let mut hashmap = HashMap::new();
+/// *hashmap.entry(1).or_insert(2) = 3;
+/// assert_eq!(hashmap.get(&1), Some(&3));
+///
+/// // Works for `BTreeMap`.
+/// let mut btreemap = BTreeMap::new();
+/// *btreemap.entry(1).or_insert(2) = 3;
+/// assert_eq!(btreemap.get(&1), Some(&3));
+/// ```
 pub trait Entry<K>: Container {
     /// Entry type returned by [`entry`](Entry::entry).
     type Entry<'a>
