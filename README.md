@@ -36,6 +36,8 @@ author, who uses has it as a dependency for
 - [`undoredo`](https://github.com/mikwielgus/undoredo), a versatile crate for
 implementing Undo/Redo and non-linear history tree using sparse deltas (diffs),
 snapshots, or commands on arbitrary data structures;
+- [`multi_bimap`](https://github.com/mikwielgus/multi_bimap), a crate
+implementing many-to-many bidirectional map using arbitrary internal containers.
 - [`dcel`](https://github.com/mikwielgus/dcel), a crate that implements the
 half-edge data structure (aka. doubly connected edge list, DCEL) generically
 over its underlying containers.
