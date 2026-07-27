@@ -10,6 +10,8 @@ use crate::ops::{Assign, Get, Len, Modify, Put, Set, WithOne};
 
 /// A collection that holds exactly one element.
 #[derive(Clone, Copy, Debug, Eq, Ord, PartialEq, PartialOrd)]
+#[cfg_attr(feature = "serde", derive(serde::Serialize, serde::Deserialize))]
+#[cfg_attr(feature = "serde", serde(transparent))]
 pub struct One<V> {
     value: V,
 }

@@ -24,8 +24,8 @@ Basically, this is Python's
 [collections.abc](https://docs.python.org/3/library/collections.abc.html), but
 in Rust, and with traits not only for different kinds of containers, but also
 for each operation. And every container is treated as if it was a map. If it is
-not really a map, it is treated as if its key type was `usize`, even when there
-can be at most only one element. Hence the crate name, `maplike`.
+not really a map, then it is treated as if its key type was `usize`, even when
+there can be at most only one element. Hence the crate name, `maplike`.
 
 The traits are implemented for many containers from `std` and third-party
 crates. See the [Traits](#traits) section for a list of all available traits.
@@ -42,7 +42,7 @@ implementing many-to-many bidirectional map using arbitrary internal containers.
 half-edge data structure (aka. doubly connected edge list, DCEL) generically
 over its underlying containers.
 
-This crate is `no_std`-compatible.
+This crate is compatible with `no_std` and `serde`.
 
 ## Usage
 
@@ -284,7 +284,7 @@ For some examples of practical use, see the
 [examples](https://github.com/mikwielgus/undoredo/tree/develop/examples)
 directory of the [`undoredo`](https://github.com/mikwielgus/undoredo) crate.
 
-## Unsupported collections
+## Unsupported containers
 
 Among stable vector data structures,
 [`Slab`](https://docs.rs/slab/latest/slab/),

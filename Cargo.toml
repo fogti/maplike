@@ -62,6 +62,10 @@ smallvec = ["dep:smallvec"]
 ## `tinyvec::TinyVec`.
 tinyvec = ["dep:tinyvec"]
 
+## Enables `serde` support. Derives `Serialize` and `Deserialize` traits for
+## `One`.
+serde = ["dep:serde"]
+
 [dependencies]
 maplike_derive = { version = "0.13", optional = true, path = "maplike_derive" }
 arrayvec = { version = "0.7", optional = true }
@@ -73,6 +77,7 @@ smallvec = { version = "1", optional = true }
 stable-vec = { version = "0.4", optional = true }
 thunderdome = { version = "0.6", optional = true }
 tinyvec = { version = "1", features = ["alloc"], optional = true }
+serde = { version = "1.0", optional = true, default-features = false, features = ["derive", "alloc"] }
 
 [dev-dependencies]
 indexmap = "2.14"
@@ -86,4 +91,3 @@ tinyvec = { version = "1", features = ["alloc"] }
 [package.metadata.docs.rs]
 cargo-args = ["--all-features", "-Zunstable-options", "-Zrustdoc-scrape-examples"]
 rustdoc-args = ["--cfg", "docsrs"]
-    
