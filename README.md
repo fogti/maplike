@@ -4,6 +4,7 @@ SPDX-FileCopyrightText: 2026 maplike contributors
 SPDX-License-Identifier: MIT OR Apache-2.0
 -->
 
+[![Repository](https://img.shields.io/badge/repository-GitHub-0FBF3E)](https://github.com/mikwielgus/maplike)
 [![Docs](https://docs.rs/maplike/badge.svg)](https://docs.rs/maplike/)
 [![Crates.io](https://img.shields.io/crates/v/maplike.svg)](https://crates.io/crates/maplike)
 [![MIT OR Apache 2.0](https://img.shields.io/crates/l/maplike.svg)](#licence)
@@ -66,7 +67,7 @@ or
 `maplike`'s traits allow you to write functions that are generic over many
 different collection types. A single trait like
 [`Get`](https://docs.rs/maplike/latest/maplike/ops/trait.Get.html) is enough to
-abstract over vectors, arrays, and maps alike.
+abstract over `Vec`s, arrays, and maps alike.
 
 ```rust
 use std::collections::{BTreeMap, HashMap};
@@ -97,12 +98,11 @@ together
 [`Clear`](https://docs.rs/maplike/latest/maplike/ops/trait.Clear.html),
 [`Len`](https://docs.rs/maplike/latest/maplike/ops/trait.Len.html), and
 [`Index`](https://doc.rust-lang.org/std/ops/trait.Index.html)), thus allowing
-code that is generic over
+for code that is generic over
 [`Vec`](https://doc.rust-lang.org/std/vec/struct.Vec.html),
 [`VecDeque`](https://doc.rust-lang.org/alloc/collections/vec_deque/struct.VecDeque.html),
-[`smallvec::SmallVec`],
-[`tinyvec::ArrayVec`](https://docs.rs/tinyvec/latest/tinyvec/struct.ArrayVec.htm
-l), and
+`smallvec::SmallVec`,
+[`tinyvec::ArrayVec`](https://docs.rs/tinyvec/latest/tinyvec/struct.ArrayVec.html), and
 [`tinyvec::TinyVec`](https://docs.rs/tinyvec/latest/tinyvec/enum.TinyVec.html).
 
 ```rust
