@@ -14,9 +14,9 @@ SPDX-License-Identifier: MIT OR Apache-2.0
 Rust traits for abstract containers and operations over them.
 
 With this library, you can write code that is generic over various built-in,
-standard library, and third-party collections, containers, and primitives. For
-example, you can have the same code work on both on `BTreeMap` and `HashMap`,
-and in many cases also on `Vec` and more.
+standard library, and third-party collections, containers, and primitives. You
+can have the same code work on both on `BTreeMap` and `HashMap`, and in many
+cases also on `Vec`, `Option`, `Box`, `Rc`, and more.
 
 See the [Supported containers](#supported-containers) section for a complete
 list of supported containers.
@@ -24,9 +24,10 @@ list of supported containers.
 Basically, this is Python's
 [collections.abc](https://docs.python.org/3/library/collections.abc.html), but
 in Rust, and with traits not only for different kinds of containers, but also
-for each operation. And every container is treated as if it was a map. If it is
-not really a map, then it is treated as if its key type was `usize`, even when
-there can be at most only one element. Hence the crate name, `maplike`.
+for each operation. Essentially, every container is treated as if it was a
+map. If it is not really a map, then it is treated as if its key type was
+`usize`, even when there can be at most only one element. Hence the crate name,
+`maplike`.
 
 The traits are implemented for many containers from `std` and third-party
 crates. See the [Traits](#traits) section for a list of all available traits.
@@ -38,7 +39,8 @@ author, who uses has it as a dependency for
 implementing Undo/Redo and non-linear history tree using sparse deltas (diffs),
 snapshots, or commands on arbitrary data structures;
 - [`multi_bimap`](https://github.com/mikwielgus/multi_bimap), a crate
-implementing many-to-many bidirectional map using arbitrary internal containers.
+implementing many-to-many bidirectional map using two antiparallel internal
+containers chosen by the user.
 - [`dcel`](https://github.com/mikwielgus/dcel), a crate that implements the
 half-edge data structure (aka. doubly connected edge list, DCEL) generically
 over its underlying containers.
@@ -222,7 +224,7 @@ implementations:
   gated by the `alloc` feature (enabled by default);
 - [`Arc`](https://doc.rust-lang.org/std/sync/struct.Arc.html),
   and its weak pointer,
-  [`std::sync::Weak`](https://doc.rust-lang.org/std/sync/struct.Weak.html) both
+  [`std::sync::Weak`](https://doc.rust-lang.org/std/sync/struct.Weak.html), both
   gated by the `std` feature (enabled by default);
 - [`Option`](https://doc.rust-lang.org/std/option/enum.Option.html), not feature-gated;
 
@@ -239,8 +241,8 @@ Rust's compound types (arrays, tuples, slices) are supported and treated like
 
 `maplike` provides and supports its own generic type,
 [`One`](https://docs.rs/maplike/latest/maplike/struct.One.html), for a
-collection that always has only one element. Think `Option` but without `None`
-or `Box` but without pointer indirection, behaving like a collection despite
+collection that always has only one element. Think `Option`, but without `None`.
+Or `Box`, but without pointer indirection, behaving like a collection despite
 holding a value not reference, allocated on the stack.
 
 Wrap your value in this type if you need to treat it as a single-element,
