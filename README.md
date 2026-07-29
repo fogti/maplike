@@ -34,13 +34,13 @@ crates. See the [Traits](#traits) section for a list of all available traits.
 
 This library is maintained and champaigned (aka.
 [dogfooded](https://en.wikipedia.org/wiki/Eating_your_own_dog_food)) by the
-author, who uses has it as a dependency for
+authors, who use has it as a dependency for
 - [`undoredo`](https://github.com/mikwielgus/undoredo), a versatile crate for
 implementing Undo/Redo and non-linear history tree using sparse deltas (diffs),
 snapshots, or commands on arbitrary data structures;
 - [`multi_bimap`](https://github.com/mikwielgus/multi_bimap), a crate
 implementing many-to-many bidirectional map using two antiparallel internal
-containers chosen by the user.
+containers chosen by the user;
 - [`dcel`](https://github.com/mikwielgus/dcel), a crate that implements the
 half-edge data structure (aka. doubly connected edge list, DCEL) generically
 over its underlying containers.
@@ -265,8 +265,6 @@ trait implementations for data structures from certain external crates:
   gated by the `indexmap` feature flag;
 - [`rstar::RTree`](https://docs.rs/rstar/0.12.2/rstar/index.html), gated by the
   `rstar` feature flag;
-- [`rstared::RTreed`](https://docs.rs/rstared/latest/rstared/), gated by the
-  `rstared` feature flag;
 - [`stable_vec::StableVec`](https://docs.rs/stable-vec/latest/stable_vec/),
   gated by the `stable-vec` feature flag;
 - [`thunderdome::Arena`](https://docs.rs/thunderdome/latest/thunderdome/),
