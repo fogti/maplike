@@ -303,8 +303,7 @@ insertion using the
 [`.reserve_for()`](https://docs.rs/stable-vec/latest/stable_vec/struct.StableVecFacade.html#method.reserve_for)
 method. For `thunderdome::Arena`, we insert at arbitrary key directly via the
 [`.insert_at()`](https://docs.rs/thunderdome/latest/thunderdome/struct.Arena.html#method.insert_at)
-method. Collections for which we could not achieve this are documented in the
-section below.
+method.
 
 For `Slab`, an interface to insert at an arbitrary key is missing apparently
 [because](https://github.com/tokio-rs/slab/issues/117#issuecomment-1159741097)
