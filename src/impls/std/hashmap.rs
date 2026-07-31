@@ -11,7 +11,7 @@ use std_::{collections::HashMap, hash::Hash};
 
 use crate::containers::Container;
 use crate::entry::{CombinedEntry, Entry, OccupiedEntry, VacantEntry};
-use crate::iter::IntoIter;
+use crate::iter::{IntoIter, Iter};
 use crate::ops::{Assign, Clear, Get, Insert, Modify, Remove, Set};
 
 impl<K, V> Container for HashMap<K, V> {
@@ -208,6 +208,15 @@ impl<'a, K: Eq + Hash, V> VacantEntry<'a, K, V> for HashMapVacantEntry<'a, K, V>
     #[inline(always)]
     fn insert_entry(self, value: V) -> Self::OccupiedEntry {
         HashMapVacantEntry::insert_entry(self, value)
+    }
+}
+
+impl<'a, K: 'a, V: 'a> Iter<'a, &'a K> for HashMap<K, V> {
+    type Iter = std_::collections::hash_map::Iter<'a, K, V>;
+
+    #[inline(always)]
+    fn iter(&'a self) -> Self::Iter {
+        HashMap::iter(self)
     }
 }
 

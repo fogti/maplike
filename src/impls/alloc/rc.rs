@@ -5,7 +5,7 @@
 use alloc_::rc::{Rc, Weak};
 
 use crate::containers::Container;
-use crate::iter::IntoIter;
+use crate::iter::{IntoIter, Iter};
 use crate::ops::{Assign, Clear, Get, Len, Modify, Put, Remove, Set, WithOne};
 
 impl<V> Container for Rc<V> {
@@ -72,6 +72,15 @@ impl<V> Len for Rc<V> {
     #[inline(always)]
     fn len(&self) -> usize {
         1
+    }
+}
+
+impl<'a, V: 'a> Iter<'a, usize> for Rc<V> {
+    type Iter = core::iter::Once<(usize, &'a V)>;
+
+    #[inline(always)]
+    fn iter(&'a self) -> Self::Iter {
+        core::iter::once((0, self.as_ref()))
     }
 }
 

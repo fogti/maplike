@@ -3,7 +3,7 @@
 // SPDX-License-Identifier: MIT OR Apache-2.0
 
 use crate::containers::Container;
-use crate::iter::IntoIter;
+use crate::iter::{IntoIter, Iter};
 use crate::ops::{Assign, Clear, Get, Len, Modify, Put, Remove, Set, WithOne};
 
 impl<V> Container for Option<V> {
@@ -80,6 +80,15 @@ impl<V> Len for Option<V> {
     #[inline(always)]
     fn len(&self) -> usize {
         self.is_some().into()
+    }
+}
+
+impl<'a, V: 'a> Iter<'a, usize> for Option<V> {
+    type Iter = core::iter::Enumerate<core::option::Iter<'a, V>>;
+
+    #[inline(always)]
+    fn iter(&'a self) -> Self::Iter {
+        Option::iter(self).enumerate()
     }
 }
 

@@ -7,7 +7,7 @@ use core::borrow::Borrow;
 use bidimap::{BiBTreeMap, Overwritten};
 
 use crate::containers::Container;
-use crate::iter::IntoIter;
+use crate::iter::{IntoIter, Iter};
 use crate::ops::{
     Assign, Clear, Get, GetByLeft, GetByRight, Insert, RemoveByLeft, RemoveByRight, Set,
 };
@@ -96,6 +96,15 @@ impl<L: Ord, R: Ord> Clear for BiBTreeMap<L, R> {
     #[inline(always)]
     fn clear(&mut self) {
         BiBTreeMap::clear(self);
+    }
+}
+
+impl<'a, L: 'a, R: 'a> Iter<'a, &'a L> for BiBTreeMap<L, R> {
+    type Iter = bidimap::btree::Iter<'a, L, R>;
+
+    #[inline(always)]
+    fn iter(&'a self) -> Self::Iter {
+        BiBTreeMap::iter(self)
     }
 }
 

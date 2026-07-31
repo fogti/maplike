@@ -5,7 +5,7 @@
 use alloc_::boxed::Box;
 
 use crate::containers::Container;
-use crate::iter::IntoIter;
+use crate::iter::{IntoIter, Iter};
 use crate::ops::{Assign, Get, Len, Modify, Put, Set, WithOne};
 
 impl<V> Container for Box<V> {
@@ -66,6 +66,15 @@ impl<V> Len for Box<V> {
     #[inline(always)]
     fn len(&self) -> usize {
         1
+    }
+}
+
+impl<'a, V: 'a> Iter<'a, usize> for Box<V> {
+    type Iter = core::iter::Once<(usize, &'a V)>;
+
+    #[inline(always)]
+    fn iter(&'a self) -> Self::Iter {
+        core::iter::once((0, self.as_ref()))
     }
 }
 

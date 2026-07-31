@@ -5,7 +5,7 @@
 use smallvec::{Array, SmallVec};
 
 use crate::containers::Container;
-use crate::iter::IntoIter;
+use crate::iter::{IntoIter, Iter};
 use crate::ops::{Assign, Clear, Get, Len, Modify, Pop, Push, Put, Resize, Set, WithOne};
 
 impl<A: Array> Container for SmallVec<A> {
@@ -102,6 +102,18 @@ impl<A: Array> Resize for SmallVec<A> {
         A::Item: Clone,
     {
         SmallVec::resize(self, new_len, value);
+    }
+}
+
+impl<'a, A: Array + 'a> Iter<'a, usize> for SmallVec<A>
+where
+    A::Item: 'a,
+{
+    type Iter = core::iter::Enumerate<core::slice::Iter<'a, A::Item>>;
+
+    #[inline(always)]
+    fn iter(&'a self) -> Self::Iter {
+        self.as_slice().iter().enumerate()
     }
 }
 

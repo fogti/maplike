@@ -176,7 +176,8 @@ array-like, and vec-like data structures:
 [`.len()`](https://docs.rs/maplike/latest/maplike/ops/trait.Len.html#tymethod.len),
 [`.resize()`](https://docs.rs/maplike/latest/maplike/ops/trait.Resize.html#tymethod.resize),
 [`.with_one()`](https://docs.rs/maplike/latest/maplike/ops/trait.WithOne.html#tymethod.with_one),
-[`.assign()`](https://docs.rs/maplike/latest/maplike/ops/trait.Assign.html#tymethod.assign), and
+[`.assign()`](https://docs.rs/maplike/latest/maplike/ops/trait.Assign.html#tymethod.assign),
+[`.iter()`](https://docs.rs/maplike/latest/maplike/iter/trait.Iter.html#tymethod.iter), and
 [`.into_iter()`](https://docs.rs/maplike/latest/maplike/iter/trait.IntoIter.html#tymethod.into_iter).
 
 For bidirectional maps, there are also variants of the get and remove operations

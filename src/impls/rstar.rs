@@ -5,7 +5,7 @@
 use rstar::{RTree, RTreeObject};
 
 use crate::containers::Container;
-use crate::iter::IntoIter;
+use crate::iter::{IntoIter, Iter};
 use crate::ops::{Assign, Clear, Get, Insert, Put, Remove, Set, WithOne};
 
 impl<K: RTreeObject> Container for RTree<K> {
@@ -80,6 +80,26 @@ impl<K: RTreeObject + PartialEq> Clear for RTree<K> {
         // TODO: Send a path upstream to implement `.clear()` efficiently,
         // without having to drain.
         self.drain().for_each(drop);
+    }
+}
+
+pub struct MapIter<'a, K: RTreeObject>(rstar::iterators::RTreeIterator<'a, K>);
+
+impl<'a, K: RTreeObject> Iterator for MapIter<'a, K> {
+    type Item = (&'a K, &'a ());
+
+    #[inline(always)]
+    fn next(&mut self) -> Option<Self::Item> {
+        self.0.next().map(|key| (key, &()))
+    }
+}
+
+impl<'a, K: RTreeObject + 'a> Iter<'a, &'a K> for RTree<K> {
+    type Iter = MapIter<'a, K>;
+
+    #[inline(always)]
+    fn iter(&'a self) -> MapIter<'a, K> {
+        MapIter(RTree::iter(self))
     }
 }
 

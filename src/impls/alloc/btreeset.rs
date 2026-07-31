@@ -7,7 +7,7 @@ use core::borrow::Borrow;
 use alloc_::collections::BTreeSet;
 
 use crate::containers::Container;
-use crate::iter::IntoIter;
+use crate::iter::{IntoIter, Iter};
 use crate::ops::{Assign, Clear, Get, Insert, Put, Remove, Set, WithOne};
 
 impl<K> Container for BTreeSet<K> {
@@ -85,6 +85,26 @@ impl<K: Ord> Clear for BTreeSet<K> {
     #[inline(always)]
     fn clear(&mut self) {
         BTreeSet::clear(self);
+    }
+}
+
+pub struct MapIter<'a, K>(alloc_::collections::btree_set::Iter<'a, K>);
+
+impl<'a, K> Iterator for MapIter<'a, K> {
+    type Item = (&'a K, &'a ());
+
+    #[inline(always)]
+    fn next(&mut self) -> Option<Self::Item> {
+        self.0.next().map(|key| (key, &()))
+    }
+}
+
+impl<'a, K: 'a> Iter<'a, &'a K> for BTreeSet<K> {
+    type Iter = MapIter<'a, K>;
+
+    #[inline(always)]
+    fn iter(&'a self) -> MapIter<'a, K> {
+        MapIter(BTreeSet::iter(self))
     }
 }
 

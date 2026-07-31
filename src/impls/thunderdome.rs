@@ -5,7 +5,7 @@
 use thunderdome::{Arena, Index};
 
 use crate::containers::Container;
-use crate::iter::IntoIter;
+use crate::iter::{IntoIter, Iter};
 use crate::ops::{Assign, Clear, Get, Insert, Modify, Push, Put, Remove, Set, WithOne};
 
 impl<V> Container for Arena<V> {
@@ -94,6 +94,15 @@ impl<V> Clear for Arena<V> {
     #[inline(always)]
     fn clear(&mut self) {
         Arena::clear(self);
+    }
+}
+
+impl<'a, V: 'a> Iter<'a, Index> for Arena<V> {
+    type Iter = thunderdome::iter::Iter<'a, V>;
+
+    #[inline(always)]
+    fn iter(&'a self) -> Self::Iter {
+        Arena::iter(self)
     }
 }
 

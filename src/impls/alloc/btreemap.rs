@@ -12,7 +12,7 @@ use alloc_::collections::btree_map::{
 
 use crate::containers::Container;
 use crate::entry::{CombinedEntry, Entry, OccupiedEntry, VacantEntry};
-use crate::iter::IntoIter;
+use crate::iter::{IntoIter, Iter};
 use crate::ops::{Assign, Clear, Get, Insert, Modify, Remove, Set};
 
 impl<K, V> Container for BTreeMap<K, V> {
@@ -209,6 +209,15 @@ impl<'a, K: Ord, V> VacantEntry<'a, K, V> for BTreeMapVacantEntry<'a, K, V> {
     #[inline(always)]
     fn insert_entry(self, value: V) -> Self::OccupiedEntry {
         BTreeMapVacantEntry::insert_entry(self, value)
+    }
+}
+
+impl<'a, K: 'a, V: 'a> Iter<'a, &'a K> for BTreeMap<K, V> {
+    type Iter = alloc_::collections::btree_map::Iter<'a, K, V>;
+
+    #[inline(always)]
+    fn iter(&'a self) -> Self::Iter {
+        BTreeMap::iter(self)
     }
 }
 

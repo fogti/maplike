@@ -8,7 +8,7 @@ use core::hash::Hash;
 use indexmap::IndexSet;
 
 use crate::containers::Container;
-use crate::iter::IntoIter;
+use crate::iter::{IntoIter, Iter};
 use crate::ops::{Assign, Clear, Get, Insert, Put, Remove, Set, WithOne};
 
 impl<K> Container for IndexSet<K> {
@@ -86,6 +86,26 @@ impl<K: Eq + Hash> Clear for IndexSet<K> {
     #[inline(always)]
     fn clear(&mut self) {
         IndexSet::clear(self);
+    }
+}
+
+pub struct MapIter<'a, K>(indexmap::set::Iter<'a, K>);
+
+impl<'a, K> Iterator for MapIter<'a, K> {
+    type Item = (&'a K, &'a ());
+
+    #[inline(always)]
+    fn next(&mut self) -> Option<Self::Item> {
+        self.0.next().map(|key| (key, &()))
+    }
+}
+
+impl<'a, K: 'a> Iter<'a, &'a K> for IndexSet<K> {
+    type Iter = MapIter<'a, K>;
+
+    #[inline(always)]
+    fn iter(&'a self) -> MapIter<'a, K> {
+        MapIter(IndexSet::iter(self))
     }
 }
 
