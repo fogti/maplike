@@ -5,7 +5,7 @@
 use std_::sync::{Arc, Weak};
 
 use crate::containers::Container;
-use crate::iter::{IntoIter, Iter, Values};
+use crate::iter::{Iter, Values};
 use crate::ops::{Assign, Clear, Get, Len, Modify, Put, Remove, Set, WithOne};
 
 impl<V> Container for Arc<V> {
@@ -90,19 +90,6 @@ impl<'a, V: 'a> Values<'a> for Arc<V> {
     #[inline(always)]
     fn values(&'a self) -> Self::Values {
         core::iter::once(self.as_ref())
-    }
-}
-
-impl<V> IntoIter<usize> for Arc<V> {
-    type IntoIter = core::iter::Enumerate<core::iter::Once<V>>;
-
-    #[inline(always)]
-    fn into_iter(self) -> Self::IntoIter {
-        core::iter::once(match Arc::try_unwrap(self) {
-            Ok(value) => value,
-            Err(_) => panic!("Arc is not uniquely owned"),
-        })
-        .enumerate()
     }
 }
 

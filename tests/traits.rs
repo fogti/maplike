@@ -494,13 +494,10 @@ mod rc_tests {
         assert_eq!(c.put(30), Some(21));
         assert_eq!(c.get(&0), Some(&30));
 
-        check_with_one::<i32, i32, Rc<i32>>(40, 40);
+        let c = Rc::with_one(40);
+        assert_eq!(c.get(&0), Some(&40));
+        assert_eq!(c.len(), 1);
         check_assign(Rc::new(1), Rc::new(2));
-
-        assert_eq!(
-            IntoIter::into_iter(Rc::new(9)).collect::<Vec<_>>(),
-            [(0, 9)],
-        );
     }
 
     #[test]
@@ -626,13 +623,10 @@ mod std_tests {
         assert_eq!(c.put(30), Some(21));
         assert_eq!(c.get(&0), Some(&30));
 
-        check_with_one::<i32, i32, Arc<i32>>(40, 40);
+        let c = Arc::with_one(40);
+        assert_eq!(c.get(&0), Some(&40));
+        assert_eq!(c.len(), 1);
         check_assign(Arc::new(1), Arc::new(2));
-
-        assert_eq!(
-            IntoIter::into_iter(Arc::new(9)).collect::<Vec<_>>(),
-            [(0, 9)],
-        );
     }
 
     #[test]
