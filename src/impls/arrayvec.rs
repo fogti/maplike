@@ -5,7 +5,7 @@
 use arrayvec::ArrayVec;
 
 use crate::containers::Container;
-use crate::iter::{IntoIter, Iter};
+use crate::iter::{IntoIter, Iter, Values};
 use crate::ops::{Assign, Clear, Get, Len, Modify, Pop, Push, Put, Set, WithOne};
 
 impl<T, const CAP: usize> Container for ArrayVec<T, CAP> {
@@ -101,6 +101,15 @@ impl<'a, T: 'a, const CAP: usize> Iter<'a, usize> for ArrayVec<T, CAP> {
     #[inline(always)]
     fn iter(&'a self) -> Self::Iter {
         self.as_slice().iter().enumerate()
+    }
+}
+
+impl<'a, T: 'a, const CAP: usize> Values<'a> for ArrayVec<T, CAP> {
+    type Values = core::slice::Iter<'a, T>;
+
+    #[inline(always)]
+    fn values(&'a self) -> Self::Values {
+        self.as_slice().iter()
     }
 }
 

@@ -3,7 +3,7 @@
 // SPDX-License-Identifier: MIT OR Apache-2.0
 
 use crate::containers::Container;
-use crate::iter::{IntoIter, Iter};
+use crate::iter::{IntoIter, Iter, Values};
 use crate::ops::{Assign, Get, Len, Modify, Put, Set, WithOne};
 
 macro_rules! impl_traits_for_scalar {
@@ -73,6 +73,15 @@ macro_rules! impl_traits_for_scalar {
                 #[inline(always)]
                 fn iter(&'a self) -> Self::Iter {
                     core::iter::once((0, self))
+                }
+            }
+
+            impl<'a> Values<'a> for $t {
+                type Values = core::iter::Once<&'a Self>;
+
+                #[inline(always)]
+                fn values(&'a self) -> Self::Values {
+                    core::iter::once(self)
                 }
             }
 

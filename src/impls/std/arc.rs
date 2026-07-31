@@ -5,7 +5,7 @@
 use std_::sync::{Arc, Weak};
 
 use crate::containers::Container;
-use crate::iter::{IntoIter, Iter};
+use crate::iter::{IntoIter, Iter, Values};
 use crate::ops::{Assign, Clear, Get, Len, Modify, Put, Remove, Set, WithOne};
 
 impl<V> Container for Arc<V> {
@@ -81,6 +81,15 @@ impl<'a, V: 'a> Iter<'a, usize> for Arc<V> {
     #[inline(always)]
     fn iter(&'a self) -> Self::Iter {
         core::iter::once((0, self.as_ref()))
+    }
+}
+
+impl<'a, V: 'a> Values<'a> for Arc<V> {
+    type Values = core::iter::Once<&'a V>;
+
+    #[inline(always)]
+    fn values(&'a self) -> Self::Values {
+        core::iter::once(self.as_ref())
     }
 }
 

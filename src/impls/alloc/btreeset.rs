@@ -7,7 +7,7 @@ use core::borrow::Borrow;
 use alloc_::collections::BTreeSet;
 
 use crate::containers::Container;
-use crate::iter::{IntoIter, Iter};
+use crate::iter::{IntoIter, Iter, Values, ValuesFromKeyValuePairs};
 use crate::ops::{Assign, Clear, Get, Insert, Put, Remove, Set, WithOne};
 
 impl<K> Container for BTreeSet<K> {
@@ -105,6 +105,15 @@ impl<'a, K: 'a> Iter<'a, &'a K> for BTreeSet<K> {
     #[inline(always)]
     fn iter(&'a self) -> MapIter<'a, K> {
         MapIter(BTreeSet::iter(self))
+    }
+}
+
+impl<'a, K: 'a> Values<'a> for BTreeSet<K> {
+    type Values = ValuesFromKeyValuePairs<MapIter<'a, K>>;
+
+    #[inline(always)]
+    fn values(&'a self) -> Self::Values {
+        ValuesFromKeyValuePairs(Iter::iter(self))
     }
 }
 

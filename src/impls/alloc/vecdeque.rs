@@ -5,7 +5,7 @@
 use alloc_::collections::VecDeque;
 
 use crate::containers::Container;
-use crate::iter::{IntoIter, Iter};
+use crate::iter::{IntoIter, Iter, Values};
 use crate::ops::{Assign, Clear, Get, Len, Modify, Pop, Push, Put, Set, WithOne};
 
 impl<V> Container for VecDeque<V> {
@@ -101,6 +101,15 @@ impl<'a, V: 'a> Iter<'a, usize> for VecDeque<V> {
     #[inline(always)]
     fn iter(&'a self) -> Self::Iter {
         VecDeque::iter(self).enumerate()
+    }
+}
+
+impl<'a, V: 'a> Values<'a> for VecDeque<V> {
+    type Values = alloc_::collections::vec_deque::Iter<'a, V>;
+
+    #[inline(always)]
+    fn values(&'a self) -> Self::Values {
+        VecDeque::iter(self)
     }
 }
 

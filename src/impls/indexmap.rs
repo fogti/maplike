@@ -13,7 +13,7 @@ use indexmap::map::{
 
 use crate::containers::Container;
 use crate::entry::{CombinedEntry, Entry, OccupiedEntry, VacantEntry};
-use crate::iter::{IntoIter, Iter};
+use crate::iter::{IntoIter, Iter, Values};
 use crate::ops::{Assign, Clear, Get, Insert, Modify, Remove, Set};
 
 impl<K, V> Container for IndexMap<K, V> {
@@ -219,6 +219,15 @@ impl<'a, K: 'a, V: 'a> Iter<'a, &'a K> for IndexMap<K, V> {
     #[inline(always)]
     fn iter(&'a self) -> Self::Iter {
         IndexMap::iter(self)
+    }
+}
+
+impl<'a, K: 'a, V: 'a> Values<'a> for IndexMap<K, V> {
+    type Values = indexmap::map::Values<'a, K, V>;
+
+    #[inline(always)]
+    fn values(&'a self) -> Self::Values {
+        IndexMap::values(self)
     }
 }
 

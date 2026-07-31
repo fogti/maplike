@@ -18,6 +18,18 @@ where
     fn iter(&'a self) -> Self::Iter;
 }
 
+/// Borrow the collection and yield values.
+pub trait Values<'a>: Container
+where
+    Self: 'a,
+{
+    /// Iterator that borrows values from the collection.
+    type Values: Iterator<Item = &'a Self::Value>;
+
+    /// Borrow the collection and yield values.
+    fn values(&'a self) -> Self::Values;
+}
+
 /// Consume the collection and yield owned key-value pairs.
 pub trait IntoIter<K>: Container {
     /// Iterator that consumes the collection.
@@ -25,4 +37,28 @@ pub trait IntoIter<K>: Container {
 
     /// Consume the collection and yield owned key-value pairs.
     fn into_iter(self) -> Self::IntoIter;
+}
+
+/// Adapter that turns an iterator of key-value pairs (`(K, V)`) into an
+/// iterator of values.
+///
+/// Useful for types that do not have `.values()` or value-iterating `.iter()`
+/// methods, but only have iterators over key-value pairs.
+pub struct ValuesFromKeyValuePairs<I>(pub I);
+
+impl<I, K, V> Iterator for ValuesFromKeyValuePairs<I>
+where
+    I: Iterator<Item = (K, V)>,
+{
+    type Item = V;
+
+    #[inline(always)]
+    fn next(&mut self) -> Option<V> {
+        self.0.next().map(|(_, value)| value)
+    }
+
+    #[inline(always)]
+    fn size_hint(&self) -> (usize, Option<usize>) {
+        self.0.size_hint()
+    }
 }

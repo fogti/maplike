@@ -5,7 +5,7 @@
 use stable_vec::StableVecFacade;
 
 use crate::containers::Container;
-use crate::iter::{IntoIter, Iter};
+use crate::iter::{IntoIter, Iter, Values};
 use crate::ops::{Assign, Clear, Get, Insert, Modify, Push, Put, Remove, Set, WithOne};
 
 impl<V, C: stable_vec::core::Core<V>> Container for StableVecFacade<V, C> {
@@ -105,6 +105,15 @@ impl<'a, V: 'a, C: stable_vec::core::Core<V> + 'a> Iter<'a, usize> for StableVec
     #[inline(always)]
     fn iter(&'a self) -> Self::Iter {
         StableVecFacade::iter(self)
+    }
+}
+
+impl<'a, V: 'a, C: stable_vec::core::Core<V> + 'a> Values<'a> for StableVecFacade<V, C> {
+    type Values = stable_vec::iter::Values<'a, V, C>;
+
+    #[inline(always)]
+    fn values(&'a self) -> Self::Values {
+        StableVecFacade::values(self)
     }
 }
 

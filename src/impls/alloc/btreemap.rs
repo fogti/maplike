@@ -12,7 +12,7 @@ use alloc_::collections::btree_map::{
 
 use crate::containers::Container;
 use crate::entry::{CombinedEntry, Entry, OccupiedEntry, VacantEntry};
-use crate::iter::{IntoIter, Iter};
+use crate::iter::{IntoIter, Iter, Values};
 use crate::ops::{Assign, Clear, Get, Insert, Modify, Remove, Set};
 
 impl<K, V> Container for BTreeMap<K, V> {
@@ -218,6 +218,15 @@ impl<'a, K: 'a, V: 'a> Iter<'a, &'a K> for BTreeMap<K, V> {
     #[inline(always)]
     fn iter(&'a self) -> Self::Iter {
         BTreeMap::iter(self)
+    }
+}
+
+impl<'a, K: 'a, V: 'a> Values<'a> for BTreeMap<K, V> {
+    type Values = alloc_::collections::btree_map::Values<'a, K, V>;
+
+    #[inline(always)]
+    fn values(&'a self) -> Self::Values {
+        BTreeMap::values(self)
     }
 }
 

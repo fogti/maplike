@@ -5,7 +5,7 @@
 use alloc_::vec::Vec;
 
 use crate::containers::Container;
-use crate::iter::{IntoIter, Iter};
+use crate::iter::{IntoIter, Iter, Values};
 use crate::ops::{Assign, Clear, Get, Len, Modify, Pop, Push, Put, Resize, Set, WithOne};
 
 impl<V> Container for Vec<V> {
@@ -111,6 +111,15 @@ impl<'a, V: 'a> Iter<'a, usize> for Vec<V> {
     #[inline(always)]
     fn iter(&'a self) -> Self::Iter {
         self.as_slice().iter().enumerate()
+    }
+}
+
+impl<'a, V: 'a> Values<'a> for Vec<V> {
+    type Values = core::slice::Iter<'a, V>;
+
+    #[inline(always)]
+    fn values(&'a self) -> Self::Values {
+        self.as_slice().iter()
     }
 }
 
