@@ -5,7 +5,7 @@
 use stable_vec::StableVecFacade;
 
 use crate::containers::Container;
-use crate::iter::{IntoIter, Iter, Values};
+use crate::iter::{IntoIter, IntoValues, Iter, Values, ValuesFromKeyValuePairs};
 use crate::ops::{Assign, Clear, Get, Insert, Modify, Push, Put, Remove, Set, WithOne};
 
 impl<V, C: stable_vec::core::Core<V>> Container for StableVecFacade<V, C> {
@@ -99,21 +99,30 @@ impl<V, C: stable_vec::core::Core<V>> Clear for StableVecFacade<V, C> {
     }
 }
 
-impl<'a, V: 'a, C: stable_vec::core::Core<V> + 'a> Iter<'a, usize> for StableVecFacade<V, C> {
-    type Iter = stable_vec::iter::Iter<'a, V, C>;
-
-    #[inline(always)]
-    fn iter(&'a self) -> Self::Iter {
-        StableVecFacade::iter(self)
-    }
-}
-
 impl<'a, V: 'a, C: stable_vec::core::Core<V> + 'a> Values<'a> for StableVecFacade<V, C> {
     type Values = stable_vec::iter::Values<'a, V, C>;
 
     #[inline(always)]
     fn values(&'a self) -> Self::Values {
         StableVecFacade::values(self)
+    }
+}
+
+impl<V, C: stable_vec::core::Core<V>> IntoValues for StableVecFacade<V, C> {
+    type IntoValues = ValuesFromKeyValuePairs<stable_vec::iter::IntoIter<V, C>>;
+
+    #[inline(always)]
+    fn into_values(self) -> Self::IntoValues {
+        ValuesFromKeyValuePairs(IntoIterator::into_iter(self))
+    }
+}
+
+impl<'a, V: 'a, C: stable_vec::core::Core<V> + 'a> Iter<'a, usize> for StableVecFacade<V, C> {
+    type Iter = stable_vec::iter::Iter<'a, V, C>;
+
+    #[inline(always)]
+    fn iter(&'a self) -> Self::Iter {
+        StableVecFacade::iter(self)
     }
 }
 

@@ -8,7 +8,7 @@ use core::hash::Hash;
 use indexmap::IndexSet;
 
 use crate::containers::Container;
-use crate::iter::{IntoIter, Iter, Values, ValuesFromKeyValuePairs};
+use crate::iter::{IntoIter, IntoValues, Iter, Values, ValuesFromKeyValuePairs};
 use crate::ops::{Assign, Clear, Get, Insert, Put, Remove, Set, WithOne};
 
 impl<K> Container for IndexSet<K> {
@@ -89,6 +89,24 @@ impl<K: Eq + Hash> Clear for IndexSet<K> {
     }
 }
 
+impl<'a, K: 'a> Values<'a> for IndexSet<K> {
+    type Values = ValuesFromKeyValuePairs<MapIter<'a, K>>;
+
+    #[inline(always)]
+    fn values(&'a self) -> Self::Values {
+        ValuesFromKeyValuePairs(Iter::iter(self))
+    }
+}
+
+impl<K> IntoValues for IndexSet<K> {
+    type IntoValues = ValuesFromKeyValuePairs<MapIntoIter<K>>;
+
+    #[inline(always)]
+    fn into_values(self) -> Self::IntoValues {
+        ValuesFromKeyValuePairs(IntoIter::into_iter(self))
+    }
+}
+
 pub struct MapIter<'a, K>(indexmap::set::Iter<'a, K>);
 
 impl<'a, K> Iterator for MapIter<'a, K> {
@@ -106,15 +124,6 @@ impl<'a, K: 'a> Iter<'a, &'a K> for IndexSet<K> {
     #[inline(always)]
     fn iter(&'a self) -> MapIter<'a, K> {
         MapIter(IndexSet::iter(self))
-    }
-}
-
-impl<'a, K: 'a> Values<'a> for IndexSet<K> {
-    type Values = ValuesFromKeyValuePairs<MapIter<'a, K>>;
-
-    #[inline(always)]
-    fn values(&'a self) -> Self::Values {
-        ValuesFromKeyValuePairs(Iter::iter(self))
     }
 }
 

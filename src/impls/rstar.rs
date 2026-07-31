@@ -5,7 +5,7 @@
 use rstar::{RTree, RTreeObject};
 
 use crate::containers::Container;
-use crate::iter::{IntoIter, Iter, Values, ValuesFromKeyValuePairs};
+use crate::iter::{IntoIter, IntoValues, Iter, Values, ValuesFromKeyValuePairs};
 use crate::ops::{Assign, Clear, Get, Insert, Put, Remove, Set, WithOne};
 
 impl<K: RTreeObject> Container for RTree<K> {
@@ -83,6 +83,24 @@ impl<K: RTreeObject + PartialEq> Clear for RTree<K> {
     }
 }
 
+impl<'a, K: RTreeObject + 'a> Values<'a> for RTree<K> {
+    type Values = ValuesFromKeyValuePairs<MapIter<'a, K>>;
+
+    #[inline(always)]
+    fn values(&'a self) -> Self::Values {
+        ValuesFromKeyValuePairs(Iter::iter(self))
+    }
+}
+
+impl<K: RTreeObject> IntoValues for RTree<K> {
+    type IntoValues = ValuesFromKeyValuePairs<MapIntoIter<K>>;
+
+    #[inline(always)]
+    fn into_values(self) -> Self::IntoValues {
+        ValuesFromKeyValuePairs(IntoIter::into_iter(self))
+    }
+}
+
 pub struct MapIter<'a, K: RTreeObject>(rstar::iterators::RTreeIterator<'a, K>);
 
 impl<'a, K: RTreeObject> Iterator for MapIter<'a, K> {
@@ -100,15 +118,6 @@ impl<'a, K: RTreeObject + 'a> Iter<'a, &'a K> for RTree<K> {
     #[inline(always)]
     fn iter(&'a self) -> MapIter<'a, K> {
         MapIter(RTree::iter(self))
-    }
-}
-
-impl<'a, K: RTreeObject + 'a> Values<'a> for RTree<K> {
-    type Values = ValuesFromKeyValuePairs<MapIter<'a, K>>;
-
-    #[inline(always)]
-    fn values(&'a self) -> Self::Values {
-        ValuesFromKeyValuePairs(Iter::iter(self))
     }
 }
 

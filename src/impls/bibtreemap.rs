@@ -7,7 +7,7 @@ use core::borrow::Borrow;
 use bidimap::{BiBTreeMap, Overwritten};
 
 use crate::containers::Container;
-use crate::iter::{IntoIter, Iter, Values, ValuesFromKeyValuePairs};
+use crate::iter::{IntoIter, IntoValues, Iter, Values, ValuesFromKeyValuePairs};
 use crate::ops::{
     Assign, Clear, Get, GetByLeft, GetByRight, Insert, RemoveByLeft, RemoveByRight, Set,
 };
@@ -99,21 +99,30 @@ impl<L: Ord, R: Ord> Clear for BiBTreeMap<L, R> {
     }
 }
 
-impl<'a, L: 'a, R: 'a> Iter<'a, &'a L> for BiBTreeMap<L, R> {
-    type Iter = bidimap::btree::Iter<'a, L, R>;
-
-    #[inline(always)]
-    fn iter(&'a self) -> Self::Iter {
-        BiBTreeMap::iter(self)
-    }
-}
-
 impl<'a, L: 'a, R: 'a> Values<'a> for BiBTreeMap<L, R> {
     type Values = ValuesFromKeyValuePairs<bidimap::btree::Iter<'a, L, R>>;
 
     #[inline(always)]
     fn values(&'a self) -> Self::Values {
         ValuesFromKeyValuePairs(BiBTreeMap::iter(self))
+    }
+}
+
+impl<L, R> IntoValues for BiBTreeMap<L, R> {
+    type IntoValues = ValuesFromKeyValuePairs<bidimap::btree::IntoIter<L, R>>;
+
+    #[inline(always)]
+    fn into_values(self) -> Self::IntoValues {
+        ValuesFromKeyValuePairs(IntoIterator::into_iter(self))
+    }
+}
+
+impl<'a, L: 'a, R: 'a> Iter<'a, &'a L> for BiBTreeMap<L, R> {
+    type Iter = bidimap::btree::Iter<'a, L, R>;
+
+    #[inline(always)]
+    fn iter(&'a self) -> Self::Iter {
+        BiBTreeMap::iter(self)
     }
 }
 

@@ -5,7 +5,7 @@
 use smallvec::{Array, SmallVec};
 
 use crate::containers::Container;
-use crate::iter::{IntoIter, Iter, Values};
+use crate::iter::{IntoIter, IntoValues, Iter, Values};
 use crate::ops::{Assign, Clear, Get, Len, Modify, Pop, Push, Put, Resize, Set, WithOne};
 
 impl<A: Array> Container for SmallVec<A> {
@@ -105,18 +105,6 @@ impl<A: Array> Resize for SmallVec<A> {
     }
 }
 
-impl<'a, A: Array + 'a> Iter<'a, usize> for SmallVec<A>
-where
-    A::Item: 'a,
-{
-    type Iter = core::iter::Enumerate<core::slice::Iter<'a, A::Item>>;
-
-    #[inline(always)]
-    fn iter(&'a self) -> Self::Iter {
-        self.as_slice().iter().enumerate()
-    }
-}
-
 impl<'a, A: Array + 'a> Values<'a> for SmallVec<A>
 where
     A::Item: 'a,
@@ -126,6 +114,27 @@ where
     #[inline(always)]
     fn values(&'a self) -> Self::Values {
         self.as_slice().iter()
+    }
+}
+
+impl<A: Array> IntoValues for SmallVec<A> {
+    type IntoValues = <SmallVec<A> as IntoIterator>::IntoIter;
+
+    #[inline(always)]
+    fn into_values(self) -> Self::IntoValues {
+        IntoIterator::into_iter(self)
+    }
+}
+
+impl<'a, A: Array + 'a> Iter<'a, usize> for SmallVec<A>
+where
+    A::Item: 'a,
+{
+    type Iter = core::iter::Enumerate<core::slice::Iter<'a, A::Item>>;
+
+    #[inline(always)]
+    fn iter(&'a self) -> Self::Iter {
+        self.as_slice().iter().enumerate()
     }
 }
 

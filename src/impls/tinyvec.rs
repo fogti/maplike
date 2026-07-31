@@ -5,7 +5,7 @@
 use tinyvec::{Array, ArrayVec, TinyVec};
 
 use crate::containers::Container;
-use crate::iter::{IntoIter, Iter, Values};
+use crate::iter::{IntoIter, IntoValues, Iter, Values};
 use crate::ops::{Assign, Clear, Get, Len, Modify, Pop, Push, Put, Resize, Set, WithOne};
 
 impl<A: Array> Container for ArrayVec<A> {
@@ -105,18 +105,6 @@ impl<A: Array> Resize for ArrayVec<A> {
     }
 }
 
-impl<'a, A: Array + 'a> Iter<'a, usize> for ArrayVec<A>
-where
-    A::Item: 'a,
-{
-    type Iter = core::iter::Enumerate<core::slice::Iter<'a, A::Item>>;
-
-    #[inline(always)]
-    fn iter(&'a self) -> Self::Iter {
-        self.as_slice().iter().enumerate()
-    }
-}
-
 impl<'a, A: Array + 'a> Values<'a> for ArrayVec<A>
 where
     A::Item: 'a,
@@ -126,6 +114,27 @@ where
     #[inline(always)]
     fn values(&'a self) -> Self::Values {
         self.as_slice().iter()
+    }
+}
+
+impl<A: Array> IntoValues for ArrayVec<A> {
+    type IntoValues = <ArrayVec<A> as IntoIterator>::IntoIter;
+
+    #[inline(always)]
+    fn into_values(self) -> Self::IntoValues {
+        IntoIterator::into_iter(self)
+    }
+}
+
+impl<'a, A: Array + 'a> Iter<'a, usize> for ArrayVec<A>
+where
+    A::Item: 'a,
+{
+    type Iter = core::iter::Enumerate<core::slice::Iter<'a, A::Item>>;
+
+    #[inline(always)]
+    fn iter(&'a self) -> Self::Iter {
+        self.as_slice().iter().enumerate()
     }
 }
 
@@ -235,18 +244,6 @@ impl<A: Array> Resize for TinyVec<A> {
     }
 }
 
-impl<'a, A: Array + 'a> Iter<'a, usize> for TinyVec<A>
-where
-    A::Item: 'a,
-{
-    type Iter = core::iter::Enumerate<core::slice::Iter<'a, A::Item>>;
-
-    #[inline(always)]
-    fn iter(&'a self) -> Self::Iter {
-        self.as_slice().iter().enumerate()
-    }
-}
-
 impl<'a, A: Array + 'a> Values<'a> for TinyVec<A>
 where
     A::Item: 'a,
@@ -256,6 +253,27 @@ where
     #[inline(always)]
     fn values(&'a self) -> Self::Values {
         self.as_slice().iter()
+    }
+}
+
+impl<A: Array> IntoValues for TinyVec<A> {
+    type IntoValues = <TinyVec<A> as IntoIterator>::IntoIter;
+
+    #[inline(always)]
+    fn into_values(self) -> Self::IntoValues {
+        IntoIterator::into_iter(self)
+    }
+}
+
+impl<'a, A: Array + 'a> Iter<'a, usize> for TinyVec<A>
+where
+    A::Item: 'a,
+{
+    type Iter = core::iter::Enumerate<core::slice::Iter<'a, A::Item>>;
+
+    #[inline(always)]
+    fn iter(&'a self) -> Self::Iter {
+        self.as_slice().iter().enumerate()
     }
 }
 

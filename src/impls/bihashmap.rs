@@ -8,7 +8,7 @@ use bidimap::{BiHashMap, Overwritten};
 use std_::hash::Hash;
 
 use crate::containers::Container;
-use crate::iter::{IntoIter, Iter, Values, ValuesFromKeyValuePairs};
+use crate::iter::{IntoIter, IntoValues, Iter, Values, ValuesFromKeyValuePairs};
 use crate::ops::{
     Assign, Clear, Get, GetByLeft, GetByRight, Insert, RemoveByLeft, RemoveByRight, Set,
 };
@@ -100,21 +100,30 @@ impl<L: Eq + Hash, R: Eq + Hash> Clear for BiHashMap<L, R> {
     }
 }
 
-impl<'a, L: 'a, R: 'a> Iter<'a, &'a L> for BiHashMap<L, R> {
-    type Iter = bidimap::hash::Iter<'a, L, R>;
-
-    #[inline(always)]
-    fn iter(&'a self) -> Self::Iter {
-        BiHashMap::iter(self)
-    }
-}
-
 impl<'a, L: 'a, R: 'a> Values<'a> for BiHashMap<L, R> {
     type Values = ValuesFromKeyValuePairs<bidimap::hash::Iter<'a, L, R>>;
 
     #[inline(always)]
     fn values(&'a self) -> Self::Values {
         ValuesFromKeyValuePairs(BiHashMap::iter(self))
+    }
+}
+
+impl<L, R> IntoValues for BiHashMap<L, R> {
+    type IntoValues = ValuesFromKeyValuePairs<bidimap::hash::IntoIter<L, R>>;
+
+    #[inline(always)]
+    fn into_values(self) -> Self::IntoValues {
+        ValuesFromKeyValuePairs(IntoIterator::into_iter(self))
+    }
+}
+
+impl<'a, L: 'a, R: 'a> Iter<'a, &'a L> for BiHashMap<L, R> {
+    type Iter = bidimap::hash::Iter<'a, L, R>;
+
+    #[inline(always)]
+    fn iter(&'a self) -> Self::Iter {
+        BiHashMap::iter(self)
     }
 }
 

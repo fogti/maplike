@@ -75,21 +75,21 @@ impl<V> Len for Arc<V> {
     }
 }
 
-impl<'a, V: 'a> Iter<'a, usize> for Arc<V> {
-    type Iter = core::iter::Once<(usize, &'a V)>;
-
-    #[inline(always)]
-    fn iter(&'a self) -> Self::Iter {
-        core::iter::once((0, self.as_ref()))
-    }
-}
-
 impl<'a, V: 'a> Values<'a> for Arc<V> {
     type Values = core::iter::Once<&'a V>;
 
     #[inline(always)]
     fn values(&'a self) -> Self::Values {
         core::iter::once(self.as_ref())
+    }
+}
+
+impl<'a, V: 'a> Iter<'a, usize> for Arc<V> {
+    type Iter = core::iter::Once<(usize, &'a V)>;
+
+    #[inline(always)]
+    fn iter(&'a self) -> Self::Iter {
+        core::iter::once((0, self.as_ref()))
     }
 }
 

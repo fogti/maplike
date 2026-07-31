@@ -5,7 +5,7 @@
 use thunderdome::{Arena, Index};
 
 use crate::containers::Container;
-use crate::iter::{IntoIter, Iter, Values, ValuesFromKeyValuePairs};
+use crate::iter::{IntoIter, IntoValues, Iter, Values, ValuesFromKeyValuePairs};
 use crate::ops::{Assign, Clear, Get, Insert, Modify, Push, Put, Remove, Set, WithOne};
 
 impl<V> Container for Arena<V> {
@@ -97,21 +97,30 @@ impl<V> Clear for Arena<V> {
     }
 }
 
-impl<'a, V: 'a> Iter<'a, Index> for Arena<V> {
-    type Iter = thunderdome::iter::Iter<'a, V>;
-
-    #[inline(always)]
-    fn iter(&'a self) -> Self::Iter {
-        Arena::iter(self)
-    }
-}
-
 impl<'a, V: 'a> Values<'a> for Arena<V> {
     type Values = ValuesFromKeyValuePairs<thunderdome::iter::Iter<'a, V>>;
 
     #[inline(always)]
     fn values(&'a self) -> Self::Values {
         ValuesFromKeyValuePairs(Arena::iter(self))
+    }
+}
+
+impl<V> IntoValues for Arena<V> {
+    type IntoValues = ValuesFromKeyValuePairs<thunderdome::iter::IntoIter<V>>;
+
+    #[inline(always)]
+    fn into_values(self) -> Self::IntoValues {
+        ValuesFromKeyValuePairs(IntoIterator::into_iter(self))
+    }
+}
+
+impl<'a, V: 'a> Iter<'a, Index> for Arena<V> {
+    type Iter = thunderdome::iter::Iter<'a, V>;
+
+    #[inline(always)]
+    fn iter(&'a self) -> Self::Iter {
+        Arena::iter(self)
     }
 }
 

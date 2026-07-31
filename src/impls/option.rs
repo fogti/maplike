@@ -3,7 +3,7 @@
 // SPDX-License-Identifier: MIT OR Apache-2.0
 
 use crate::containers::Container;
-use crate::iter::{IntoIter, Iter, Values};
+use crate::iter::{IntoIter, IntoValues, Iter, Values};
 use crate::ops::{Assign, Clear, Get, Len, Modify, Put, Remove, Set, WithOne};
 
 impl<V> Container for Option<V> {
@@ -83,21 +83,30 @@ impl<V> Len for Option<V> {
     }
 }
 
-impl<'a, V: 'a> Iter<'a, usize> for Option<V> {
-    type Iter = core::iter::Enumerate<core::option::Iter<'a, V>>;
-
-    #[inline(always)]
-    fn iter(&'a self) -> Self::Iter {
-        Option::iter(self).enumerate()
-    }
-}
-
 impl<'a, V: 'a> Values<'a> for Option<V> {
     type Values = core::option::Iter<'a, V>;
 
     #[inline(always)]
     fn values(&'a self) -> Self::Values {
         Option::iter(self)
+    }
+}
+
+impl<V> IntoValues for Option<V> {
+    type IntoValues = core::option::IntoIter<V>;
+
+    #[inline(always)]
+    fn into_values(self) -> Self::IntoValues {
+        IntoIterator::into_iter(self)
+    }
+}
+
+impl<'a, V: 'a> Iter<'a, usize> for Option<V> {
+    type Iter = core::iter::Enumerate<core::option::Iter<'a, V>>;
+
+    #[inline(always)]
+    fn iter(&'a self) -> Self::Iter {
+        Option::iter(self).enumerate()
     }
 }
 

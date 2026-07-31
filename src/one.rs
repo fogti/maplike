@@ -5,7 +5,7 @@
 //! `One`, a collection that holds always exactly one element.
 
 use crate::containers::Container;
-use crate::iter::{IntoIter, Iter, Values};
+use crate::iter::{IntoIter, IntoValues, Iter, Values};
 use crate::ops::{Assign, Get, Len, Modify, Put, Set, WithOne};
 
 /// A collection that holds exactly one element.
@@ -89,21 +89,30 @@ impl<V> Len for One<V> {
     }
 }
 
-impl<'a, V: 'a> Iter<'a, usize> for One<V> {
-    type Iter = core::iter::Once<(usize, &'a V)>;
-
-    #[inline(always)]
-    fn iter(&'a self) -> Self::Iter {
-        core::iter::once((0, &self.value))
-    }
-}
-
 impl<'a, V: 'a> Values<'a> for One<V> {
     type Values = core::iter::Once<&'a V>;
 
     #[inline(always)]
     fn values(&'a self) -> Self::Values {
         core::iter::once(&self.value)
+    }
+}
+
+impl<V> IntoValues for One<V> {
+    type IntoValues = core::iter::Once<V>;
+
+    #[inline(always)]
+    fn into_values(self) -> Self::IntoValues {
+        core::iter::once(self.value)
+    }
+}
+
+impl<'a, V: 'a> Iter<'a, usize> for One<V> {
+    type Iter = core::iter::Once<(usize, &'a V)>;
+
+    #[inline(always)]
+    fn iter(&'a self) -> Self::Iter {
+        core::iter::once((0, &self.value))
     }
 }
 

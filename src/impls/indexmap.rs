@@ -13,7 +13,7 @@ use indexmap::map::{
 
 use crate::containers::Container;
 use crate::entry::{CombinedEntry, Entry, OccupiedEntry, VacantEntry};
-use crate::iter::{IntoIter, Iter, Values};
+use crate::iter::{IntoIter, IntoValues, Iter, Values};
 use crate::ops::{Assign, Clear, Get, Insert, Modify, Remove, Set};
 
 impl<K, V> Container for IndexMap<K, V> {
@@ -213,21 +213,30 @@ impl<'a, K: Eq + Hash, V> VacantEntry<'a, K, V> for IndexMapVacantEntry<'a, K, V
     }
 }
 
-impl<'a, K: 'a, V: 'a> Iter<'a, &'a K> for IndexMap<K, V> {
-    type Iter = indexmap::map::Iter<'a, K, V>;
-
-    #[inline(always)]
-    fn iter(&'a self) -> Self::Iter {
-        IndexMap::iter(self)
-    }
-}
-
 impl<'a, K: 'a, V: 'a> Values<'a> for IndexMap<K, V> {
     type Values = indexmap::map::Values<'a, K, V>;
 
     #[inline(always)]
     fn values(&'a self) -> Self::Values {
         IndexMap::values(self)
+    }
+}
+
+impl<K, V> IntoValues for IndexMap<K, V> {
+    type IntoValues = indexmap::map::IntoValues<K, V>;
+
+    #[inline(always)]
+    fn into_values(self) -> Self::IntoValues {
+        IndexMap::into_values(self)
+    }
+}
+
+impl<'a, K: 'a, V: 'a> Iter<'a, &'a K> for IndexMap<K, V> {
+    type Iter = indexmap::map::Iter<'a, K, V>;
+
+    #[inline(always)]
+    fn iter(&'a self) -> Self::Iter {
+        IndexMap::iter(self)
     }
 }
 

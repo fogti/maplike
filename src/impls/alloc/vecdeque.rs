@@ -5,7 +5,7 @@
 use alloc_::collections::VecDeque;
 
 use crate::containers::Container;
-use crate::iter::{IntoIter, Iter, Values};
+use crate::iter::{IntoIter, IntoValues, Iter, Values};
 use crate::ops::{Assign, Clear, Get, Len, Modify, Pop, Push, Put, Set, WithOne};
 
 impl<V> Container for VecDeque<V> {
@@ -95,21 +95,30 @@ impl<V> Len for VecDeque<V> {
     }
 }
 
-impl<'a, V: 'a> Iter<'a, usize> for VecDeque<V> {
-    type Iter = core::iter::Enumerate<alloc_::collections::vec_deque::Iter<'a, V>>;
-
-    #[inline(always)]
-    fn iter(&'a self) -> Self::Iter {
-        VecDeque::iter(self).enumerate()
-    }
-}
-
 impl<'a, V: 'a> Values<'a> for VecDeque<V> {
     type Values = alloc_::collections::vec_deque::Iter<'a, V>;
 
     #[inline(always)]
     fn values(&'a self) -> Self::Values {
         VecDeque::iter(self)
+    }
+}
+
+impl<V> IntoValues for VecDeque<V> {
+    type IntoValues = alloc_::collections::vec_deque::IntoIter<V>;
+
+    #[inline(always)]
+    fn into_values(self) -> Self::IntoValues {
+        IntoIterator::into_iter(self)
+    }
+}
+
+impl<'a, V: 'a> Iter<'a, usize> for VecDeque<V> {
+    type Iter = core::iter::Enumerate<alloc_::collections::vec_deque::Iter<'a, V>>;
+
+    #[inline(always)]
+    fn iter(&'a self) -> Self::Iter {
+        VecDeque::iter(self).enumerate()
     }
 }
 

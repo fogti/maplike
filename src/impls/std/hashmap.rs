@@ -11,7 +11,7 @@ use std_::{collections::HashMap, hash::Hash};
 
 use crate::containers::Container;
 use crate::entry::{CombinedEntry, Entry, OccupiedEntry, VacantEntry};
-use crate::iter::{IntoIter, Iter, Values};
+use crate::iter::{IntoIter, IntoValues, Iter, Values};
 use crate::ops::{Assign, Clear, Get, Insert, Modify, Remove, Set};
 
 impl<K, V> Container for HashMap<K, V> {
@@ -211,21 +211,30 @@ impl<'a, K: Eq + Hash, V> VacantEntry<'a, K, V> for HashMapVacantEntry<'a, K, V>
     }
 }
 
-impl<'a, K: 'a, V: 'a> Iter<'a, &'a K> for HashMap<K, V> {
-    type Iter = std_::collections::hash_map::Iter<'a, K, V>;
-
-    #[inline(always)]
-    fn iter(&'a self) -> Self::Iter {
-        HashMap::iter(self)
-    }
-}
-
 impl<'a, K: 'a, V: 'a> Values<'a> for HashMap<K, V> {
     type Values = std_::collections::hash_map::Values<'a, K, V>;
 
     #[inline(always)]
     fn values(&'a self) -> Self::Values {
         HashMap::values(self)
+    }
+}
+
+impl<K, V> IntoValues for HashMap<K, V> {
+    type IntoValues = std_::collections::hash_map::IntoValues<K, V>;
+
+    #[inline(always)]
+    fn into_values(self) -> Self::IntoValues {
+        HashMap::into_values(self)
+    }
+}
+
+impl<'a, K: 'a, V: 'a> Iter<'a, &'a K> for HashMap<K, V> {
+    type Iter = std_::collections::hash_map::Iter<'a, K, V>;
+
+    #[inline(always)]
+    fn iter(&'a self) -> Self::Iter {
+        HashMap::iter(self)
     }
 }
 
