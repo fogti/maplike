@@ -2,8 +2,8 @@
 //
 // SPDX-License-Identifier: MIT OR Apache-2.0
 
-// This file was generated using Claude Opus 4.8 Medium with many manual and
-// automated modifications.
+// This file was generated using Claude Opus 4.8 Medium and Cursor Grok 4.5 with
+// many manual and automated modifications.
 
 #![allow(dead_code)]
 #![allow(unused_imports)]
@@ -1144,5 +1144,171 @@ mod bidimap_tests {
         let mut b = BiHashMap::new();
         b.insert("b".to_string(), 2i32);
         check_assign(a, b);
+    }
+}
+
+#[cfg(feature = "geo")]
+mod geo_tests {
+    use super::*;
+    use geo_types::{
+        Coord, Geometry, GeometryCollection, Line, LineString, MultiLineString, MultiPoint,
+        MultiPolygon, Point, Polygon, Rect, Triangle, coord, line_string,
+    };
+
+    impl FromUsize for Coord<i32> {
+        fn from_usize(u: usize) -> Self {
+            Coord { x: u as i32, y: 0 }
+        }
+    }
+
+    impl FromUsize for Point<i32> {
+        fn from_usize(u: usize) -> Self {
+            Point::new(u as i32, 0)
+        }
+    }
+
+    impl FromUsize for LineString<i32> {
+        fn from_usize(u: usize) -> Self {
+            let x = u as i32;
+            line_string![(x: x, y: 0), (x: x + 1, y: 0)]
+        }
+    }
+
+    impl FromUsize for Polygon<i32> {
+        fn from_usize(u: usize) -> Self {
+            let x = u as i32;
+            Polygon::new(
+                line_string![
+                    (x: x, y: x),
+                    (x: x + 1, y: x),
+                    (x: x + 1, y: x + 1),
+                    (x: x, y: x),
+                ],
+                vec![],
+            )
+        }
+    }
+
+    impl FromUsize for Geometry<i32> {
+        fn from_usize(u: usize) -> Self {
+            Geometry::Point(Point::from_usize(u))
+        }
+    }
+
+    #[test]
+    fn test_traits_on_geo_scalars() {
+        check_scalar(
+            coord! { x: 1, y: 2 },
+            coord! { x: 3, y: 4 },
+            coord! { x: 5, y: 6 },
+            coord! { x: 7, y: 8 },
+        );
+        check_scalar(
+            Point::new(1, 2),
+            Point::new(3, 4),
+            Point::new(5, 6),
+            Point::new(7, 8),
+        );
+        check_scalar(
+            Line::new(coord! { x: 0, y: 0 }, coord! { x: 1, y: 1 }),
+            Line::new(coord! { x: 2, y: 2 }, coord! { x: 3, y: 3 }),
+            Line::new(coord! { x: 4, y: 4 }, coord! { x: 5, y: 5 }),
+            Line::new(coord! { x: 6, y: 6 }, coord! { x: 7, y: 7 }),
+        );
+        check_scalar(
+            Rect::new(coord! { x: 0, y: 0 }, coord! { x: 1, y: 1 }),
+            Rect::new(coord! { x: 2, y: 2 }, coord! { x: 3, y: 3 }),
+            Rect::new(coord! { x: 4, y: 4 }, coord! { x: 5, y: 5 }),
+            Rect::new(coord! { x: 6, y: 6 }, coord! { x: 7, y: 7 }),
+        );
+        check_scalar(
+            Triangle::new(
+                coord! { x: 0, y: 0 },
+                coord! { x: 1, y: 0 },
+                coord! { x: 0, y: 1 },
+            ),
+            Triangle::new(
+                coord! { x: 2, y: 2 },
+                coord! { x: 3, y: 2 },
+                coord! { x: 2, y: 3 },
+            ),
+            Triangle::new(
+                coord! { x: 4, y: 4 },
+                coord! { x: 5, y: 4 },
+                coord! { x: 4, y: 5 },
+            ),
+            Triangle::new(
+                coord! { x: 6, y: 6 },
+                coord! { x: 7, y: 6 },
+                coord! { x: 6, y: 7 },
+            ),
+        );
+
+        let poly = |x: i32| {
+            Polygon::new(
+                line_string![
+                    (x: x, y: x),
+                    (x: x + 1, y: x),
+                    (x: x + 1, y: x + 1),
+                    (x: x, y: x),
+                ],
+                vec![],
+            )
+        };
+        check_scalar(poly(0), poly(2), poly(4), poly(6));
+        check_scalar(
+            Geometry::Point(Point::new(1, 2)),
+            Geometry::Point(Point::new(3, 4)),
+            Geometry::Point(Point::new(5, 6)),
+            Geometry::Point(Point::new(7, 8)),
+        );
+    }
+
+    #[test]
+    fn test_traits_on_geo_veclike() {
+        check_with_one::<Coord<i32>, Coord<i32>, LineString<i32>>(
+            coord! { x: 30, y: 0 },
+            coord! { x: 30, y: 0 },
+        );
+        check_vec::<Coord<i32>, LineString<i32>>(LineString::new(vec![]));
+        check_resize::<Coord<i32>, LineString<i32>>(LineString::new(vec![]));
+        check_assign(
+            LineString::new(vec![coord! { x: 1, y: 0 }]),
+            LineString::new(vec![coord! { x: 2, y: 0 }, coord! { x: 3, y: 0 }]),
+        );
+
+        check_with_one::<Point<i32>, Point<i32>, MultiPoint<i32>>(
+            Point::new(30, 0),
+            Point::new(30, 0),
+        );
+        check_vec::<Point<i32>, MultiPoint<i32>>(MultiPoint::new(vec![]));
+        check_assign(
+            MultiPoint::new(vec![Point::new(1, 0)]),
+            MultiPoint::new(vec![Point::new(2, 0), Point::new(3, 0)]),
+        );
+
+        let ls = |x: i32| line_string![(x: x, y: 0), (x: x + 1, y: 0)];
+        check_with_one::<LineString<i32>, LineString<i32>, MultiLineString<i32>>(ls(30), ls(30));
+        check_vec::<LineString<i32>, MultiLineString<i32>>(MultiLineString::new(vec![]));
+
+        let poly = |x: i32| {
+            Polygon::new(
+                line_string![
+                    (x: x, y: x),
+                    (x: x + 1, y: x),
+                    (x: x + 1, y: x + 1),
+                    (x: x, y: x),
+                ],
+                vec![],
+            )
+        };
+        check_with_one::<Polygon<i32>, Polygon<i32>, MultiPolygon<i32>>(poly(30), poly(30));
+        check_vec::<Polygon<i32>, MultiPolygon<i32>>(MultiPolygon::new(vec![]));
+
+        check_with_one::<Geometry<i32>, Geometry<i32>, GeometryCollection<i32>>(
+            Geometry::Point(Point::new(30, 0)),
+            Geometry::Point(Point::new(30, 0)),
+        );
+        check_vec::<Geometry<i32>, GeometryCollection<i32>>(GeometryCollection::new_from(vec![]));
     }
 }
