@@ -57,3 +57,7 @@ mod smallvec;
 #[cfg(feature = "tinyvec")]
 #[cfg_attr(docsrs, doc(cfg(feature = "tinyvec")))]
 mod tinyvec;
+
+#[cfg(feature = "geo")]
+#[cfg_attr(docsrs, doc(cfg(feature = "geo")))]
+mod geo;

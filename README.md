@@ -235,9 +235,9 @@ implementations:
 
 All Rust's scalar types (`i8`, `i16`, `i32`, `i64`, `i128`, `isize`, `u8`,
 `u16`, `u32`, `u64`, `u128`, `usize`, `f32`, `f64`, `char`, `bool`, `()`) are
-supported and treated like single-element, `usize`-keyed maps.
+supported and treated as single-element, `usize`-keyed maps.
 
-Rust's compound types (arrays, tuples, slices) are supported and treated like
+Rust's compound types (arrays, tuples, slices) are supported and treated as
 `usize`-keyed maps.
 
 ### `maplike`'s types
@@ -282,6 +282,22 @@ trait implementations for data structures from certain external crates:
 - [`tinyvec::ArrayVec`](https://docs.rs/tinyvec/latest/tinyvec/struct.ArrayVec.html),
   and [`tinyvec::TinyVec`](https://docs.rs/tinyvec/latest/tinyvec/enum.TinyVec.html),
   gated by the `tinyvec` feature flag;
+- geometry types from [`geo`](https://docs.rs/geo)/[`geo-types`](https://docs.rs/geo-types),
+  gated by the `geo` feature flag:
+  [`Coord`](https://docs.rs/geo/latest/geo/struct.Coord.html),
+  [`Point`](https://docs.rs/geo/latest/geo/struct.Point.html),
+  [`Line`](https://docs.rs/geo/latest/geo/struct.Line.html),
+  [`Rect`](https://docs.rs/geo/latest/geo/struct.Rect.html),
+  [`Triangle`](https://docs.rs/geo/latest/geo/struct.Triangle.html),
+  [`Polygon`](https://docs.rs/geo/latest/geo/struct.Polygon.html), and
+  [`Geometry`](https://docs.rs/geo/latest/geo/enum.Geometry.html)
+  are treated as single-element, `usize`-keyed maps;
+  [`LineString`](https://docs.rs/geo/latest/geo/struct.LineString.html),
+  [`MultiPoint`](https://docs.rs/geo/latest/geo/struct.MultiPoint.html),
+  [`MultiLineString`](https://docs.rs/geo/latest/geo/struct.MultiLineString.html),
+  [`MultiPolygon`](https://docs.rs/geo/latest/geo/struct.MultiPolygon.html), and
+  [`GeometryCollection`](https://docs.rs/geo/latest/geo/struct.GeometryCollection.html)
+  are treated as `usize`-keyed vec-like maps of their elements;
 
 For some examples of practical use, see the
 [examples](https://github.com/mikwielgus/undoredo/tree/develop/examples)

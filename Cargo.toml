@@ -42,6 +42,11 @@ arrayvec = ["dep:arrayvec"]
 ## additionally under the `std` feature, `bidimap::BiHashMap`.
 bidimap = ["dep:bidimap"]
 
+## Enables convenience implementations for geometry types from the
+## [`geo`](https://docs.rs/geo)/[`geo-types`](https://docs.rs/geo-types)
+## crates. Implies `alloc`.
+geo = ["dep:geo-types", "alloc"]
+
 ## Enables convenience implementations for `indexmap::IndexMap` and
 ## `indexmap::IndexSet`.
 indexmap = ["dep:indexmap"]
@@ -71,6 +76,7 @@ maplike_derive = { version = "0.13", optional = true, path = "maplike_derive" }
 arrayvec = { version = "0.7", optional = true }
 bidimap = { version = "0.7", optional = true }
 document-features = { version = "0.2", optional = true }
+geo-types = { version = "0.7", optional = true, default-features = false }
 indexmap = { version = "2.14", optional = true }
 rstar = { version = ">= 0.12, < 0.14", optional = true }
 smallvec = { version = "1", optional = true }
@@ -87,6 +93,7 @@ rstar = ">= 0.12, < 0.14"
 smallvec = "1"
 arrayvec = "0.7"
 tinyvec = { version = "1", features = ["alloc"] }
+geo-types = { version = "0.7", default-features = false }
 
 [package.metadata.docs.rs]
 cargo-args = ["--all-features", "-Zunstable-options", "-Zrustdoc-scrape-examples"]
