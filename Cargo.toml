@@ -17,6 +17,7 @@ license = "MIT OR Apache-2.0"
 keywords = ["container", "undo", "redo", "rtree", "no_std"]
 categories = ["data-structures", "gui", "no-std", "rust-patterns"]
 edition = "2024"
+rust-version = "1.92"
 
 [badges]
 maintenance = { status = "actively-developed" }

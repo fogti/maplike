@@ -7,6 +7,7 @@ SPDX-License-Identifier: MIT OR Apache-2.0
 [![Repository](https://img.shields.io/badge/repository-GitHub-0FBF3E)](https://github.com/mikwielgus/maplike)
 [![Docs](https://docs.rs/maplike/badge.svg)](https://docs.rs/maplike/)
 [![Crates.io](https://img.shields.io/crates/v/maplike.svg)](https://crates.io/crates/maplike)
+[![MSRV](https://img.shields.io/crates/msrv/maplike.svg)](https://blog.rust-lang.org/2025/12/11/Rust-1.92.0/)
 [![MIT OR Apache 2.0](https://img.shields.io/crates/l/maplike.svg)](#licence)
 
 # maplike
