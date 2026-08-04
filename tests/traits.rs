@@ -752,6 +752,7 @@ mod alloc_tests {
         check_push_put::<usize, i32, VecDeque<i32>>(VecDeque::new());
         check_with_one::<i32, i32, VecDeque<i32>>(30, 30);
         check_vec::<i32, VecDeque<i32>>(VecDeque::new());
+        check_resize::<i32, VecDeque<i32>>(VecDeque::new());
         check_assign(VecDeque::from([1i32]), VecDeque::from([2i32, 3i32]));
 
         let mut c: VecDeque<i32> = VecDeque::new();

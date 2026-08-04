@@ -6,7 +6,7 @@ use alloc_::collections::VecDeque;
 
 use crate::containers::Container;
 use crate::iter::{IntoIter, IntoValues, Iter, Values};
-use crate::ops::{Assign, Clear, Get, Len, Modify, Pop, Push, Put, Set, WithOne};
+use crate::ops::{Assign, Clear, Get, Len, Modify, Pop, Push, Put, Resize, Set, WithOne};
 
 impl<V> Container for VecDeque<V> {
     type Key = usize;
@@ -92,6 +92,16 @@ impl<V> Len for VecDeque<V> {
     #[inline(always)]
     fn len(&self) -> usize {
         VecDeque::len(self)
+    }
+}
+
+impl<V> Resize for VecDeque<V> {
+    #[inline(always)]
+    fn resize(&mut self, new_len: usize, value: V)
+    where
+        V: Clone,
+    {
+        VecDeque::resize(self, new_len, value);
     }
 }
 
