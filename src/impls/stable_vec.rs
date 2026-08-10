@@ -6,7 +6,7 @@ use stable_vec::StableVecFacade;
 
 use crate::containers::Container;
 use crate::iter::{IntoIter, IntoValues, Iter, Values, ValuesFromKeyValuePairs};
-use crate::ops::{Assign, Clear, Get, Insert, Modify, Push, Put, Remove, Set, WithOne};
+use crate::ops::{Assign, Clear, Get, Insert, Len, Modify, Push, Put, Remove, Set, WithOne};
 
 impl<V, C: stable_vec::core::Core<V>> Container for StableVecFacade<V, C> {
     type Key = usize;
@@ -96,6 +96,13 @@ impl<V, C: stable_vec::core::Core<V>> Clear for StableVecFacade<V, C> {
     #[inline(always)]
     fn clear(&mut self) {
         StableVecFacade::clear(self);
+    }
+}
+
+impl<V, C: stable_vec::core::Core<V>> Len for StableVecFacade<V, C> {
+    #[inline(always)]
+    fn len(&self) -> usize {
+        StableVecFacade::num_elements(self)
     }
 }
 

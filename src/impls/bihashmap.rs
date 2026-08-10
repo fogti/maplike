@@ -10,7 +10,7 @@ use std_::hash::Hash;
 use crate::containers::Container;
 use crate::iter::{IntoIter, IntoValues, Iter, Values, ValuesFromKeyValuePairs};
 use crate::ops::{
-    Assign, Clear, Get, GetByLeft, GetByRight, Insert, RemoveByLeft, RemoveByRight, Set,
+    Assign, Clear, Get, GetByLeft, GetByRight, Insert, Len, RemoveByLeft, RemoveByRight, Set,
 };
 
 impl<L, R> Container for BiHashMap<L, R> {
@@ -97,6 +97,13 @@ impl<L: Eq + Hash, R: Eq + Hash> Clear for BiHashMap<L, R> {
     #[inline(always)]
     fn clear(&mut self) {
         BiHashMap::clear(self);
+    }
+}
+
+impl<L, R> Len for BiHashMap<L, R> {
+    #[inline(always)]
+    fn len(&self) -> usize {
+        BiHashMap::len(self)
     }
 }
 

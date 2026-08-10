@@ -55,17 +55,25 @@ where
     K: FromUsize + Clone,
     V: FromUsize + Clone + PartialEq + Debug,
     O: PartialEq + Debug,
-    C: Container<Key = K, Value = V> + Get<K> + Set<K> + Insert<K> + Remove<K, Output = O> + Clear,
+    C: Container<Key = K, Value = V>
+        + Get<K>
+        + Set<K>
+        + Insert<K>
+        + Remove<K, Output = O>
+        + Clear
+        + Len,
 {
     let k1 = K::from_usize(1);
     let k2 = K::from_usize(2);
     let v1 = V::from_usize(10);
     let v2 = V::from_usize(20);
 
+    assert_eq!(Len::len(&c), 0);
     assert_eq!(c.get(&k1), None);
 
     c.insert(k1.clone(), v1.clone());
     c.insert(k2.clone(), v2.clone());
+    assert_eq!(Len::len(&c), 2);
     assert_eq!(c.get(&k1), Some(&v1));
     assert_eq!(c.get(&k2), Some(&v2));
 
@@ -73,9 +81,11 @@ where
     assert_eq!(c.get(&k1), Some(&v2));
 
     assert_eq!(c.remove(&k1), expected_removed);
+    assert_eq!(Len::len(&c), 1);
     assert_eq!(c.get(&k1), None);
 
     c.clear();
+    assert_eq!(Len::len(&c), 0);
     assert_eq!(c.get(&k2), None);
 }
 
@@ -869,9 +879,11 @@ mod thunderdome_tests {
         check_pushed_insert_remove::<thunderdome::Index, i32, Arena<i32>>(Arena::new());
 
         let mut a: Arena<i32> = Arena::new();
+        assert_eq!(Len::len(&a), 0);
         a.push(1);
         a.push(2);
         a.push(3);
+        assert_eq!(Len::len(&a), 3);
         let items: Vec<(thunderdome::Index, i32)> = IntoIter::into_iter(a).collect();
         assert_eq!(items.len(), 3);
 
@@ -881,6 +893,7 @@ mod thunderdome_tests {
         let j = y.push(7);
         x.assign(y);
         assert_eq!(Get::get(&x, &j), Some(&7));
+        assert_eq!(Len::len(&x), 1);
     }
 }
 
@@ -1098,10 +1111,13 @@ mod bidimap_tests {
             + Insert<String, Output = Overwritten<String, i32>>
             + RemoveByLeft<String, str>
             + RemoveByRight<String>
-            + Clear,
+            + Clear
+            + Len,
     {
+        assert_eq!(Len::len(&c), 0);
         assert_eq!(c.insert("a".to_string(), 1), Overwritten::Neither);
         assert_eq!(c.insert("b".to_string(), 2), Overwritten::Neither);
+        assert_eq!(Len::len(&c), 2);
 
         assert_eq!(c.get(&"a".to_string()), Some(&1));
         assert_eq!(c.get_by_left("a"), Some(&1));
@@ -1115,9 +1131,11 @@ mod bidimap_tests {
         assert_eq!(c.get_by_right(&11), Some(&"a".to_string()));
 
         assert_eq!(c.remove_by_left("a"), Some(11));
+        assert_eq!(Len::len(&c), 1);
         assert_eq!(c.get_by_left("a"), None);
 
         assert_eq!(c.remove_by_right(&2), Some("b".to_string()));
+        assert_eq!(Len::len(&c), 0);
         c.clear();
         assert_eq!(c.get_by_left("b"), None);
     }

@@ -9,7 +9,7 @@ use bidimap::{BiBTreeMap, Overwritten};
 use crate::containers::Container;
 use crate::iter::{IntoIter, IntoValues, Iter, Values, ValuesFromKeyValuePairs};
 use crate::ops::{
-    Assign, Clear, Get, GetByLeft, GetByRight, Insert, RemoveByLeft, RemoveByRight, Set,
+    Assign, Clear, Get, GetByLeft, GetByRight, Insert, Len, RemoveByLeft, RemoveByRight, Set,
 };
 
 impl<L, R> Container for BiBTreeMap<L, R> {
@@ -96,6 +96,13 @@ impl<L: Ord, R: Ord> Clear for BiBTreeMap<L, R> {
     #[inline(always)]
     fn clear(&mut self) {
         BiBTreeMap::clear(self);
+    }
+}
+
+impl<L, R> Len for BiBTreeMap<L, R> {
+    #[inline(always)]
+    fn len(&self) -> usize {
+        BiBTreeMap::len(self)
     }
 }
 

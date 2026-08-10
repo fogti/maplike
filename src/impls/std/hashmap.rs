@@ -12,7 +12,7 @@ use std_::{collections::HashMap, hash::Hash};
 use crate::containers::Container;
 use crate::entry::{CombinedEntry, Entry, OccupiedEntry, VacantEntry};
 use crate::iter::{IntoIter, IntoValues, Iter, Values};
-use crate::ops::{Assign, Clear, Get, Insert, Modify, Remove, Set};
+use crate::ops::{Assign, Clear, Get, Insert, Len, Modify, Remove, Set};
 
 impl<K, V> Container for HashMap<K, V> {
     type Key = K;
@@ -83,6 +83,13 @@ impl<K: Eq + Hash, V> Clear for HashMap<K, V> {
     #[inline(always)]
     fn clear(&mut self) {
         HashMap::clear(self);
+    }
+}
+
+impl<K, V> Len for HashMap<K, V> {
+    #[inline(always)]
+    fn len(&self) -> usize {
+        HashMap::len(self)
     }
 }
 

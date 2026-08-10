@@ -8,7 +8,7 @@ use alloc_::collections::BTreeSet;
 
 use crate::containers::Container;
 use crate::iter::{IntoIter, IntoValues, Iter, Values, ValuesFromKeyValuePairs};
-use crate::ops::{Assign, Clear, Get, Insert, Put, Remove, Set, WithOne};
+use crate::ops::{Assign, Clear, Get, Insert, Len, Put, Remove, Set, WithOne};
 
 impl<K> Container for BTreeSet<K> {
     type Key = K;
@@ -85,6 +85,13 @@ impl<K: Ord> Clear for BTreeSet<K> {
     #[inline(always)]
     fn clear(&mut self) {
         BTreeSet::clear(self);
+    }
+}
+
+impl<K> Len for BTreeSet<K> {
+    #[inline(always)]
+    fn len(&self) -> usize {
+        BTreeSet::len(self)
     }
 }
 

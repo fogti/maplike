@@ -8,7 +8,7 @@ use std_::{collections::HashSet, hash::Hash};
 
 use crate::containers::Container;
 use crate::iter::{IntoIter, IntoValues, Iter, Values, ValuesFromKeyValuePairs};
-use crate::ops::{Assign, Clear, Get, Insert, Put, Remove, Set, WithOne};
+use crate::ops::{Assign, Clear, Get, Insert, Len, Put, Remove, Set, WithOne};
 
 impl<K> Container for HashSet<K> {
     type Key = K;
@@ -85,6 +85,13 @@ impl<K: Eq + Hash> Clear for HashSet<K> {
     #[inline(always)]
     fn clear(&mut self) {
         HashSet::clear(self);
+    }
+}
+
+impl<K> Len for HashSet<K> {
+    #[inline(always)]
+    fn len(&self) -> usize {
+        HashSet::len(self)
     }
 }
 

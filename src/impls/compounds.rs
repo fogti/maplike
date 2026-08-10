@@ -18,6 +18,13 @@ macro_rules! impl_assign_for_tuple {
                 *self = value;
             }
         }
+
+        impl<$($typ,)+> Len for ($($typ,)+) {
+            #[inline(always)]
+            fn len(&self) -> usize {
+                1
+            }
+        }
     };
 }
 

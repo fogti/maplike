@@ -46,7 +46,8 @@ containers chosen by the user;
 half-edge data structure (aka. doubly connected edge list, DCEL) generically
 over its underlying containers.
 
-This crate is compatible with `no_std` and `serde`.
+This crate is compatible with `no_std` and `serde` and contains no `unsafe`
+code.
 
 ## Usage
 

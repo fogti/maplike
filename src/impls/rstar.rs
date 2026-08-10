@@ -6,7 +6,7 @@ use rstar::{RTree, RTreeObject};
 
 use crate::containers::Container;
 use crate::iter::{IntoIter, IntoValues, Iter, Values, ValuesFromKeyValuePairs};
-use crate::ops::{Assign, Clear, Get, Insert, Put, Remove, Set, WithOne};
+use crate::ops::{Assign, Clear, Get, Insert, Len, Put, Remove, Set, WithOne};
 
 impl<K: RTreeObject> Container for RTree<K> {
     type Key = K;
@@ -80,6 +80,13 @@ impl<K: RTreeObject + PartialEq> Clear for RTree<K> {
         // TODO: Send a path upstream to implement `.clear()` efficiently,
         // without having to drain.
         self.drain().for_each(drop);
+    }
+}
+
+impl<K: RTreeObject> Len for RTree<K> {
+    #[inline(always)]
+    fn len(&self) -> usize {
+        RTree::size(self)
     }
 }
 

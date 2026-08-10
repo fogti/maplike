@@ -576,19 +576,13 @@ pub trait Clear: Container {
     fn clear(&mut self);
 }
 
-/// Returns the length of the collection.
-///
-/// Should be only implemented for truly contiguous data structures, for which
-/// it makes sense to have a `.pop()` operation. Currently
-/// [`Vec`](https://doc.rust-lang.org/alloc/vec/struct.Vec.html) and
-/// [`tinyvec::ArrayVec`](https://docs.rs/tinyvec/latest/tinyvec/struct.ArrayVec.html)
-/// satisfy this property.
+/// Returns the number of elements in the collection.
 ///
 /// # Examples
 ///
 /// ```
 /// use maplike::ops::Len;
-/// use std::collections::VecDeque;
+/// use std::collections::{HashMap, VecDeque};
 ///
 /// // Works for `Vec`.
 /// let vec = vec![1.0, 2.0, 3.0];
@@ -601,16 +595,14 @@ pub trait Clear: Container {
 /// // Works for `VecDeque`.
 /// let deque = VecDeque::from([1.0, 2.0, 3.0]);
 /// assert_eq!(deque.len(), 3);
+///
+/// // Works for `HashMap`.
+/// let hashmap = HashMap::from([(1, 2.0), (2, 3.0)]);
+/// assert_eq!(hashmap.len(), 2);
 /// ```
 pub trait Len: Container {
-    /// Returns the length of the collection.
-    ///
-    /// Should be only implemented for truly contiguous data structures, for which
-    /// it makes sense to have a `.pop()` operation. Currently
-    /// [`Vec`](https://doc.rust-lang.org/alloc/vec/struct.Vec.html) and
-    /// [`tinyvec::ArrayVec`](https://docs.rs/tinyvec/latest/tinyvec/struct.ArrayVec.html)
-    /// satisfy this property.
-    fn len(&self) -> Self::Key;
+    /// Returns the number of elements in the collection.
+    fn len(&self) -> usize;
 }
 
 /// Resize the collection to the given length.
