@@ -15,7 +15,6 @@ use crate::iter::{IntoIter, IntoValues, Iter, Values};
 use crate::ops::{Assign, Clear, Get, Insert, Len, Modify, Remove, Set};
 
 impl<K, V> Container for HashMap<K, V> {
-    type Key = K;
     type Value = V;
 }
 

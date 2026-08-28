@@ -20,7 +20,7 @@ enum TestEnum {
 
 fn assert_derived_container<T>()
 where
-    T: maplike::containers::Container<Key = usize, Value = T>,
+    T: maplike::containers::Container<Value = T>,
 {
 }
 

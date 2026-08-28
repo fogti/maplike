@@ -15,8 +15,6 @@ use crate::ops::{Assign, Clear, Get, Insert, Len, Pop, Push, Remove, Set};
 /// vectors, which also are keyed collections but with slightly different sets
 /// of operations.
 pub trait Container {
-    /// Type of the keys in the keyed collection.
-    type Key;
     /// Type of the values in the keyed collection.
     type Value;
 }
@@ -106,7 +104,7 @@ impl<K, T: Maplike<K, Value = ()>> Setlike<K> for T {}
 /// use maplike::ops::{Get, Len, Set};
 ///
 /// // Generic over any `Arraylike` collection.
-/// fn scale_all<C: Arraylike<usize, Key = usize, Value = f64>>(collection: &mut C, factor: f64) {
+/// fn scale_all<C: Arraylike<usize, Value = f64>>(collection: &mut C, factor: f64) {
 ///     for i in 0..collection.len() {
 ///         if let Some(&value) = collection.get(&i) {
 ///             // Multiply all collection elements by a constant factor.
@@ -144,7 +142,7 @@ impl<K, T: Index<K> + Get<K> + Set<K> + Len> Arraylike<K> for T {}
 /// use maplike::ops::{Get, Len, Set};
 ///
 /// // Generic over any `Veclike` collection.
-/// fn scale_all<C: Veclike<usize, Key = usize, Value = f64>>(collection: &mut C, factor: f64) {
+/// fn scale_all<C: Veclike<usize, Value = f64>>(collection: &mut C, factor: f64) {
 ///     for i in 0..collection.len() {
 ///         if let Some(&value) = collection.get(&i) {
 ///             // Multiply all collection elements by a constant factor.

@@ -9,7 +9,6 @@ use crate::iter::{IntoIter, IntoValues, Iter, Values, ValuesFromKeyValuePairs};
 use crate::ops::{Assign, Clear, Get, Insert, Len, Modify, Push, Put, Remove, Set, WithOne};
 
 impl<V> Container for Arena<V> {
-    type Key = Index;
     type Value = V;
 }
 

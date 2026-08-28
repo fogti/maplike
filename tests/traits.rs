@@ -55,13 +55,7 @@ where
     K: FromUsize + Clone,
     V: FromUsize + Clone + PartialEq + Debug,
     O: PartialEq + Debug,
-    C: Container<Key = K, Value = V>
-        + Get<K>
-        + Set<K>
-        + Insert<K>
-        + Remove<K, Output = O>
-        + Clear
-        + Len,
+    C: Container<Value = V> + Get<K> + Set<K> + Insert<K> + Remove<K, Output = O> + Clear + Len,
 {
     let k1 = K::from_usize(1);
     let k2 = K::from_usize(2);
@@ -93,7 +87,7 @@ fn check_entry<K, V, C>(mut c: C)
 where
     K: FromUsize + Clone + PartialEq + Debug,
     V: FromUsize + Clone + PartialEq + Debug + Default,
-    C: Container<Key = K, Value = V> + Entry<K> + Get<K> + Clear,
+    C: Container<Value = V> + Entry<K> + Get<K> + Clear,
     for<'a> <C as Entry<K>>::Entry<'a>: CombinedEntry<'a, K, V>,
 {
     let k = K::from_usize(1);
@@ -183,7 +177,7 @@ fn check_modify<K, V, C>(mut c: C)
 where
     K: FromUsize + Clone,
     V: FromUsize + Clone + PartialEq + Debug,
-    C: Container<Key = K, Value = V> + Insert<K> + Get<K> + Modify<K> + Clear,
+    C: Container<Value = V> + Insert<K> + Get<K> + Modify<K> + Clear,
 {
     let k = K::from_usize(1);
 
@@ -199,7 +193,7 @@ fn check_into_iter<K, V, C>(mut c: C)
 where
     K: FromUsize + Clone + PartialEq + Debug,
     V: FromUsize + Clone + PartialEq + Debug,
-    C: Container<Key = K, Value = V> + Insert<K> + IntoIter<K>,
+    C: Container<Value = V> + Insert<K> + IntoIter<K>,
 {
     c.insert(K::from_usize(1), V::from_usize(10));
     c.insert(K::from_usize(2), V::from_usize(20));
@@ -224,7 +218,7 @@ where
 
 fn check_borrow_str<C>(mut c: C)
 where
-    C: Container<Key = String, Value = i32>
+    C: Container<Value = i32>
         + Insert<String>
         + Get<String, str>
         + Modify<String, str>
@@ -247,7 +241,7 @@ fn check_push_put<K, V, C>(mut c: C)
 where
     K: Clone,
     V: FromUsize + Clone + Ord + PartialEq + Debug,
-    C: Container<Key = K, Value = V> + Push<K> + Get<K> + Set<K> + Modify<K> + Put<V> + IntoIter<K>,
+    C: Container<Value = V> + Push<K> + Get<K> + Set<K> + Modify<K> + Put<V> + IntoIter<K>,
 {
     let k0 = c.push(V::from_usize(10));
     let k1 = c.push(V::from_usize(20));
@@ -271,10 +265,10 @@ where
     );
 }
 
-fn check_with_one<E, V, C>(element: E, expected: V)
+fn check_with_one<E, V, C, K>(element: E, expected: V)
 where
     V: PartialEq + Debug,
-    C: Container<Value = V> + WithOne<E> + IntoIter<<C as Container>::Key>,
+    C: Container<Value = V> + WithOne<E> + IntoIter<K>,
 {
     let values: Vec<V> = IntoIter::into_iter(C::with_one(element))
         .map(|(_, value)| value)
@@ -286,12 +280,7 @@ fn check_pushed_insert_remove<K, V, C>(mut c: C)
 where
     K: Clone,
     V: FromUsize + Clone + PartialEq + Debug,
-    C: Container<Key = K, Value = V>
-        + Push<K>
-        + Get<K>
-        + Insert<K>
-        + Remove<K, Output = Option<V>>
-        + Clear,
+    C: Container<Value = V> + Push<K> + Get<K> + Insert<K> + Remove<K, Output = Option<V>> + Clear,
 {
     let k0 = c.push(V::from_usize(10));
 
@@ -308,7 +297,7 @@ where
 fn check_vec<V, C>(mut c: C)
 where
     V: FromUsize + Clone + PartialEq + Debug,
-    C: Container<Key = usize, Value = V> + Push<usize> + Pop + Len + Clear,
+    C: Container<Value = V> + Push<usize> + Pop + Len + Clear,
 {
     c.push(V::from_usize(10));
     c.push(V::from_usize(20));
@@ -322,7 +311,7 @@ where
 fn check_resize<V, C>(mut c: C)
 where
     V: FromUsize + Clone + PartialEq + Debug,
-    C: Container<Key = usize, Value = V> + Get<usize> + Len + Resize,
+    C: Container<Value = V> + Get<usize> + Len + Resize,
 {
     c.resize(3, V::from_usize(1));
     assert_eq!(Len::len(&c), 3);
@@ -341,7 +330,7 @@ where
 
 fn check_indexed<C>(c: &mut C)
 where
-    C: ?Sized + Container<Key = usize, Value = i32> + Get<usize> + Set<usize> + Modify<usize> + Len,
+    C: ?Sized + Container<Value = i32> + Get<usize> + Set<usize> + Modify<usize> + Len,
 {
     assert_eq!(Len::len(&*c), 3);
 
@@ -357,7 +346,7 @@ where
 fn check_scalar<V>(initial: V, alt1: V, alt2: V, alt3: V)
 where
     V: Clone + PartialEq + Debug,
-    V: Container<Key = usize, Value = V>
+    V: Container<Value = V>
         + Get<usize>
         + Set<usize, Output = Option<V>>
         + Modify<usize>
@@ -386,7 +375,7 @@ where
         [(0, alt3.clone())],
     );
 
-    check_with_one::<V, V, V>(alt1.clone(), alt1.clone());
+    check_with_one::<V, V, V, _>(alt1.clone(), alt1.clone());
     check_assign(v, alt1);
 }
 
@@ -445,7 +434,7 @@ mod one_tests {
         assert_eq!(c.put(30), Some(20));
         assert_eq!(c.get(&0), Some(&30));
 
-        check_with_one::<i32, i32, One<i32>>(40, 40);
+        check_with_one::<i32, i32, One<i32>, _>(40, 40);
         check_assign(One::new(1), One::new(2));
     }
 }
@@ -472,7 +461,7 @@ mod box_tests {
         assert_eq!(c.put(30), Some(21));
         assert_eq!(c.get(&0), Some(&30));
 
-        check_with_one::<i32, i32, Box<i32>>(40, 40);
+        check_with_one::<i32, i32, Box<i32>, _>(40, 40);
         check_assign(Box::new(1), Box::new(2));
 
         assert_eq!(
@@ -612,7 +601,7 @@ mod std_tests {
     fn test_traits_on_hashset() {
         check_keyed(HashSet::<usize>::new(), Some(()));
         check_into_iter::<usize, (), HashSet<usize>>(HashSet::new());
-        check_with_one::<usize, (), HashSet<usize>>(7, ());
+        check_with_one::<usize, (), HashSet<usize>, _>(7, ());
         check_assign(HashSet::from([1]), HashSet::from([2, 3]));
     }
 
@@ -735,14 +724,14 @@ mod alloc_tests {
     fn test_traits_on_btreeset() {
         check_keyed(BTreeSet::<usize>::new(), Some(()));
         check_into_iter::<usize, (), BTreeSet<usize>>(BTreeSet::new());
-        check_with_one::<usize, (), BTreeSet<usize>>(7, ());
+        check_with_one::<usize, (), BTreeSet<usize>, _>(7, ());
         check_assign(BTreeSet::from([1]), BTreeSet::from([2, 3]));
     }
 
     #[test]
     fn test_traits_on_vec() {
         check_push_put::<usize, i32, Vec<i32>>(Vec::new());
-        check_with_one::<i32, i32, Vec<i32>>(30, 30);
+        check_with_one::<i32, i32, Vec<i32>, _>(30, 30);
         check_vec::<i32, Vec<i32>>(Vec::new());
         check_resize::<i32, Vec<i32>>(Vec::new());
         check_assign(vec![1i32], vec![2i32, 3i32]);
@@ -760,7 +749,7 @@ mod alloc_tests {
         use std::collections::VecDeque;
 
         check_push_put::<usize, i32, VecDeque<i32>>(VecDeque::new());
-        check_with_one::<i32, i32, VecDeque<i32>>(30, 30);
+        check_with_one::<i32, i32, VecDeque<i32>, _>(30, 30);
         check_vec::<i32, VecDeque<i32>>(VecDeque::new());
         check_resize::<i32, VecDeque<i32>>(VecDeque::new());
         check_assign(VecDeque::from([1i32]), VecDeque::from([2i32, 3i32]));
@@ -840,7 +829,7 @@ mod option_tests {
             [(0, 9)],
         );
 
-        check_with_one::<i32, i32, Option<i32>>(30, 30);
+        check_with_one::<i32, i32, Option<i32>, _>(30, 30);
     }
 }
 
@@ -855,7 +844,7 @@ mod stable_vec_tests {
         check_modify::<usize, i32, StableVec<i32>>(StableVec::new());
         check_into_iter::<usize, i32, StableVec<i32>>(StableVec::new());
         check_push_put::<usize, i32, StableVec<i32>>(StableVec::new());
-        check_with_one::<i32, i32, StableVec<i32>>(30, 30);
+        check_with_one::<i32, i32, StableVec<i32>, _>(30, 30);
         check_pushed_insert_remove::<usize, i32, StableVec<i32>>(StableVec::new());
 
         let mut a = StableVec::new();
@@ -875,7 +864,7 @@ mod thunderdome_tests {
     #[test]
     fn test_traits_on_arena() {
         check_push_put::<thunderdome::Index, i32, Arena<i32>>(Arena::new());
-        check_with_one::<i32, i32, Arena<i32>>(30, 30);
+        check_with_one::<i32, i32, Arena<i32>, _>(30, 30);
         check_pushed_insert_remove::<thunderdome::Index, i32, Arena<i32>>(Arena::new());
 
         let mut a: Arena<i32> = Arena::new();
@@ -905,7 +894,7 @@ mod arrayvec_tests {
     #[test]
     fn test_traits_on_arrayvec() {
         check_push_put::<usize, i32, ArrayVec<i32, 8>>(ArrayVec::new());
-        check_with_one::<i32, i32, ArrayVec<i32, 8>>(30, 30);
+        check_with_one::<i32, i32, ArrayVec<i32, 8>, _>(30, 30);
         check_vec::<i32, ArrayVec<i32, 8>>(ArrayVec::new());
         check_assign(
             {
@@ -955,7 +944,7 @@ mod smallvec_tests {
     #[test]
     fn test_traits_on_smallvec() {
         check_push_put::<usize, i32, SmallVec<[i32; 8]>>(SmallVec::new());
-        check_with_one::<i32, i32, SmallVec<[i32; 8]>>(30, 30);
+        check_with_one::<i32, i32, SmallVec<[i32; 8]>, _>(30, 30);
         check_vec::<i32, SmallVec<[i32; 8]>>(SmallVec::new());
         check_resize::<i32, SmallVec<[i32; 8]>>(SmallVec::new());
         check_assign(
@@ -982,7 +971,7 @@ mod tinyvec_tests {
     #[test]
     fn test_traits_on_arrayvec() {
         check_push_put::<usize, i32, ArrayVec<[i32; 8]>>(ArrayVec::new());
-        check_with_one::<i32, i32, ArrayVec<[i32; 8]>>(30, 30);
+        check_with_one::<i32, i32, ArrayVec<[i32; 8]>, _>(30, 30);
         check_vec::<i32, ArrayVec<[i32; 8]>>(ArrayVec::new());
         check_resize::<i32, ArrayVec<[i32; 8]>>(ArrayVec::new());
         check_assign(
@@ -994,7 +983,7 @@ mod tinyvec_tests {
     #[test]
     fn test_traits_on_tinyvec() {
         check_push_put::<usize, i32, TinyVec<[i32; 8]>>(TinyVec::new());
-        check_with_one::<i32, i32, TinyVec<[i32; 8]>>(30, 30);
+        check_with_one::<i32, i32, TinyVec<[i32; 8]>, _>(30, 30);
         check_vec::<i32, TinyVec<[i32; 8]>>(TinyVec::new());
         check_resize::<i32, TinyVec<[i32; 8]>>(TinyVec::new());
 
@@ -1016,7 +1005,7 @@ mod rstar_tests {
     fn test_traits_on_rtree() {
         check_keyed(RTree::<(i32, i32)>::new(), Some(()));
         check_into_iter::<(i32, i32), (), RTree<(i32, i32)>>(RTree::new());
-        check_with_one::<(i32, i32), (), RTree<(i32, i32)>>((3, 4), ());
+        check_with_one::<(i32, i32), (), RTree<(i32, i32)>, _>((3, 4), ());
 
         let mut r: RTree<(i32, i32)> = RTree::new();
         Insert::insert(&mut r, (1, 0), ());
@@ -1089,7 +1078,7 @@ mod indexmap_tests {
     fn test_traits_on_indexset() {
         check_keyed(IndexSet::<usize>::new(), Some(()));
         check_into_iter::<usize, (), IndexSet<usize>>(IndexSet::new());
-        check_with_one::<usize, (), IndexSet<usize>>(7, ());
+        check_with_one::<usize, (), IndexSet<usize>, _>(7, ());
         check_assign(IndexSet::from([1]), IndexSet::from([2, 3]));
     }
 }
@@ -1103,7 +1092,7 @@ mod bidimap_tests {
 
     fn check_bidirectional_map<C>(mut c: C)
     where
-        C: Container<Key = String, Value = i32>
+        C: Container<Value = i32>
             + Get<String>
             + GetByLeft<String, str>
             + GetByRight<String>
@@ -1285,7 +1274,7 @@ mod geo_tests {
 
     #[test]
     fn test_traits_on_geo_veclike() {
-        check_with_one::<Coord<i32>, Coord<i32>, LineString<i32>>(
+        check_with_one::<Coord<i32>, Coord<i32>, LineString<i32>, _>(
             coord! { x: 30, y: 0 },
             coord! { x: 30, y: 0 },
         );
@@ -1296,7 +1285,7 @@ mod geo_tests {
             LineString::new(vec![coord! { x: 2, y: 0 }, coord! { x: 3, y: 0 }]),
         );
 
-        check_with_one::<Point<i32>, Point<i32>, MultiPoint<i32>>(
+        check_with_one::<Point<i32>, Point<i32>, MultiPoint<i32>, _>(
             Point::new(30, 0),
             Point::new(30, 0),
         );
@@ -1307,7 +1296,7 @@ mod geo_tests {
         );
 
         let ls = |x: i32| line_string![(x: x, y: 0), (x: x + 1, y: 0)];
-        check_with_one::<LineString<i32>, LineString<i32>, MultiLineString<i32>>(ls(30), ls(30));
+        check_with_one::<LineString<i32>, LineString<i32>, MultiLineString<i32>, _>(ls(30), ls(30));
         check_vec::<LineString<i32>, MultiLineString<i32>>(MultiLineString::new(vec![]));
 
         let poly = |x: i32| {
@@ -1321,10 +1310,10 @@ mod geo_tests {
                 vec![],
             )
         };
-        check_with_one::<Polygon<i32>, Polygon<i32>, MultiPolygon<i32>>(poly(30), poly(30));
+        check_with_one::<Polygon<i32>, Polygon<i32>, MultiPolygon<i32>, _>(poly(30), poly(30));
         check_vec::<Polygon<i32>, MultiPolygon<i32>>(MultiPolygon::new(vec![]));
 
-        check_with_one::<Geometry<i32>, Geometry<i32>, GeometryCollection<i32>>(
+        check_with_one::<Geometry<i32>, Geometry<i32>, GeometryCollection<i32>, _>(
             Geometry::Point(Point::new(30, 0)),
             Geometry::Point(Point::new(30, 0)),
         );

@@ -9,7 +9,6 @@ use crate::iter::{IntoIter, IntoValues, Iter, Values};
 use crate::ops::{Assign, Get, Len, Modify, Put, Set, WithOne};
 
 impl<V> Container for Box<V> {
-    type Key = usize;
     type Value = V;
 }
 

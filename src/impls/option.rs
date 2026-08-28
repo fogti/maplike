@@ -7,7 +7,6 @@ use crate::iter::{IntoIter, IntoValues, Iter, Values};
 use crate::ops::{Assign, Clear, Get, Len, Modify, Put, Remove, Set, WithOne};
 
 impl<V> Container for Option<V> {
-    type Key = usize;
     type Value = V;
 }
 

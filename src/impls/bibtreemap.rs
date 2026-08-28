@@ -13,7 +13,6 @@ use crate::ops::{
 };
 
 impl<L, R> Container for BiBTreeMap<L, R> {
-    type Key = L;
     type Value = R;
 }
 

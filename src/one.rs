@@ -24,7 +24,6 @@ impl<V> One<V> {
 }
 
 impl<V> Container for One<V> {
-    type Key = usize;
     type Value = V;
 }
 

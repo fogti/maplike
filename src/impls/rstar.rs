@@ -9,7 +9,6 @@ use crate::iter::{IntoIter, IntoValues, Iter, Values, ValuesFromKeyValuePairs};
 use crate::ops::{Assign, Clear, Get, Insert, Len, Put, Remove, Set, WithOne};
 
 impl<K: RTreeObject> Container for RTree<K> {
-    type Key = K;
     type Value = ();
 }
 

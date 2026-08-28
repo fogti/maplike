@@ -9,7 +9,6 @@ use crate::iter::{Iter, Values};
 use crate::ops::{Assign, Clear, Get, Len, Modify, Put, Remove, Set, WithOne};
 
 impl<V> Container for Arc<V> {
-    type Key = usize;
     type Value = V;
 }
 
@@ -94,7 +93,6 @@ impl<'a, V: 'a> Iter<'a, usize> for Arc<V> {
 }
 
 impl<V> Container for Weak<V> {
-    type Key = usize;
     type Value = V;
 }
 

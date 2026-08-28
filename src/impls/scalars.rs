@@ -10,7 +10,6 @@ macro_rules! impl_traits_for_scalar {
     ($($t:ty),*) => {
         $(
             impl Container for $t {
-                type Key = usize;
                 type Value = Self;
             }
 

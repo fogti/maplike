@@ -9,7 +9,6 @@ use crate::iter::{IntoIter, IntoValues, Iter, Values};
 use crate::ops::{Assign, Clear, Get, Len, Modify, Pop, Push, Put, Resize, Set, WithOne};
 
 impl<A: Array> Container for SmallVec<A> {
-    type Key = usize;
     type Value = A::Item;
 }
 

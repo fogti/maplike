@@ -14,7 +14,6 @@ use crate::ops::{
 };
 
 impl<L, R> Container for BiHashMap<L, R> {
-    type Key = L;
     type Value = R;
 }
 

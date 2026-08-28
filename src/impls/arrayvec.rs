@@ -9,7 +9,6 @@ use crate::iter::{IntoIter, IntoValues, Iter, Values};
 use crate::ops::{Assign, Clear, Get, Len, Modify, Pop, Push, Put, Set, WithOne};
 
 impl<T, const CAP: usize> Container for ArrayVec<T, CAP> {
-    type Key = usize;
     type Value = T;
 }
 

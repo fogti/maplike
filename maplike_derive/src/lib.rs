@@ -42,7 +42,6 @@ fn expand_container(input: DeriveInput) -> syn::Result<TokenStream> {
         impl #impl_generics ::maplike::containers::Container for #name #ty_generics
         #where_clause
         {
-            type Key = usize;
             type Value = Self;
         }
     };

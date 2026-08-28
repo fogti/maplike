@@ -15,7 +15,6 @@ macro_rules! impl_traits_for_geo_noncollection {
     ($($ty:ident),* $(,)?) => {
         $(
             impl<T: CoordNum> Container for $ty<T> {
-                type Key = usize;
                 type Value = Self;
             }
 
@@ -123,7 +122,6 @@ impl_traits_for_geo_noncollection!(Coord, Point, Line, Rect, Triangle, Polygon, 
 macro_rules! impl_traits_for_geo_veclike {
     ($wrapper:ident, $value:ty, $ctor:ident) => {
         impl<T: CoordNum> Container for $wrapper<T> {
-            type Key = usize;
             type Value = $value;
         }
 

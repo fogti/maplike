@@ -8,7 +8,6 @@ use crate::ops::{Assign, Get, Len, Modify, Set};
 macro_rules! impl_assign_for_tuple {
     ($($idx:tt $typ:ident),+) => {
         impl<$($typ,)+> Container for ($($typ,)+) {
-            type Key = usize;
             type Value = Self;
         }
 
@@ -43,7 +42,6 @@ impl_assign_for_tuple!(0 T0, 1 T1, 2 T2, 3 T3, 4 T4, 5 T5, 6 T6, 7 T7, 8 T8, 9 T
 impl_assign_for_tuple!(0 T0, 1 T1, 2 T2, 3 T3, 4 T4, 5 T5, 6 T6, 7 T7, 8 T8, 9 T9, 10 T10, 11 T11);
 
 impl<V, const N: usize> Container for [V; N] {
-    type Key = usize;
     type Value = V;
 }
 
@@ -88,7 +86,6 @@ impl<V, const N: usize> Len for [V; N] {
 }
 
 impl<V> Container for [V] {
-    type Key = usize;
     type Value = V;
 }
 
